@@ -26,7 +26,7 @@ export class MeatFormComponent implements OnInit {
         updatedOn: null,
         lastUpdatedByUserId: null,
         note: ''
-    };
+    };//123123
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
