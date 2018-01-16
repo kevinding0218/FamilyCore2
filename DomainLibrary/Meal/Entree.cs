@@ -28,11 +28,11 @@ namespace DomainLibrary.Meal
         // one Entree could have only one EntreeStyleId
         public EntreeStyle EntreeStyle { get; set; }
         // one Entree could have many EntreeVegetable
-        public ICollection<EntreeDetail> DetailsWithCurrentEntree { get; set; }
+        public ICollection<EntreeDetail> MappingDetailsWithCurrentEntree { get; set; }
 
         public Entree()
         {
-            DetailsWithCurrentEntree = new Collection<EntreeDetail>();
+            MappingDetailsWithCurrentEntree = new Collection<EntreeDetail>();
         }
     }
 }

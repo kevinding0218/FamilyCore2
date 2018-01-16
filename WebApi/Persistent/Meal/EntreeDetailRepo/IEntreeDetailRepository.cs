@@ -6,8 +6,8 @@ namespace WebApi.Persistent.Meal
 {
     public interface IEntreeDetailRepository
     {
-        Task<bool> IsDuplicateEntreeDetail(string name);
-        Task<IEnumerable<EntreeDetail>> GetEntreeDetails();
+        Task<bool> IsDuplicateEntreeDetail(string name, int? Id = null);
+        Task<IEnumerable<EntreeDetail>> GetEntreeDetails(string EntreeDetailType);
         Task<EntreeDetail> GetEntreeDetail(int id);
         void AddEntreeDetail(EntreeDetail newEntreeDetail);
         void Remove(EntreeDetail existedEntreeDetail);

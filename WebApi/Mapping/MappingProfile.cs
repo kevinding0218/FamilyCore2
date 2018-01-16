@@ -18,6 +18,8 @@ namespace WebApi.Mapping
             DomainToApiEntreeDetail();
             // StapleFood
             DomainToApiStapleFood();
+            // Entree
+            DomainToApiEntree();
             #endregion
 
             #region API Resource/View Model to Domain
@@ -27,15 +29,18 @@ namespace WebApi.Mapping
             ApiToDomainEntreeDetail();
             // StapleFood
             ApiToDomainStapleFood();
+            // Entree
+            ApiToDomainEntree();
             #endregion
         }
 
+        #region Domain to API Resource/View Model
         private void DomainToApiEntreeDetail()
         {
-            this.CreateMap<EntreeDetail, SaveEntreeResource>()
+            this.CreateMap<EntreeDetail, SaveEntreeDetailResource>()
                 .ForMember
                 (svr => svr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }));
-            this.CreateMap<EntreeDetail, GridEntreeResource>()
+            this.CreateMap<EntreeDetail, GridEntreeDetailResource>()
                 .ForMember(gvr => gvr.NumberOfEntreeIncluded, opt => opt.Ignore())
                 .ForMember(gvr => gvr.EntreesIncluded, opt => opt.Ignore())
                 .ForMember(gvr => gvr.AddedOn, opt => opt.MapFrom(v => v.AddedOn.ToString()))
@@ -46,10 +51,10 @@ namespace WebApi.Mapping
 
         private void DomainToApiStapleFood()
         {
-            this.CreateMap<StapleFood, SaveEntreeResource>()
+            this.CreateMap<StapleFood, SaveEntreeDetailResource>()
                 .ForMember
                 (svr => svr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }));
-            this.CreateMap<StapleFood, GridEntreeResource>()
+            this.CreateMap<StapleFood, GridEntreeDetailResource>()
                 .ForMember(gvr => gvr.NumberOfEntreeIncluded, opt => opt.Ignore())
                 .ForMember(gvr => gvr.EntreesIncluded, opt => opt.Ignore())
                 .ForMember(gvr => gvr.AddedOn, opt => opt.MapFrom(v => v.AddedOn.ToString()))
@@ -58,18 +63,45 @@ namespace WebApi.Mapping
                 (gvr => gvr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }));
         }
 
+        private void DomainToApiEntree()
+        {
+            this.CreateMap<Entree, EntreeInfoResource>()
+                .ForMember(eir => eir.EntreeId, opt => opt.MapFrom(e => e.Id))
+                .ForMember(eir => eir.EntreeName, opt => opt.MapFrom(e => e.Name))
+                .ForMember(eir => eir.VegetableCount, opt => opt.Ignore())
+                .ForMember(eir => eir.MeatCount, opt => opt.Ignore())
+                .ForMember(eir => eir.StapleFood, opt => opt.MapFrom(e => e.StapleFood.Name))
+                .ForMember(eir => eir.Style, opt => opt.MapFrom(e => e.EntreeStyle.Style))
+                .ForMember(eir => eir.Catagory, opt => opt.MapFrom(e => e.EntreeCatagory.Catagory))
+                .ForMember(eir => eir.AddedOn, opt => opt.MapFrom(e => e.AddedOn.ToString()))
+                .ForMember(eir => eir.EntreeDetailList, opt => opt.Ignore());
+            this.CreateMap<Entree, SaveEntreeResource>();
+        }
+        #endregion
+
+        #region API Resource/View Model to Domain
         private void ApiToDomainEntreeDetail()
         {
-            this.CreateMap<SaveEntreeResource, EntreeDetail>()
+            this.CreateMap<SaveEntreeDetailResource, EntreeDetail>()
                                 .ForMember(v => v.Id, opt => opt.Ignore())
                                 .ForMember(v => v.Name, opt => opt.MapFrom(svr => svr.keyValuePairInfo.Name));
         }
 
         private void ApiToDomainStapleFood()
         {
-            this.CreateMap<SaveEntreeResource, StapleFood>()
+            this.CreateMap<SaveEntreeDetailResource, StapleFood>()
                                 .ForMember(v => v.Id, opt => opt.Ignore())
                                 .ForMember(v => v.Name, opt => opt.MapFrom(svr => svr.keyValuePairInfo.Name));
         }
+        private void ApiToDomainEntree()
+        {
+            this.CreateMap<SaveEntreeResource, Entree>()
+                .ForMember(e => e.Id, opt => opt.Ignore())
+                .ForMember(e => e.StapleFood, opt => opt.Ignore())
+                .ForMember(e => e.EntreeCatagory, opt => opt.Ignore())
+                .ForMember(e => e.EntreeStyle, opt => opt.Ignore())
+                .ForMember(e => e.MappingDetailsWithCurrentEntree, opt => opt.Ignore());
+        }
+        #endregion
     }
 }

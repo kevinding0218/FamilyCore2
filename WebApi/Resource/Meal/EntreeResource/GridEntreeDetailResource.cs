@@ -4,7 +4,7 @@ using WebApi.Resource.Shared;
 
 namespace WebApi.Resource.Meal.EntreeResource
 {
-    public class GridEntreeResource
+    public class GridEntreeDetailResource
     {
         public KeyValuePairResource keyValuePairInfo { get; set; }
         public String AddedOn { get; set; }

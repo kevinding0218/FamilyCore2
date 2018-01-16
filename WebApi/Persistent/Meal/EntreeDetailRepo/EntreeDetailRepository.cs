@@ -16,14 +16,16 @@ namespace WebApi.Persistent.Meal
             this._context = context;
         }
 
-        public async Task<bool> IsDuplicateEntreeDetail(string name)
+        public async Task<bool> IsDuplicateEntreeDetail(string name, int? Id = null)
         {
-            return await _context.EntreeDetails.AnyAsync(m => m.Name == name);
+            if (Id.HasValue)
+                return await _context.EntreeDetails.AnyAsync(ed => ed.Name == name && ed.Id != Id);
+            return await _context.EntreeDetails.AnyAsync(ed => ed.Name == name);
         }
 
-        public async Task<IEnumerable<EntreeDetail>> GetEntreeDetails()
+        public async Task<IEnumerable<EntreeDetail>> GetEntreeDetails(string EntreeDetailType)
         {
-            return await this._context.EntreeDetails.Include(ed => ed.EntreeDetailType).Where(ed => ed.EntreeDetailType.DetailType == "肉类").ToListAsync();
+            return await this._context.EntreeDetails.Include(ed => ed.EntreeDetailType).Where(ed => ed.EntreeDetailType.DetailType == EntreeDetailType).ToListAsync();
         }
 
         public async Task<EntreeDetail> GetEntreeDetail(int id)

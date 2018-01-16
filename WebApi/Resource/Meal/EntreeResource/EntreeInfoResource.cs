@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WebApi.CustomAttribute;
 
 namespace WebApi.Resource.Meal.EntreeResource
@@ -13,6 +14,11 @@ namespace WebApi.Resource.Meal.EntreeResource
         public string Style { get; set; }
         public string Catagory { get; set; }
         public string Note { get; set; }
+
+        public int AddedById { get; set; }
+        public string AddedByUserName { get; set; }
+        public String AddedOn { get; set; }
+
         [IngoreReadToListAttribute]
         public IEnumerable<EntreeDetailResource> EntreeDetailList { get; set; }
 

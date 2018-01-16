@@ -1,17 +1,19 @@
 ﻿using System;
-using WebApi.Resource.Shared;
 
 namespace WebApi.Resource.Meal.EntreeResource
 {
     public class SaveEntreeResource
     {
-        public KeyValuePairResource keyValuePairInfo { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int? StapleFoodId { get; set; }
+        public String Note { get; set; }
+        public int EntreeCatagoryId { get; set; }
+        public int EntreeStyleId { get; set; }
+        public int? CurrentRank { get; set; }
+        public int AddedById { get; set; }
         public DateTime AddedOn { get; set; }
-
+        public int? LastUpdatedById { get; set; }
         public DateTime? LastUpdatedByOn { get; set; }
-        public int AddedByUserId { get; set; }
-
-        public int? LastUpdatedByUserId { get; set; }
-        public string Note { get; set; }
     }
 }

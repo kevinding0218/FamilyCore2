@@ -43,14 +43,14 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region READ LIST OF OBJECTS
         [HttpGet]
-        public async Task<QueryResultResource<GridEntreeResource>> GetVegetables(VegetableQueryResource filterResource)
+        public async Task<QueryResultResource<GridEntreeDetailResource>> GetVegetables(VegetableQueryResource filterResource)
         {
             //var result = new QueryResultResource<GridEntreeComponentResource>();
             var filter = _mapper.Map<VegetableQueryResource, VegetableQuery>(filterResource);
 
             var queryResult = await _vegeRepository.GetVegetables(filter);
             //result.TotalItems = queryResult.TotalItems;
-            var queryResultResource = _mapper.Map<QueryResult<EntreeDetail>, QueryResultResource<GridEntreeResource>>(queryResult);
+            var queryResultResource = _mapper.Map<QueryResult<EntreeDetail>, QueryResultResource<GridEntreeDetailResource>>(queryResult);
 
             #region  Apply additional fields to Result and apply sorting/paging
             var queryResultItemsQueryable = queryResultResource.Items.AsQueryable();
@@ -74,7 +74,7 @@ namespace WebApi.Controllers.ApiController.Meal
                 //gridVegetable.SetEntrees(new List<string>(new string[] { "Entree 1", "Entree 2", "Entree 3" }));
             }
 
-            var columnsMap = new Dictionary<string, Expression<Func<GridEntreeResource, object>>>()
+            var columnsMap = new Dictionary<string, Expression<Func<GridEntreeDetailResource, object>>>()
             {
                 ["addedBy"] = gv => gv.AddedByUserName,
                 ["entreesIncluded"] = gv => gv.NumberOfEntreeIncluded
@@ -101,7 +101,7 @@ namespace WebApi.Controllers.ApiController.Meal
                 return NotFound();
 
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeResource>(isExistedVegetable);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedVegetable);
 
             // Return view Model
             return Ok(result);
@@ -110,12 +110,12 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region CREATE
         [HttpPost]
-        public async Task<IActionResult> CreateVegetable([FromBody] SaveEntreeResource newVegetableResource)
+        public async Task<IActionResult> CreateVegetable([FromBody] SaveEntreeDetailResource newVegetableResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _userRepository.IsExistedUser(newVegetableResource.AddedByUserId))
+            if (!await _userRepository.IsExistedUser(newVegetableResource.AddedById))
             {
                 ModelState.AddModelError("NonExistedUser", "User Not Found!");
                 return BadRequest(ModelState);
@@ -128,7 +128,7 @@ namespace WebApi.Controllers.ApiController.Meal
             }
 
             // Convert from View Model to Domain Model
-            var newVegetable = _mapper.Map<SaveEntreeResource, EntreeDetail>(newVegetableResource);
+            var newVegetable = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newVegetableResource);
             newVegetable.AddedOn = DateTime.Now;
 
             // Insert into database by using Domain Model
@@ -137,7 +137,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
             newVegetable = await _vegeRepository.GetVegetable(newVegetable.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeResource>(newVegetable);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(newVegetable);
 
             // Return view Model
             return Ok(result);
@@ -146,7 +146,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region  UPDATE
         [HttpPut("{id}")] //api/vegetable/id
-        public async Task<IActionResult> UpdateVegetable(int id, [FromBody] SaveEntreeResource SaveEntreeComponentResource)
+        public async Task<IActionResult> UpdateVegetable(int id, [FromBody] SaveEntreeDetailResource SaveEntreeComponentResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -155,8 +155,21 @@ namespace WebApi.Controllers.ApiController.Meal
             if (isExistedVegetable == null)
                 return NotFound();
 
+            if (await _vegeRepository.IsDuplicateVegetable(SaveEntreeComponentResource.keyValuePairInfo.Name, SaveEntreeComponentResource.keyValuePairInfo.Id))
+            {
+                ModelState.AddModelError("DuplicateVegetable", SaveEntreeComponentResource.keyValuePairInfo.Name + " already existed!");
+                return BadRequest(ModelState);
+            }
+
+            //var test = await _vegeRepository.GetVegetableWithSameName(SaveEntreeComponentResource.keyValuePairInfo.Name);
+            //if (test != null && test.Id != id)
+            //{
+            //    ModelState.AddModelError("DuplicateVegetable", SaveEntreeComponentResource.keyValuePairInfo.Name + " already existed!");
+            //    return BadRequest(ModelState);
+            //}
+
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeResource, EntreeDetail>(SaveEntreeComponentResource, isExistedVegetable);
+            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeComponentResource, isExistedVegetable);
             isExistedVegetable.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model
@@ -165,7 +178,7 @@ namespace WebApi.Controllers.ApiController.Meal
             // Fetch complete object from database
             isExistedVegetable = await _vegeRepository.GetVegetable(isExistedVegetable.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeResource>(isExistedVegetable);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedVegetable);
 
             // Return view Model
             return Ok(result);

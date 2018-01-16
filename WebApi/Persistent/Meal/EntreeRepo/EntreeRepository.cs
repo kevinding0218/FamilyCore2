@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DomainLibrary.Meal;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
@@ -57,7 +59,7 @@ namespace WebApi.Persistent.Meal
             return entreeInfo;
         }
 
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeDetails()
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntreesList()
         {
             var entreeInfo = new List<EntreeInfoResource>();
             await _context.LoadStoredProc("dbo.GetEntreeInfoById")
@@ -85,6 +87,44 @@ namespace WebApi.Persistent.Meal
             return entreeDetails;
         }
 
+        public async Task<bool> IsDuplicateEntree(string name, int? Id = null)
+        {
+            if (Id.HasValue)
+                return await _context.Entrees.AnyAsync(e => e.Name == name && e.Id != Id);
+            return await _context.Entrees.AnyAsync(e => e.Name == name);
+        }
 
+        public async Task<IEnumerable<Entree>> GetEntrees()
+        {
+            return await this._context.Entrees
+                .Include(e => e.StapleFood)
+                .Include(e => e.EntreeStyle)
+                .Include(e => e.EntreeCatagory)
+                .ToListAsync();
+        }
+
+        public async Task<Entree> GetEntree(int id)
+        {
+            return await this._context.Entrees
+                .Include(e => e.StapleFood)
+                .Include(e => e.EntreeStyle)
+                .Include(e => e.EntreeCatagory)
+                .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
+        public void AddEntree(Entree newEntree)
+        {
+            _context.Add(newEntree);
+        }
+
+        public void Remove(Entree existedEntree)
+        {
+            _context.Remove(existedEntree);
+        }
+
+        //public async Task<int> GetNumberOfEntreeDetailsWithCurrentEntree(int EntreeId)
+        //{
+        //    //return await this._context.Entrees.Include(e => e.MappingDetailsWithCurrentEntree).ThenInclude(map => map.en)
+        //}
     }
 }

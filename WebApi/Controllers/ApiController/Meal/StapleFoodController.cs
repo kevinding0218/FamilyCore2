@@ -39,10 +39,10 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region READ LIST OF OBJECTS
         [HttpGet]
-        public async Task<IEnumerable<GridEntreeResource>> GetStapleFoods()
+        public async Task<IEnumerable<GridEntreeDetailResource>> GetStapleFoods()
         {
             var StapleFoods = await this._stapleFoodRepository.GetStapleFoods();
-            var gridResult = _mapper.Map<IEnumerable<StapleFood>, IEnumerable<GridEntreeResource>>(StapleFoods);
+            var gridResult = _mapper.Map<IEnumerable<StapleFood>, IEnumerable<GridEntreeDetailResource>>(StapleFoods);
 
             foreach (var gridStapleFood in gridResult)
             {
@@ -67,7 +67,7 @@ namespace WebApi.Controllers.ApiController.Meal
                 return NotFound();
 
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<StapleFood, SaveEntreeResource>(isExistedStapleFood);
+            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(isExistedStapleFood);
 
             // Return view Model
             return Ok(result);
@@ -76,12 +76,12 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region CREATE
         [HttpPost]
-        public async Task<IActionResult> CreateStapleFood([FromBody] SaveEntreeResource newStapleFoodResource)
+        public async Task<IActionResult> CreateStapleFood([FromBody] SaveEntreeDetailResource newStapleFoodResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _userRepository.IsExistedUser(newStapleFoodResource.AddedByUserId))
+            if (!await _userRepository.IsExistedUser(newStapleFoodResource.AddedById))
             {
                 ModelState.AddModelError("NonExistedUser", "User Not Found!");
                 return BadRequest(ModelState);
@@ -94,7 +94,7 @@ namespace WebApi.Controllers.ApiController.Meal
             }
 
             // Convert from View Model to Domain Model
-            var newStapleFood = _mapper.Map<SaveEntreeResource, StapleFood>(newStapleFoodResource);
+            var newStapleFood = _mapper.Map<SaveEntreeDetailResource, StapleFood>(newStapleFoodResource);
             newStapleFood.AddedOn = DateTime.Now;
 
             // Insert into database by using Domain Model
@@ -103,7 +103,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
             newStapleFood = await _stapleFoodRepository.GetStapleFood(newStapleFood.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<StapleFood, SaveEntreeResource>(newStapleFood);
+            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(newStapleFood);
 
             // Return view Model
             return Ok(result);
@@ -112,7 +112,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region  UPDATE
         [HttpPut("{id}")] //api/StapleFood/id
-        public async Task<IActionResult> UpdateStapleFood(int id, [FromBody] SaveEntreeResource SaveEntreeResource)
+        public async Task<IActionResult> UpdateStapleFood(int id, [FromBody] SaveEntreeDetailResource SaveEntreeResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -122,7 +122,7 @@ namespace WebApi.Controllers.ApiController.Meal
                 return NotFound();
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeResource, StapleFood>(SaveEntreeResource, isExistedStapleFood);
+            _mapper.Map<SaveEntreeDetailResource, StapleFood>(SaveEntreeResource, isExistedStapleFood);
             isExistedStapleFood.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model
@@ -131,7 +131,7 @@ namespace WebApi.Controllers.ApiController.Meal
             // Fetch complete object from database
             isExistedStapleFood = await _stapleFoodRepository.GetStapleFood(isExistedStapleFood.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<StapleFood, SaveEntreeResource>(isExistedStapleFood);
+            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(isExistedStapleFood);
 
             // Return view Model
             return Ok(result);

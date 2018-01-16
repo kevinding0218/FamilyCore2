@@ -19,9 +19,16 @@ namespace WebApi.Persistent.Meal
             this._context = context;
         }
 
-        public async Task<bool> IsDuplicateVegetable(string name)
+        public async Task<bool> IsDuplicateVegetable(string name, int? Id = null)
         {
+            if (Id.HasValue)
+                return await _context.EntreeDetails.AnyAsync(ed => ed.Name == name && ed.Id != Id);
             return await _context.EntreeDetails.AnyAsync(ed => ed.Name == name);
+        }
+
+        public async Task<EntreeDetail> GetVegetableWithSameName(string name)
+        {
+            return await _context.EntreeDetails.SingleOrDefaultAsync(ed => ed.Name == name);
         }
 
         public async Task<EntreeDetail> GetVegetable(int id)

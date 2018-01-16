@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DomainLibrary.Meal;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Resource.Meal.EntreeResource;
 
@@ -9,7 +10,13 @@ namespace WebApi.Persistent.Meal
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithVegeId(int VegeId);
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithMeatId(int MeatId);
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithStapleFoodId(int StapleFoodId);
-        Task<IEnumerable<EntreeInfoResource>> GetEntreeDetails();
+        Task<IEnumerable<EntreeInfoResource>> GetEntreesList();
         Task<IEnumerable<EntreeDetailResource>> GetEntreeDetailWithEntreeId(int EntreeId);
+
+        Task<bool> IsDuplicateEntree(string name, int? Id = null);
+        Task<IEnumerable<Entree>> GetEntrees();
+        Task<Entree> GetEntree(int id);
+        void AddEntree(Entree newEntree);
+        void Remove(Entree existedEntree);
     }
 }
