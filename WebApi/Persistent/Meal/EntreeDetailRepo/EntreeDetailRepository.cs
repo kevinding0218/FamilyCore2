@@ -5,49 +5,49 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
 
-namespace WebApi.Persistent.Meal.MeatRepo
+namespace WebApi.Persistent.Meal
 {
-    public class MeatRepository : IMeatRepository
+    public class EntreeDetailRepository : IEntreeDetailRepository
     {
         private readonly FcDbContext _context;
 
-        public MeatRepository(FcDbContext context)
+        public EntreeDetailRepository(FcDbContext context)
         {
             this._context = context;
         }
 
-        public async Task<bool> IsDuplicateMeat(string name)
+        public async Task<bool> IsDuplicateEntreeDetail(string name)
         {
             return await _context.EntreeDetails.AnyAsync(m => m.Name == name);
         }
 
-        public async Task<IEnumerable<EntreeDetail>> GetMeats()
+        public async Task<IEnumerable<EntreeDetail>> GetEntreeDetails()
         {
             return await this._context.EntreeDetails.Include(ed => ed.EntreeDetailType).Where(ed => ed.EntreeDetailType.DetailType == "肉类").ToListAsync();
         }
 
-        public async Task<EntreeDetail> GetMeat(int id)
+        public async Task<EntreeDetail> GetEntreeDetail(int id)
         {
             return await _context.EntreeDetails.SingleOrDefaultAsync(m => m.Id == id);
         }
 
-        public void AddMeat(EntreeDetail newMeat)
+        public void AddEntreeDetail(EntreeDetail newEntreeDetail)
         {
-            _context.Add(newMeat);
+            _context.Add(newEntreeDetail);
         }
 
-        public void Remove(EntreeDetail existedMeat)
+        public void Remove(EntreeDetail existedEntreeDetail)
         {
-            _context.Remove(existedMeat);
+            _context.Remove(existedEntreeDetail);
         }
 
-        public async Task<int> GetNumberOfEntreesWithMeat(int meatId)
+        public async Task<int> GetNumberOfEntreesWithEntreeDetail(int EntreeDetailId)
         {
             // Use Store Procedure         
             int numberOfEntreeWithVege = -1;
 
-            await _context.LoadStoredProc("dbo.GetNumberOfEntreeById")
-                .WithSqlParam("Id", meatId)
+            await _context.LoadStoredProc("dbo.GetNumberOfEntreeByEntreeDetailId")
+                .WithSqlParam("Id", EntreeDetailId)
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     numberOfEntreeWithVege = handler.ReadToValue<int>() ?? default(int); ;

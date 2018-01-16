@@ -32,6 +32,6 @@ namespace DomainLibrary.Member
         public string Note { get; set; }
 
         [NotMapped]
-        public string FullName { get { return String.Format("{0} {1})", FirstName, LastName); } }
+        public string FullName { get { return String.Format("{0} {1}", FirstName, LastName); } }
     }
 }

@@ -1,4 +1,4 @@
-import { SaveVegetable } from './../../viewModels/meal/vegetable';
+import { SaveEntreeDetail } from './../../viewModels/meal/entreeDetail';
 import { SharedServiceHelper } from './../event/shared.service.helper';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
@@ -18,14 +18,14 @@ export class VegetableService {
       .map(res => res.json());
   }
 
-  create(vegetable: SaveVegetable) {
+  create(vegetable: SaveEntreeDetail) {
     console.log('In Create');
     console.log(vegetable);
     return this._http.post(this.apiEndPoint, vegetable)
       .map(res => res.json());
   }
 
-  update(vegetable: SaveVegetable) {
+  update(vegetable: SaveEntreeDetail) {
     return this._http.put(this.apiEndPoint + '/' + vegetable.keyValuePairInfo.id, vegetable)
       .map(res => res.json());
   }

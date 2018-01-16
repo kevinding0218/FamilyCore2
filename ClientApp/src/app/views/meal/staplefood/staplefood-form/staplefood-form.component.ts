@@ -2,21 +2,21 @@ import { SaveEntreeDetail } from './../../../../viewModels/meal/entreeDetail';
 import { NgForm } from '@angular/forms/src/directives';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
-import { MeatService } from './../../../../services/meal/meat.service';
+import { StaplefoodService } from './../../../../services/meal/staplefood.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-meat-form',
-    templateUrl: './meat-form.component.html'
+    selector: 'app-staplefood-form',
+    templateUrl: './staplefood-form.component.html'
 })
-export class MeatFormComponent implements OnInit {
-    FormHeader: string = 'Update Meat Item';
+export class StaplefoodFormComponent implements OnInit {
+    FormHeader: string = 'Update staplefood Item';
     isDevelopment: boolean = (JSON.parse(localStorage.getItem('currentUser')) == 'true' ? true : false);
     successfulSave: boolean = false;
     oldName: string;
     oldNote: string;
-    meat: SaveEntreeDetail = {
+    staplefood: SaveEntreeDetail = {
         keyValuePairInfo: {
             id: null,
             name: ''
@@ -30,53 +30,53 @@ export class MeatFormComponent implements OnInit {
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
-        private _meatService: MeatService,
+        private _staplefoodService: StaplefoodService,
         private toastr: ToastrService
     ) {
         _route.params.subscribe(p => {
-            this.meat.keyValuePairInfo.id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
+            this.staplefood.keyValuePairInfo.id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
         });
     }
 
     ngOnInit() {
         var sources = [];
 
-        if (this.meat.keyValuePairInfo.id)
+        if (this.staplefood.keyValuePairInfo.id)
         {
-            sources.push(this._meatService.getMeat(this.meat.keyValuePairInfo.id));
+            sources.push(this._staplefoodService.getStaplefood(this.staplefood.keyValuePairInfo.id));
 
             Observable.forkJoin(sources).subscribe(data => {
-                if (this.meat.keyValuePairInfo.id) {
-                    this.FormHeader = 'Update Meat Item';
-                    this.setmeat(data[0]);
+                if (this.staplefood.keyValuePairInfo.id) {
+                    this.FormHeader = 'Update staplefood Item';
+                    this.setstaplefood(data[0]);
                 }
             }, err => {
                 if (err.status == 404)
                     this._router.navigate(['/pages/404']);
             });
         } else {
-            this.FormHeader = 'Create New Meat';
+            this.FormHeader = 'Create New staplefood';
         }
     }
 
-    private setmeat(vege: any) {
-        this.meat.keyValuePairInfo.name = vege.keyValuePairInfo.name;
-        this.meat.addedOn = vege.addedOn;
-        this.meat.addedByUserId = vege.addedByUserId;
-        this.meat.updatedOn = vege.updatedOn;
-        this.meat.lastUpdatedByUserId = vege.lastUpdatedByUserId;
-        this.meat.note = vege.note;
+    private setstaplefood(vege: any) {
+        this.staplefood.keyValuePairInfo.name = vege.keyValuePairInfo.name;
+        this.staplefood.addedOn = vege.addedOn;
+        this.staplefood.addedByUserId = vege.addedByUserId;
+        this.staplefood.updatedOn = vege.updatedOn;
+        this.staplefood.lastUpdatedByUserId = vege.lastUpdatedByUserId;
+        this.staplefood.note = vege.note;
     }
 
     submit() {
-        if (this.meat.keyValuePairInfo.id) {
-            this.meat.lastUpdatedByUserId = 2;
+        if (this.staplefood.keyValuePairInfo.id) {
+            this.staplefood.lastUpdatedByUserId = 2;
 
-            this._meatService.update(this.meat)
+            this._staplefoodService.update(this.staplefood)
                 .subscribe(
                 (data) => {
                     this.successfulSave = true;
-                    this._router.navigate(['/meal/meatList']);
+                    this._router.navigate(['/meal/staplefoodList']);
                 },
                 (err) => {
                     this.successfulSave = false;
@@ -91,26 +91,26 @@ export class MeatFormComponent implements OnInit {
                     }
                 });
         } else {
-            this.meat.addedByUserId = 2;
-            this.meat.addedOn = new Date();
-            this._meatService.create(this.meat)
+            this.staplefood.addedByUserId = 2;
+            this.staplefood.addedOn = new Date();
+            this._staplefoodService.create(this.staplefood)
                 .subscribe(x => {
-                    this.toastr.success('This meat has been successfully inserted!', 'INSERT SUCCESS');
-                    this._router.navigate(['/meal/meatList']);
+                    this.toastr.success('This staplefood has been successfully inserted!', 'INSERT SUCCESS');
+                    this._router.navigate(['/meal/staplefoodList']);
                 });
         }
     }
 
     resetFormValue() {
-        this.meat.keyValuePairInfo.name = this.oldName;
-        this.meat.note = this.oldNote;
+        this.staplefood.keyValuePairInfo.name = this.oldName;
+        this.staplefood.note = this.oldNote;
     }
 
-    deleteMeat() {
+    deletestaplefood() {
         if (confirm("Are you sure?")) {
-            // this._meatService.delete(this.meat.keyValuePairInfo.id)
+            // this._staplefoodService.delete(this.staplefood.keyValuePairInfo.id)
             //     .subscribe(x => {
-            //         this._router.navigate(['/meal/meatForm/new']);
+            //         this._router.navigate(['/meal/staplefoodForm/new']);
             //     });
         }
     }

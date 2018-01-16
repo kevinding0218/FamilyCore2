@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MeatService } from '../../../../services/meal/meat.service';
+import { StaplefoodService } from '../../../../services/meal/staplefood.service';
 
 @Component({
-  selector: 'app-meat-list',
-  templateUrl: './meat-list.component.html'
+  selector: 'app-staplefood-list',
+  templateUrl: './staplefood-list.component.html'
 })
-export class MeatListComponent implements OnInit {
+export class StaplefoodListComponent implements OnInit {
   isDevelopment: boolean = (JSON.parse(localStorage.getItem('currentUser')) == 'true' ? true : false);
   @ViewChild('mainTable') mainTable: any;
   @ViewChild('levelOneDetailTable') detailtable: any;
@@ -26,14 +26,14 @@ export class MeatListComponent implements OnInit {
     { prop: 'note', name: 'Note' }
   ];
 
-  constructor(private _meatService: MeatService, private router: Router) { }
+  constructor(private _staplefoodService: StaplefoodService, private router: Router) { }
 
   ngOnInit() {
     this.populateDataTable();
   }
 
   private populateDataTable() {
-    this._meatService.getMeats()
+    this._staplefoodService.getStaplefoods()
       .subscribe(result => {
         this.ngx_rows = this.temp = result;
         setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
@@ -42,7 +42,7 @@ export class MeatListComponent implements OnInit {
 
   editMainTableItem(value) {
     console.log('editMainTableItem value: ' + value);
-    this.router.navigate(['/meal/meatForm/' + value]);
+    this.router.navigate(['/meal/staplefoodForm/' + value]);
   }
 
   updateFilter(event) {

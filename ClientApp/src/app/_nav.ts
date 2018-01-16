@@ -22,6 +22,11 @@ export const navigation = [
         name: 'Meats',
         url: '/meal/meatList',
         icon: 'icon-list'
+      },
+      {
+        name: 'Staple Food',
+        url: '/meal/staplefoodList',
+        icon: 'icon-list'
       }
     ]
   },

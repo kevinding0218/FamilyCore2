@@ -4,21 +4,21 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-align-justify"></i>
-          <b>List of Meats</b>
+          <b>List of staplefoods</b>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12">
               <div class="form-group row">
                 <div class="col-md-12">
-                  <input id="filter" type="text" class="form-control" placeholder='Type to filter the meat...' (keyup)='updateFilter($event)'>
+                  <input id="filter" type="text" class="form-control" placeholder='Type to filter the staplefood...' (keyup)='updateFilter($event)'>
                 </div>
               </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12"></div>
             <div class="col-lg-2 col-ms-2 col-sm-12">
-              <a [routerLink]="['/meal/meatForm/new']" class="btn btn-success">
-                <i class="icon-plus"></i> Create New Meat</a>
+              <a [routerLink]="['/meal/staplefoodForm/new']" class="btn btn-success">
+                <i class="icon-plus"></i> Create New Staple Food</a>
             </div>
           </div>
           <ngx-datatable #mainTable class="bootstrap expandable" style="border: lightblue 3px double;" [rows]="ngx_rows" [loadingIndicator]="ngx_loadingIndicator"
@@ -40,7 +40,7 @@
                         <label>{{value}}</label>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Meat Count" sortable="false" prop="meatCount">
+                    <ngx-datatable-column name="staplefood Count" sortable="false" prop="staplefoodCount">
                       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <label>{{value}}</label>
                       </ng-template>

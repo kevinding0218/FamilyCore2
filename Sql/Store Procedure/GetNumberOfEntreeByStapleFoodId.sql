@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetNumberOfEntreeById]
+CREATE PROCEDURE [dbo].[GetNumberOfEntreeByStapleFoodId]
 	@Id INT
 AS
 BEGIN
@@ -19,5 +19,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT COUNT(*) AS TotalEntrees FROM Entrees_Details WHERE EntreeDetailId = @Id
+	SELECT COUNT(*) AS TotalEntrees FROM dbo.Entree e
+	INNER JOIN dbo.StapleFood sf ON sf.Id = e.StapleFoodId 
+	WHERE sf.Id = @Id
 END

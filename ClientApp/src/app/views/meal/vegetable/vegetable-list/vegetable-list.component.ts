@@ -1,6 +1,6 @@
+import { GridEntreeDetail } from './../../../../viewModels/meal/entreeDetail';
 import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridVegetable } from '../../../../viewModels/meal/vegetable';
 import { VegetableService } from '../../../../services/meal/vegetable.service';
 
 @Component({
@@ -11,7 +11,7 @@ export class VegetableListComponent implements OnInit {
   isDevelopment: boolean = (JSON.parse(localStorage.getItem('currentUser')) == 'true' ? true : false);
   private readonly PAGE_SIZE = 2;
   queryResult: any = {};
-  allVegetables: GridVegetable[];
+  allVegetables: GridEntreeDetail[];
   query: any = {
     pageSize: this.PAGE_SIZE
   };
@@ -43,7 +43,6 @@ export class VegetableListComponent implements OnInit {
     { prop: 'addedByUserName', name: 'Added By' },
     { prop: 'numberOfEntreeIncluded', name: 'Entrees Included' },
     { prop: 'lastUpdatedByOn', name: 'Updated On' },
-    { prop: 'stapleFood', name: 'Staple Food' },
     { prop: 'note', name: 'Note' }
   ];
 

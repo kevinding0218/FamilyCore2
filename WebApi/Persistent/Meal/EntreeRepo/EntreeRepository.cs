@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using WebApi.Extensions;
 using WebApi.Resource.Meal.EntreeResource;
 
-namespace WebApi.Persistent.Meal.EntreeRepo
+namespace WebApi.Persistent.Meal
 {
     public class EntreeRepository : IEntreeRepository
     {
@@ -35,6 +35,20 @@ namespace WebApi.Persistent.Meal.EntreeRepo
             await _context.LoadStoredProc("dbo.GetEntreeInfoById")
                 .WithSqlParam("Id", MeatId)
                 .WithSqlParam("Type", "Meat")
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
+                    // do something with your results.
+                });
+            return entreeInfo;
+        }
+
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithStapleFoodId(int StapleFoodId)
+        {
+            var entreeInfo = new List<EntreeInfoResource>();
+            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
+                .WithSqlParam("Id", StapleFoodId)
+                .WithSqlParam("Type", "StapleFood")
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();

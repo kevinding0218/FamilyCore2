@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Persistent;
-using WebApi.Persistent.Meal.EntreeRepo;
-using WebApi.Persistent.Meal.MeatRepo;
-using WebApi.Persistent.Meal.Vegetable;
+using WebApi.Persistent.Meal;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
 
@@ -27,7 +25,8 @@ namespace WebApi
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVegetableRepository, VegetableRepository>();
-            services.AddScoped<IMeatRepository, MeatRepository>();
+            services.AddScoped<IEntreeDetailRepository, EntreeDetailRepository>();
+            services.AddScoped<IStapleFoodRepository, StapleFoodRepository>();
             services.AddScoped<IEntreeRepository, EntreeRepository>();
 
 

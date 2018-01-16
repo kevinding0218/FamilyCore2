@@ -141,6 +141,16 @@
                         <label>{{value}}</label>
                       </ng-template>
                     </ngx-datatable-column>
+                    <ngx-datatable-column name="Style" sortable="false" prop="style">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Catagory" sortable="false" prop="catagory">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Entree Note" sortable="false" prop="note">
                       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <label>{{value}}</label>

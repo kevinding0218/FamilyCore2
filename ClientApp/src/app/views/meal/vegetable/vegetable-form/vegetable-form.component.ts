@@ -1,8 +1,8 @@
+import { SaveEntreeDetail } from './../../../../viewModels/meal/entreeDetail';
 import { NgForm } from '@angular/forms/src/directives';
 import { Observable } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VegetableService } from './../../../../services/meal/vegetable.service';
-import { SaveVegetable, KeyValuePairInfo } from './../../../../viewModels/meal/vegetable';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -16,7 +16,7 @@ export class VegetableFormComponent implements OnInit {
   successfulSave: boolean = false;
   oldName: string;
   oldNote: string;
-  vegetable: SaveVegetable = {
+  vegetable: SaveEntreeDetail = {
     keyValuePairInfo: {
       id: null,
       name: ''

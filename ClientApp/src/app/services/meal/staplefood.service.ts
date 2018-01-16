@@ -6,27 +6,24 @@ import 'rxjs/add/operator/map';
 
 
 @Injectable()
-export class MeatService {
-  private readonly serviceApiEndPoint: string = 'http://localhost:49934/api/meat';
-  private readonly debugApiEndPoint: string = 'http://localhost:5000/api/meat';
-  private isDebug: boolean = false;
-  private readonly apiEndPoint: string = this.isDebug ? this.debugApiEndPoint : this.serviceApiEndPoint;
+export class StaplefoodService {
+  private readonly apiEndPoint: string = 'http://localhost:49934/api/stapleFood';
   constructor(private _http: Http) { }
 
-  getMeat(id) {
+  getStaplefood(id) {
     return this._http.get(this.apiEndPoint + '/' + id)
       .map(res => res.json());
   }
 
-  create(meat: SaveEntreeDetail) {
+  create(staplefood: SaveEntreeDetail) {
     console.log('In Create');
-    console.log(meat);
-    return this._http.post(this.apiEndPoint, meat)
+    console.log(staplefood);
+    return this._http.post(this.apiEndPoint, staplefood)
       .map(res => res.json());
   }
 
-  update(meat: SaveEntreeDetail) {
-    return this._http.put(this.apiEndPoint + '/' + meat.keyValuePairInfo.id, meat)
+  update(staplefood: SaveEntreeDetail) {
+    return this._http.put(this.apiEndPoint + '/' + staplefood.keyValuePairInfo.id, staplefood)
       .map(res => res.json());
   }
 
@@ -35,7 +32,7 @@ export class MeatService {
       .map(res => res.json());
   }
 
-  getMeats() {
+  getStaplefoods() {
     return this._http.get(this.apiEndPoint)
       .map(res => res.json());
   }

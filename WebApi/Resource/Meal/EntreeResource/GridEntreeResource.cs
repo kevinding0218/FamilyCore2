@@ -11,7 +11,7 @@ namespace WebApi.Resource.Meal.EntreeResource
 
         public String LastUpdatedByOn { get; set; }
 
-        public int AddedByUserId { get; set; }
+        public int AddedById { get; set; }
         public string AddedByUserName { get; set; }
 
         public int NumberOfEntreeIncluded { get; set; }

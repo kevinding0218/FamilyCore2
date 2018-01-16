@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using WebApi.Extensions;
 using WebApi.Persistent.Query;
 
-namespace WebApi.Persistent.Meal.Vegetable
+namespace WebApi.Persistent.Meal
 {
     public class VegetableRepository : IVegetableRepository
     {
@@ -77,7 +77,7 @@ namespace WebApi.Persistent.Meal.Vegetable
             // Use Store Procedure         
             int numberOfEntreeWithVege = -1;
 
-            await _context.LoadStoredProc("dbo.GetNumberOfEntreeById")
+            await _context.LoadStoredProc("dbo.GetNumberOfEntreeByEntreeDetailId")
                 .WithSqlParam("Id", vegeId)
                 .ExecuteStoredProcAsync((handler) =>
                 {

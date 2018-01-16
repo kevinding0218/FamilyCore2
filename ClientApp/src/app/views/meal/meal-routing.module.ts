@@ -1,9 +1,11 @@
+import { StaplefoodFormComponent } from './staplefood/staplefood-form/staplefood-form.component';
 import { MeatFormComponent } from './meat/meat-form/meat-form.component';
 import { MeatListComponent } from './meat/meat-list/meat-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { VegetableListComponent } from './vegetable/vegetable-list/vegetable-list.component';
 import { VegetableFormComponent } from './vegetable/vegetable-form/vegetable-form.component';
+import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood-list.component';
 
 const routes: Routes = [
   {
@@ -58,7 +60,28 @@ const routes: Routes = [
         path: 'meatForm/:id',
         component: MeatFormComponent,
         data: {
-          title: 'Update Vegetable'
+          title: 'Update Meat'
+        }
+      },
+      {
+        path: 'staplefoodList',
+        component: StaplefoodListComponent,
+        data: {
+          title: 'Meat List'
+        }
+      },
+      {
+        path: 'staplefoodForm/new',
+        component: StaplefoodFormComponent,
+        data: {
+          title: 'Create New Staple Food'
+        }
+      },
+      {
+        path: 'staplefoodForm/:id',
+        component: StaplefoodFormComponent,
+        data: {
+          title: 'Update Staple Food'
         }
       }
     ]

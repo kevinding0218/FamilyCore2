@@ -3,7 +3,7 @@ export interface KeyValuePairInfo {
     name: string;
 }
 
-export interface SaveVegetable {
+export interface SaveEntreeDetail {
     keyValuePairInfo: KeyValuePairInfo;
     addedOn: Date;
     addedByUserId: number;
@@ -12,12 +12,11 @@ export interface SaveVegetable {
     note: string;
 }
 
-export interface GridVegetable {
+export interface GridEntreeDetail {
     keyValuePairInfo: KeyValuePairInfo;
     addedOn: Date;
     addedByUserName: string;
     numberOfEntreeIncluded: number;
     lastUpdatedByOn: Date;
-    stapleFood: string;
     note: string;
 }

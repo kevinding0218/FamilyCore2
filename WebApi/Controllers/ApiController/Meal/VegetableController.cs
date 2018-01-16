@@ -8,8 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApi.Extensions;
-using WebApi.Persistent.Meal.EntreeRepo;
-using WebApi.Persistent.Meal.Vegetable;
+using WebApi.Persistent.Meal;
 using WebApi.Persistent.Query;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
@@ -58,7 +57,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
             foreach (var gridVegetable in queryResultItemsQueryable)
             {
-                var AddedByUserId = gridVegetable.AddedByUserId;
+                var AddedByUserId = gridVegetable.AddedById;
                 var VegeId = gridVegetable.keyValuePairInfo.Id;
 
                 gridVegetable.AddedByUserName = await _userRepository.GetUserFullName(AddedByUserId);

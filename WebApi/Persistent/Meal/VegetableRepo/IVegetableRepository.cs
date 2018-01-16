@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WebApi.Persistent.Query;
 
-namespace WebApi.Persistent.Meal.Vegetable
+namespace WebApi.Persistent.Meal
 {
     public interface IVegetableRepository
     {
