@@ -1,0 +1,225 @@
+---------------------------
+$ mkdir HomeAssist
+$ cd HomeAssist
+$ dotnet new angular
+$ dotnet restore
+$ npm install -d
+$ dot net run
+
+---------------------------
+Install Dotnet Watch Tool
+Google "Dotnet Watch"
+In Github page under below "How to Install"
+Copy 
+"
+<ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+</ItemGroup>
+"
+into .csproj right below "Project"
+then in command:
+$ dotnet restore 
+$ dotnet watch run
+
+---------------------------
+How to debug in VS Code
+Make sure current dotnet run or dotnet watch run is terminated
+Set up a break point in Home Controller for example,
+Go to "Debug" section then click "Start Debugging"
+if there is error: Could not find the preLaunchTask 'build'?
+close and reopen VS Code and retry
+if error still existed
+go to ".vscode\launch.json"
+Check value "program", replace .net core version and project.dll in the path
+where you can find in "$projectName\bin\Debug" folder
+
+---------------------------
+Add EntityFrameworkCore to current project using dotnet cli
+EITHER
+$ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+OR
+In .csproj, add
+<ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
+</ItemGroup>
+then use 
+$ dotnet restore
+If there is conflict
+Use "Restore" option in VS Code or use "dotnet restore"
+---------------------------
+Add EntityFrameworkCore.Tools to install entityframework command in package console
+EITHER
+$ dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
+OR
+In .csproj, add
+<ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+</ItemGroup>
+then use "dotnet restore"
+
+---------------------------
+Add EntityFrameworkCore.Design to enable entity framework command
+$ dotnet add package Microsoft.EntityFrameworkCore.Design
+$ dotnet restore
+
+---------------------------
+Error:
+Detected package downgrade: Microsoft.NETCore.App from 2.0.3 to 2.0.0. Reference the package directly from the project to select a different version. 
+HomeAssist -> Microsoft.EntityFrameworkCore.Tools.DotNet 2.0.1 -> Microsoft.NETCore.App (>= 2.0.3) 
+HomeAssist -> Microsoft.NETCore.App (>= 2.0.0)	HomeAssist	G:\Drexolo\HomeAssist\HomeAssist.csproj	1	
+To fix this issue:
+<ItemGroup>
+  <!-- Remove this -->
+  <PakcageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+                    Version="2.0.1" />
+
+  <!-- Keep this -->
+  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+                          Version="2.0.1" />
+</ItemGroup>
+Then "dotnet restore"
+
+---------------------------
+Create a DbContext
+$ mkdir Persistence
+add new C# class "HAssistDbContext" and inherited from DbContext
+add its contructor as:
+"public HAssistDbContext(DbContextOptions<HAssistDbContext> options) : base(options){ }"
+then inject it as service in Startup.cs->ConfigureServices
+"services.AddDbContext<HAssistDbContext>(options => options.UseSqlServer(""));"
+
+---------------------------
+Use configuration as connectionString
+Create ConnectionStrings in appsettings.json
+"ConnectionStrings": {
+    "Default": "Server=KEVINANDLULU\\SQLEXPRESS; database=HomeAssist; Integrated Security=SSPI;"
+  }
+A major change is that instead of building the configuration in Startup, we do it in the Program class.
+Take note of the ConfigureAppConfiguration function call:
+*********************
+.ConfigureAppConfiguration((builderContext, config) =>
+{
+    IHostingEnvironment env = builderContext.HostingEnvironment;
+
+    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+})
+*********************
+The function takes a single argument, which is a callback that takes a WebHostBuilderContext and an IConfigurationBuilder.
+You can configure configuration as usual in there.
+
+---------------------------
+Creating the database
+$ dotnet ef migrations add InitialModel
+
+---------------------------
+Add Migration when database structure changed
+Create model class under "Models"
+Solution 1(package console):
+"Remove-Migration
+then
+"Add-Migration"
+then
+"Update-Database"
+Solution 2(console):
+$ dotnet ef migrations remove
+then redo:
+$ dotnet ef migrations add InitialModel
+then
+$ dotnet ef database update
+
+---------------------------
+Seeding the Database
+$ dotnet ef migrations add SeedDatabase
+in override On Method:
+migrationBuilder.Sql("INSERT INTO ...");
+in override Down Method:
+migrationBuilder.Sql("DELETE FROM ...");
+$ dotnet ef database update
+---------------------------
+If something changed in middle of the seed data, 
+need to recreate another migration then copy the seed data in
+Use AutoMapper to map two objects together
+Either:
+$ dotnet add package AutoMapper
+Or:
+Install-Package AutoMapper
+AND
+Either:
+$ dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 1.2.0
+Or:
+Install-Package AutoMapper
+Finally:
+$ dotnet restore
+In Startup.cs --> ConfigureServices()
+Add "services.AddAutoMapper();"
+---------------------------
+In Controller, create folder "Resource" and "VegetableResource" class
+Copy from "Vegetable.cs" to "VegetableResource.cs"
+Back to VegetableController GetVeges()
+Change From:
+[HttpGet("/api/veges")]
+public async Task<IEnumerable<Vegetable>> GetVeges()
+{
+   return await _context.Vegetables.ToListAsync();
+}
+To:
+[HttpGet("/api/veges")]
+public async Task<IEnumerable<VegetableResource>> GetVeges()
+{
+  var veges = await _context.Vegetables.ToListAsync();
+
+  return _mapper.Map<List<Vegetable>, List<VegetableResource>>(veges);
+}
+---------------------------
+Add Mapping Relationship between two objects
+Create folder "Mapping" and new class "MappingProfile.cs" and inherited from "Profile"
+Create Mapping Relationship inside "MappingProfile" constructor
+
+---------------------------
+Building from ClientSide
+Create new component using angular-cli
+---------------------------
+If the project is created throught "dotnet new angular"
+need to install latest angular/cli at global or project level
+1. $ npm install @angular/cli@latest -g
+2. $ ng new <projectname>
+3. copy angular-cli.json file into current project and change "root" value from "src" to "ClientApp"
+4. $ npm install @angular/cli@latest --save-dev
+5. cd <projectname>/ClientApp/app/components folder, then $ng g c <componentname> --spec false
+---------------------------
+Create new routing using angular-cli
+1. Using "ng new demoAppRouting --routing" to create an app with routing option
+2. Copy the app-routing-module.ts into current project src/app
+3. Import "AppRoutingModule" into app.module.ts
+OR
+1. in "app.module.ts", import { RouterModule } from '@angular/router';
+2. in @NgModule-->imports--> RouterModule.forRoot([path: '', redirectTo: 'veges', pathMatch: 'full']}
+---------------------------
+Re-run the project
+$ webpack
+$ dotnet restore
+$ dotnet watch run
+Ctrl + F5 if needed
+---------------------------
+Adding bootstrap and font-awesome icons
+$ npm install --save bootstrap
+$ npm install --save font-awesome
+Include the css and javascript file inside .angular-cli.json "styles" and "scripts" section array
+---------------------------
+$ ng serve
+ng serve an ejected project cannot use the build command anymore
+Open angular-cil.json, find "project" section and remove ["ejected: true]
+
+---------------------------
+Issues hard to resolve:
+Use dotnet run will not load bootstrap from angular-cli.json
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+<div *ngIf="isDevelopment">
+  <p>
+    {{meat | json}}
+  </p>
+  <pre>{{f.value | json}}</pre>
+  <span>{{ f.valid }}</span>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <strong>{{ this.FormHeader }}</strong>
+  </div>
+  <div class="card-body">
+    <form #f="ngForm" novalidate class="form-horizontal">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="txtmeatName">Meat Name</label>
+        <div class="col-md-6">
+          <input type="text" id="meatName" class="form-control" placeholder="Enter Name.." [(ngModel)]="meat.keyValuePairInfo.name"
+            name="meatName" required #meatName="ngModel">
+        </div>
+        <div class="col-md-3">
+          <label class="col-form-label" *ngIf="(meatName.dirty || meatName.touched) && meatName.invalid">
+            <span class="alert alert-danger">Name is Required!</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="txtmeatName">Note</label>
+        <div class="col-md-6">
+          <input type="text" id="meatNote" class="form-control" placeholder="Enter Note.." [(ngModel)]="meat.note" name="meatNote">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="pull-right">
+      <button type="submit" class="btn btn-sm btn-success" (click)="this.submit()" [disabled]="!f.valid">
+        <i class="fa fa-dot-circle-o"></i> Submit</button>
+      <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()">
+        <i class="fa fa-ban"></i> Reset</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteMeat()" [disabled]="true">
+        <i class="fa fa-remove"></i> Delete</button>
+    </div>
+  </div>
+</div>

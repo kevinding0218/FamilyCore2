@@ -1,0 +1,224 @@
+Angular CLI command
+--------------------------------------------------
+if ng is not found or recognized
+Adding C:\Users\DELL\AppData\Roaming\npm to System Variable Path worked for me. Please find your appropriate file path to 'npm'
+Also, check if you have added your angular-cli\bin path to the path variable.
+--------------------------------------------------
+-d: a preview that let you know what files are going to be generated or updated
+--------------------------------------------------
+Generating Component
+$ ng generate <feature> <options>
+$ ng generate component <name> <options>
+E.g:
+$ ng generate component contact
+OR
+$ ng g c contact
+*$ ng generate component contact --spec false*
+--------------------------------------------------
+options:
+--flat: boolean, default false, generate component files in src/app
+--inline-template: boolean, default false, Alias -it
+--inline-style: boolean, default false, Alias -is
+--prefix: boolean, default true, 
+--spec: boolean, default true, generate spec file with unit test
+E.g:
+ng g c contactList --flat -it -is --prefix my --spec false
+means: we are going to create a component that 
+will be generated inside src/app folder,
+will NOT generate a seperate html page, 
+will NOT generate a seperate css file,
+will specify a prefix of "my" to the selector of the component as "my-contact-list"
+will NOT create .spec.ts as a unit test file
+--------------------------------------------------
+--------------------------------------------------
+Generating Directive
+$ ng generate <feature> <options>
+$ ng generate directive <name> <options>
+$ ng g d <name> <options>
+E.g:
+$ ng generate directive btnDelete
+OR
+$ ng g d btnDelete
+--------------------------------------------------
+options:
+--flat: boolean, default true, generate directive files in src/app
+--prefix: boolean, default true, use prefix specified in angular-cli.json
+--spec: boolean, default true, generate spec file with unit test
+E.g:
+ng g d btnConfirm --flat false --prefix my --spec false
+means: we are going to create a directive that 
+will create a seperate folder "btn-confirm" where the directive is created
+will specify a prefix of "my" to the selector of the directvie as "myBtnConfirm"
+will NOT create .spec.ts as a unit test file
+--------------------------------------------------
+--------------------------------------------------
+Generating Service
+$ ng generate <feature> <options>
+$ ng generate service <name> <options>
+$ ng g s <name> <options>
+E.g:
+$ ng generate service contactData
+OR
+$ ng g s contactData
+WARNING: Service is generated but not provided, it must be provided to be used
+So we need to register this service as a provider to the area where you need to use it.
+For example: in the Module or in the Component(providers array)
+--------------------------------------------------
+options:
+-m <fileName>: register the provider in <fileName> when created it.
+E.g:
+ng g s contactData -m app.module
+--flat: boolean, default true, generate service file in src/app
+--spec: boolean, default true, generate spec file with unit test
+E.g:
+ng g s contactData --flat false --spec false
+means: we are going to create a service that 
+will create a seperate folder "contact-data" where the service is created.
+will NOT create .spec.ts as a unit test file
+--------------------------------------------------
+--------------------------------------------------
+Generating Pipe
+$ ng generate <feature> <options>
+$ ng generate pipe <name> <options>
+$ ng g p <name> <options>
+E.g:
+$ ng generate pipe convertToInches
+OR
+$ ng g p convertToInches
+--------------------------------------------------
+options:
+--flat: boolean, default true, generate pipe file in src/app
+--spec: boolean, default true, generate spec file with unit test
+E.g:
+ng g p converToInches --flat false --spec false
+means: we are going to create a pipe that 
+will create a seperate folder "contact-to-inches" where the pipe is created.
+will NOT create .spec.ts as a unit test file
+--------------------------------------------------
+--------------------------------------------------
+Generating Classes
+$ ng generate <feature> <options>
+$ ng generate contact <name> <options>
+$ ng g cl <name> <options>
+E.g:
+$ ng generate class contact
+OR
+$ ng g cl convertToInches
+--------------------------------------------------
+Generating inside Models folder
+ng g cl model/contact
+This will create a contact class inside the model folder
+--------------------------------------------------
+--------------------------------------------------
+Generating Interfaces
+$ ng generate <feature> <options>
+$ ng generate interface <name> <options>
+$ ng g f <name> <options>
+E.g:
+$ ng generate interface person
+OR
+$ ng g i person
+--------------------------------------------------
+Generating inside Models folder
+ng g i model/person
+This will create a person interface inside the model folder
+--------------------------------------------------
+--------------------------------------------------
+Generating Enumerations
+$ ng generate <feature> <options>
+$ ng generate enum <name> <options>
+$ ng g e <name> <options>
+E.g:
+$ ng generate enum directions
+OR
+$ ng g i directions
+--------------------------------------------------
+--------------------------------------------------
+Generating Modules
+$ ng generate <feature> <options>
+$ ng generate module <name> <options>
+$ ng g m <name> <options>
+E.g:
+$ ng generate module admin
+OR
+$ ng g m admin
+This will create a "admin" module inside "admin" folder
+--------------------------------------------------
+If we want to create a new component that's under "admin" module
+$ ng g c login -m admin/admin.module
+--------------------------------------------------
+--------------------------------------------------
+Generating Routing
+$ ng new demoApp
+$ ng new demoRoutingApp --routing
+Create a new application with routing option
+--------------------------------------------------
+--------------------------------------------------
+Building and Serving the application
+$ ng serve - builds and bundles the app to a virtual file system or in memory
+$ ng build - compile the app into a folder
+--------------------------------------------------
+--------------------------------------------------
+Application Build
+Environment
+File to be used for dev vs prod
+Files exist in src/environments/
+Dev - environments.ts
+Prod - environment.prod.ts
+Environment specifies settings to customize app behavior
+Default environment is development
+For development
+$ ng build --environment=dev
+$ ng build -e=dev
+$ ng build
+For production
+$ ng build --environment=prod
+$ ng build -e=prod
+--------------------------------------------------
+Using environment file in main.ts
+if (environment.production) {
+    enableProdMode();
+}
+--------------------------------------------------
+Build Target
+Impacts the way the build process executes
+For development
+$ ng build --target=development
+$ ng build --dev
+$ ng build
+For production
+$ ng build --target=production
+$ ng build --prod
+--------------------------------------------------
+--------------------------------------------------
+Serving the application
+ng serve
+Options:
+--open or -o opens the default browser with the served application
+--port or -p to specify a port. Default is 4200
+live-reload or -lr to specify live reload. Default is enabled
+E.g:
+$ ng serve -o -p 3000 open the browser with port 3000 of current application
+--------------------------------------------------
+--------------------------------------------------
+Adding css and javascript
+Include the css and javascript file inside .angular-cli.json "styles" and "scripts" section array
+--------------------------------------------------
+--------------------------------------------------
+Adding bootstrap and font-awesome icons
+$ npm install --save bootstrap
+$ npm install --save font-awesome
+Include the css and javascript file inside .angular-cli.json "styles" and "scripts" section array
+
+
+
+
+
+
+
+
+
+
+
+
+

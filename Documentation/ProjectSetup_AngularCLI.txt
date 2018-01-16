@@ -1,0 +1,478 @@
+-----------------------------
+If you already have Webpack on your computer, we’d recommend to reinstall it from scratch 
+to make sure you’re using the latest version:
+$ npm uninstall -g webpack
+$ npm rm webpack -g
+Install Webpack again:
+$ npm install webpack -g
+
+-----------------------------
+The same is relevant for Angular CLI 
+– if you have it installed, make sure to use the latest version:
+$ npm uninstall -g @angular/cli
+$ npm rm @angular/cli –g
+Reinstall Angular CLI once again:
+$ npm install @angular/cli -g
+
+-----------------------------
+create a new project:
+$ ng new FamilyAssist
+
+-----------------------------
+Move to the newly created project folder:
+$ cd FamilyAssist
+
+-----------------------------
+Initially, Angular CLI puts a webpack.config.js config file in the node_modules/webpack folder 
+and doesn’t allow to configure it.
+We need to extract webpack.config.js to the root of the project in order to configure it:
+$ ng eject
+-----------------------------
+Webpack Adjustment
+Both projects have been created but they don’t interact with each other yet. 
+Actually, we should put static files in .NET Core content root folder – wwwroot. 
+We need to adjust Webpack to put bundled files to the wwwroot folder.
+
+Let’s open our project folder in VS Code. Open file webpack.config.js 
+and find the “dist” directory as seen below:
+Replace:
+“path”: path.join(process.cwd(), “dist”),
+…with:
+“path”: path.join(process.cwd(), “wwwroot”),
+
+Also replace outDir in tsconfig.js
+Replace:
+"outDir": "./dist/out-tsc",
+…with:
+"outDir": "./wwwroot/out-tsc",
+
+-----------------------------
+Starting .NET Core project
+Now we need to add a .NET Core project:
+$ dotnet new webapi
+-----------------------------
+Our .NET Core doesn’t use static files yet and we will solve this issue now. 
+Add the following row to the Config method in Startup.cs file 
+to use default files like the index.html:
+app.UseDefaultFiles();
+Now, add the following row to "Configure" method in Startup.cs file to use static files from wwwroot:
+app.UseStaticFiles();
+Install package "Microsoft.AspNetCore.StaticFiles"
+$ dotnet add package Microsoft.AspNetCore.StaticFiles
+$ dotnet restore
+
+-----------------------------
+Now let’s check if Webpack works as expected. 
+Run the following command to transpile the TypeScript code to JavaScript code, 
+then bundle, minify and put this code in the destination folder:
+$ webpack
+Now we can see that all expected files appeared in the wwwroot folder:
+-----------------------------
+Make a production build. Set the ASPNETCORE_ENVIRONMENT variable to Production and then run:
+webpack --config webpack.config.vendor.js
+webpack
+-----------------------------
+Writing App Code
+Let’s send a really simple message from our back-end and display it in the browser.
+
+Open “Controllers” folder and add a new file called “HelloController.cs”. You will see the following menu:
+Embed the following code into the file:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Ng2AspCore.Controllers
+
+{
+    [Route("api/hello")]
+    public class HelloController : Controller
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Hello Angular4 and ASP.NET Core from Windows 10");
+        }
+    }
+}
+Explanation: there are two types of routing – conventional routing and attribute routing. We use RouteAttribute (attribute routing) to define a routing. You can also use Configure method in Startup class to define a routing (conventional routing) but RouteAttribute is a preferable way to do it. In HelloController class we return just a simple string “Hello Angular4 and ASP.NET Core from Windows 10” to show that it really works. Further in this tutorial, we will create a more useful sample.
+
+Now our endpoint is ready. You can execute dotnet run command and go to http://localhost:5000/api/hello in a browser to test it.
+
+-----------------------------
+dotnet run
+
+-----------------------------
+Further, we’ll request this endpoint in our front-end part in order to return a response on the page.
+Create a new "app.service.ts" file in src/app folder with following code:
+import { Injectable } from ‘@angular/core’;
+import { Http, Response } from ‘@angular/http’;
+
+import { Observable } from ‘rxjs/Observable’;
+import ‘rxjs/add/operator/catch’;
+import ‘rxjs/add/operator/map’;
+import ‘rxjs/add/observable/throw’;
+
+@Injectable()
+export class AppService {
+    private _serviceUrl = 'api/hello';
+
+    constructor(private _http: Http) { }
+
+    sayHello(): Observable <string>  {
+        return this._http.get(this._serviceUrl)
+            .map((response: Response) => {
+                return response.text();
+            });
+    }
+}
+Explanation: we have defined a new TypeScript class and tagged it by @Injectable decorator to use it as dependency injector. 
+In this class, we’ve got just one method that opens a communication channel in which response of the endpoint can be emitted. 
+For this purpose, we use the “Observable” class.
+
+-----------------------------
+Open app.module.ts file and add “AppService” to the file. Then import HttpModule:
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { AppComponent } from './app.component';
+import { AppService } from './app.service';
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpModule
+  ],
+  providers: [AppService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+-----------------------------
+Now, change the code of app.component.html file to the following:
+<h4 class='panel-heading'>
+    {{errorMessage}}
+</h4>
+<h2 class='panel-heading'>
+    {{pageTitle}}
+</h2>
+<hr/>
+
+-----------------------------
+Change the code of the app.component.ts file to the following:
+
+import { Component, OnInit } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { AppService } from './app.service';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  pageTitle: string = '';
+  errorMessage: string = '';
+  
+  constructor(private _appService: AppService) { }
+    ngOnInit(): void {
+        this._appService.sayHello()
+            .subscribe(result => {
+                this.pageTitle = result;
+            },
+            error => {
+                this.errorMessage = <any>error
+            });
+    }
+}
+Explanation: we have added an OnInit interface like a lifecycle hook to this file 
+and ngOnInit method from this interface in order to call the code when data-bound properties of a directive will be initialized. 
+In this method, we have subscribed to the observable channel from AppService.
+
+-----------------------------
+Launching the Application
+To launch your application, simply execute the following commands:
+
+$ webpack
+$ dotnet restore – to restore all .NET Core packages
+$ dotnet run – to run your application on Kestrel web server
+Now you can go to http://localhost:5000/ URI, as suggested by console:
+
+-----------------------------
+$ dotnet add package Microsoft.DotNet.Watcher.Tools
+$ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+$ dotnet add package Microsoft.EntityFrameworkCore.Tools.DotNet
+$ dotnet add package Microsoft.EntityFrameworkCore.Design
+$ dotnet restore
+Error:
+Detected package downgrade: Microsoft.NETCore.App from 2.0.3 to 2.0.0. Reference the package directly from the project to select a different version. 
+homeAssist -> Microsoft.EntityFrameworkCore.Tools.DotNet 2.0.1 -> Microsoft.NETCore.App (>= 2.0.3) 
+homeAssist -> Microsoft.NETCore.App (>= 2.0.0)	homeAssist	G:\Drexolo\homeAssist\homeAssist.csproj	1	
+To fix this issue:
+<ItemGroup>
+  <!-- Remove this -->
+  <PakcageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+                    Version="2.0.1" />
+
+  <!-- Keep this -->
+  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+                          Version="2.0.1" />
+</ItemGroup>
+Then "dotnet restore"
+
+---------------------------
+Create a DbContext
+$ mkdir Persistence
+add new C# class "FAssistDbContext" and inherited from DbContext
+add its contructor as:
+"public FAssistDbContext(DbContextOptions<FAssistDbContext> options) : base(options){ }"
+then inject it as service in Startup.cs->ConfigureServices
+"services.AddDbContext<FAssistDbContext>(options => options.UseSqlServer(""));"
+
+---------------------------
+Use configuration as connectionString
+Create ConnectionStrings in appsettings.json
+"ConnectionStrings": {
+    "Default": "Server=KEVINANDLULU\\SQLEXPRESS; database=FamilyAssist; Integrated Security=SSPI;"
+  }
+A major change is that instead of building the configuration in Startup, we do it in the Program class.
+Take note of the ConfigureAppConfiguration function call:
+*********************
+.ConfigureAppConfiguration((builderContext, config) =>
+{
+    IHostingEnvironment env = builderContext.HostingEnvironment;
+
+    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+})
+*********************
+The function takes a single argument, which is a callback that takes a WebHostBuilderContext and an IConfigurationBuilder.
+You can configure configuration as usual in there.
+
+---------------------------
+Creating the database
+$ dotnet ef migrations add InitialModel
+
+---------------------------
+Add Migration when database structure changed
+Create model class under "Models"
+Solution 1(package console):
+"Remove-Migration
+then
+"Add-Migration"
+then
+"Update-Database"
+Solution 2(console):
+$ dotnet ef migrations remove
+then redo:
+$ dotnet ef migrations add InitialModel
+then
+$ dotnet ef database update
+
+---------------------------
+Seeding the Database
+$ dotnet ef migrations add SeedDatabase
+in override On Method:
+migrationBuilder.Sql("INSERT INTO ...");
+in override Down Method:
+migrationBuilder.Sql("DELETE FROM ...");
+$ dotnet ef database update
+---------------------------
+If something changed in middle of the seed data, need to recreate another migration then copy the seed data in
+
+---------------------------
+Use AutoMapper to map two objects together
+Either:
+$ dotnet add package AutoMapper
+Or:
+Install-Package AutoMapper
+AND
+Either:
+$ dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 1.2.0
+Or:
+Install-Package AutoMapper
+Finally:
+$ dotnet restore
+In Startup.cs --> ConfigureServices()
+Add "services.AddAutoMapper();"
+In Controller, create folder "Resource" and "VegetableResource" class
+Copy from "Vegetable.cs" to "VegetableResource.cs"
+Back to VegetableController GetVeges()
+Change From:
+[HttpGet("/api/veges")]
+public async Task<IEnumerable<Vegetable>> GetVeges()
+{
+   return await _context.Vegetables.ToListAsync();
+}
+To:
+[HttpGet("/api/veges")]
+public async Task<IEnumerable<VegetableResource>> GetVeges()
+{
+  var veges = await _context.Vegetables.ToListAsync();
+
+  return _mapper.Map<List<Vegetable>, List<VegetableResource>>(veges);
+}
+---------------------------
+Add Mapping Relationship between two objects
+Create folder "Mapping" and new class "MappingProfile.cs" and inherited from "Profile"
+Create Mapping Relationship inside "MappingProfile" constructor
+
+---------------------------
+Building from ClientSide
+Create new component using angular-cli
+---------------------------
+If the project is created throught "dotnet new angular"
+need to install latest angular/cli at global or project level
+1. $ npm install @angular/cli@latest -g
+2. $ ng new <projectname>
+3. copy angular-cli.json file into current project and change "root" value from "src" to "ClientApp"
+4. $ npm install @angular/cli@latest --save-dev
+5. cd <projectname>/ClientApp/app/components folder, then $ng g c <componentname> --spec false
+---------------------------
+Create new routing using angular-cli
+1. Using "ng new demoAppRouting --routing" to create an app with routing option
+2. Copy the app-routing-module.ts into current project src/app
+3. Import "AppRoutingModule" into app.module.ts
+OR
+1. in "app.module.ts", import { RouterModule } from '@angular/router';
+2. in @NgModule-->imports--> RouterModule.forRoot([path: '', redirectTo: 'veges', pathMatch: 'full']}
+---------------------------
+Re-run the project
+$ webpack
+$ dotnet restore
+$ dotnet watch run
+Ctrl + F5 if needed
+---------------------------
+Adding bootstrap and font-awesome icons
+$ npm install --save bootstrap
+$ npm install --save font-awesome
+Include the css and javascript file inside .angular-cli.json "styles" and "scripts" section array
+Importing the CSS
+We have two options to import the CSS from Bootstrap that was installed from NPM:
+1: Configure .angular-cli.json:
+"styles": [
+  "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "styles.scss"
+]
+2: Import directly in src/style.css or src/style.scss:
+@import '~bootstrap/dist/css/bootstrap.min.css';
+Alternative: Local Bootstrap CSS
+If you added the Bootstrap CSS file locally, just import it in .angular-cli.json
+"styles": [
+  "styles/bootstrap-3.3.7-dist/css/bootstrap.min.css",
+  "styles.scss"
+],
+or src/style.css:
+@import './styles/bootstrap-3.3.7-dist/css/bootstrap.min.css';
+---------------------------
+$ ng serve
+ng serve an ejected project cannot use the build command anymore
+Open angular-cil.json, find "project" section and remove ["ejected: true]
+---------------------------
+In case you don’t need to use Bootstrap JavaScript components (that require JQuery), this is all the setup you need.
+But if you need to use modals, accordion, datepicker, tooltips or any other component, how can we use these components without installing jQuery?
+There is an Angular wrapper library for Bootstrap called ngx-bootstrap that we can also install from NPM:
+npm install ngx-bootstrap --save
+Go through the ngx-bootstrap and add the modules needed in your app.module.ts. For example, suppose we want to use the Dropdown, Tooltip and Modal components:
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    BsDropdownModule.forRoot(),
+    TooltipModule.forRoot(),
+    ModalModule.forRoot()
+  ],
+  // ...
+})
+export class AppBootstrapModule {}
+---------------------------
+As an alternative, if you would like to organize the ngx-bootstrap in a different module (just for organization purposes in case you need to import many bs modules and don’t want to clutter your app.module), you can create a module app-bootstrap.module.ts, import the Bootstrap modules (using forRoot()) and also declare them in the exports section (so they become available to other modules as well).
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    BsDropdownModule.forRoot(),
+    TooltipModule.forRoot(),
+    ModalModule.forRoot()
+  ],
+  exports: [BsDropdownModule, TooltipModule, ModalModule]
+})
+export class AppBootstrapModule {}
+---------------------------
+At last, don’t forget to import your bootstrap module in you app.module.ts.
+import { AppBootstrapModule } from './app-bootstrap/app-bootstrap.module';
+
+@NgModule({
+  imports: [BrowserModule, AppBootstrapModule],
+  // ...
+})
+export class AppModule {}
+---------------------------
+Let’s also take a look how to use a Modal component:
+
+<button type="button" class="btn btn-info" 
+        (click)="openModal(template)">Create template modal</button>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right" 
+                aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        This is a modal.
+    </div>
+</ng-template>
+In the code above, note the we are using a ng-template as container of our modal template. This template is being referenced by a template local variable template. When the user clicks on the button, we tell our code to open the modal referenced by template (you can have as many modals as needed, just give different names to your local variables).
+
+There is also a close button in the modal that is calling modalRef.hide().
+
+So we need some TypeScript code in our app.component.ts as well:
+
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+@Component({
+  // ..
+})
+export class AppComponent {
+  public modalRef: BsModalRef; // {1}
+  constructor(private modalService: BsModalService) {} // {2}
+
+  public openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template); // {3}
+  }
+}
+{1}: first we need a variable to keep a reference of our modal. This is going to be used to close the modal.
+{2}: to show the modal, we also need the ngx-bootstrap service
+{3}: and when the user clicks on the button to open the popup we keep the modal reference and pass the template local name to the modalService.
+---------------------------
+Issues hard to resolve:
+Use dotnet run will not load bootstrap from angular-cli.json
+Use dotnet run will not be reference by client app change
+Use webpack will not have latest client app change
+Only ng serve + dotnet run works
+---------------------------
+/* npm install --save @types/toastr */
+npm install ngx-toastr --save
+npm install @swimlane/ngx-datatable --save
+
+
+
+
+
+
+

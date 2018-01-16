@@ -1,0 +1,2 @@
+$ code --extensionHomePath "G:\vscode_ext"
+Because extension are failed to start if USER_PROFILE name contains character like space or &

@@ -1,0 +1,175 @@
+<div *ngIf="isDevelopment">
+  <div class="well">
+    <div class="form-group">
+      <label for="vegetable">Vegetables</label>
+      <select id="vegetable" class="form-control" [(ngModel)]="query.vegetableId" (change)="onqueryChange()">
+        <option value=""></option>
+        <option *ngFor="let vege of allVegetables" value="{{ vege.keyValuePairInfo.id }}">
+          {{ vege.keyValuePairInfo.name }}
+        </option>
+      </select>
+    </div>
+    <button class="btn btn-primary" (click)="resetquery()">Reset</button>
+  </div>
+  <br />
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> List of Vegetables
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th *ngFor="let c of columns">
+                    <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+                      {{ c.title }}
+                      <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending" [class.fa-sort-desc]="!query.isSortAscending">
+                      </i>
+                    </div>
+                    <div *ngIf="!c.isSortable">
+                      {{ c.title }}
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let vege of queryResult.items">
+                  <td>{{ vege.keyValuePairInfo.id }}</td>
+                  <td>{{ vege.keyValuePairInfo.name }}</td>
+                  <td>{{ vege.addedOn }}</td>
+                  <td>{{ vege.addedByUserName }}</td>
+                  <td>{{ vege.numberOfEntreeIncluded }}</td>
+                  <td>{{ vege.lastUpdatedByOn }}</td>
+                  <td>
+                    <a [routerLink]="['/meal/vegetableForm/', vege.keyValuePairInfo.id]">View</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>
+          <b>List of Vegetables</b>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input id="filter" type="text" class="form-control" placeholder='Type to filter the vegetable...' (keyup)='updateFilter($event)'>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+            <div class="col-lg-2 col-md-6 col-sm-12">
+                <a [routerLink]="['/meal/vegetableForm/new']" class="btn btn-success">
+                  <i class="icon-plus"></i> Create New Vegetable
+                </a>
+            </div>
+          </div>
+          <ngx-datatable #mainTable class="bootstrap expandable" style="border: lightblue 3px double;" [rows]="ngx_rows" [loadingIndicator]="ngx_loadingIndicator"
+            [columnMode]="'force'" [headerHeight]="40" [footerHeight]="40" [limit]="5" [rowHeight]="'auto'" [reorderable]="ngx_reorderable"
+            (page)="onPageMainTable($event)">
+            <!-- Row Detail Template -->
+            <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
+              <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div style="padding-left:35px;">
+                  <ngx-datatable #levelOneDetailTable class="dark expandable" [columnMode]="'force'" [rows]="row.entreesIncluded" [headerHeight]="40"
+                    [footerHeight]="40" [limit]="5" [rowHeight]="'auto'" (page)="onPageDetailTable($event)">
+                    <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailDetailToggle($event)">
+                      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div style="padding-left:35px;">
+                          <ngx-datatable #levelTwoDetailTable class="material" [columnMode]="'force'" [rows]="row.entreeDetailList" [headerHeight]="40"
+                            [footerHeight]="40" [limit]="5" [rowHeight]="'auto'" (page)="onPageDetailDetailTable($event)">
+                            <ngx-datatable-column name="Vegetable" sortable="false" prop="vegetable">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <label>{{value}}</label>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Meat" sortable="false" prop="meat">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <label>{{value}}</label>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Note" sortable="false" prop="note">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <label>{{value}}</label>
+                              </ng-template>
+                            </ngx-datatable-column>
+                          </ngx-datatable>
+                        </div>
+                      </ng-template>
+                    </ngx-datatable-row-detail>
+                    <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false" *ngIf="isDevelopment">
+                      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                          (click)="toggleExpandDetailRow(row,expanded)">
+                        </a>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Entree" sortable="false" prop="entreeName">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Vegetable Count" sortable="false" prop="vegetableCount">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Meat Count" sortable="false" prop="meatCount">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Staple Food" sortable="false" prop="stapleFood">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Entree Note" sortable="false" prop="note">
+                      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <label>{{value}}</label>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </ng-template>
+            </ngx-datatable-row-detail>
+            <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+              <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <a *ngIf="row.numberOfEntreeIncluded > 0" href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded"
+                  title="Expand/Collapse Row" (click)="toggleExpandRow(row,expanded)">
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+            <div *ngFor="let c of ngx_columns">
+              <ngx-datatable-column [name]="c.name" sortable="false" [prop]="c.prop"></ngx-datatable-column>
+            </div>
+            <ngx-datatable-column name="Actions" sortable="false" prop="keyValuePairInfo.id">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button md-icon-button class="btn btn-primary" (click)="editMainTableItem(value)">
+                  <i class="fa fa-edit"></i> Edit
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
