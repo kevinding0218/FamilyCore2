@@ -6,3 +6,4 @@ H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.AssemblyInfoIn
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.AssemblyInfo.cs
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.dll
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.pdb
+H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.csprojResolveAssemblyReference.cache

@@ -7,7 +7,7 @@ import { ErrorLogService } from "../services/event/error.log.service";
 
 export class AppErrorHandler implements ErrorHandler {
     constructor(
-        @Inject(NgZone) private ngZone: NgZone, 
+        @Inject(NgZone) private ngZone: NgZone,
         @Inject(Injector) private injector: Injector,
         @Inject(ErrorLogService) private errorLogService: ErrorLogService
     ) { }
@@ -20,10 +20,17 @@ export class AppErrorHandler implements ErrorHandler {
         this.ngZone.run(() => {
             this.errorLogService.logError(error);
 
-            this.toastr.error(
-                error.message,
-                'Error'
-            );
+            if (typeof error.message != 'undefined') {
+                this.toastr.error(
+                    error.message,
+                    'Error'
+                );
+            } else {
+                this.toastr.error(
+                    'Check if Api server is turned on or in good state',
+                    'Error'
+                );
+            }
         });
 
         //throw error;

@@ -23,7 +23,12 @@ export class ErrorLogService {
           }
         }
       }
-      console.error(date, 'Nobody threw an Error but something happened!', error.message);
+      if (typeof error.message != 'undefined')
+      {
+        console.error(date, 'Nobody threw an Error but something happened!', error.message);
+      } else {
+        console.error(date, 'Nobody threw an Error but something happened!', 'check if web api server is running');
+      }
     }
   }
 }
