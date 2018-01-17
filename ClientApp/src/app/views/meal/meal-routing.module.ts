@@ -1,3 +1,4 @@
+import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
 import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
 import { IngredientFormComponent } from './ingredient/form/ingredient-form.component';
 import { SeafoodFormComponent } from './seafood/form/seafood-form.component';
@@ -25,6 +26,13 @@ const routes: Routes = [
         component: VegetableListComponent,
         data: {
           title: 'Vegetables'
+        }
+      },
+      {
+        path: 'entreeListByStyle',
+        component: EntreeListByStyleComponent,
+        data: {
+          title: 'Entree List By Style'
         }
       },
       {

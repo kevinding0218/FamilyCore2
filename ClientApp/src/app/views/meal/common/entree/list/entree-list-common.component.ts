@@ -1,16 +1,18 @@
-import { EntreeDetailService } from './../../../../services/meal/entree-detail.service';
+import { EntreeService } from './../../../../../services/meal/entree.service';
+import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-    selector: 'entree-detail-list',
-    templateUrl: './entree-detail-list.component.html'
+    selector: 'entree-common-list',
+    templateUrl: './entree-list-common.component.html'
 })
 
-export class EntreeDetailListComponent implements OnInit {
-    @Input() entreeDetailType: string = '';
+export class EntreeListCommonComponent implements OnInit {
+    @Input() splitBy: string = '';
+    @Input() splitById: number = null;
     @Input() entreeListFormHeader: string = '';
     @Input() newEntreeButtonText: string = '';
 
@@ -29,22 +31,24 @@ export class EntreeDetailListComponent implements OnInit {
     temp_grid = [];
 
     ngx_columns = [
-        { prop: 'keyValuePairInfo.id', name: 'Id' },
-        { prop: 'keyValuePairInfo.name', name: 'Name' },
-        { prop: 'addedOn', name: 'Added On' },
-        { prop: 'addedByUserName', name: 'Added By' },
-        { prop: 'numberOfEntreeIncluded', name: 'Entrees Included' },
-        { prop: 'lastUpdatedByOn', name: 'Updated On' },
-        { prop: 'note', name: 'Note' }
-    ];
-
-    ngx_detail_columns = [
+        { prop: 'entreeId', name: 'Id' },
         { prop: 'entreeName', name: 'Entree' },
         { prop: 'vegetableCount', name: 'Vegetable Count' },
         { prop: 'meatCount', name: 'Meat Count' },
         { prop: 'stapleFood', name: 'Staple Food' },
         { prop: 'style', name: 'Style' },
         { prop: 'catagory', name: 'Catagory' },
+        { prop: 'rank', name: 'Rank' },
+        { prop: 'note', name: 'Entree Note' },
+        { prop: 'addedByUserName', name: 'Added By' }
+    ];
+
+    ngx_detail_columns = [
+        { prop: 'vegetable', name: 'Vegetable' },
+        { prop: 'meat', name: 'Meat' },
+        { prop: 'seafood', name: 'Sea Food' },
+        { prop: 'ingredient', name: 'Ingredient' },
+        { prop: 'sauce', name: 'Sauce' },
         { prop: 'note', name: 'Entree Note' }
     ];
 
@@ -52,19 +56,18 @@ export class EntreeDetailListComponent implements OnInit {
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
-        private _entreeDetailService: EntreeDetailService,
+        private _entreeService: EntreeService,
         private toastr: ToastrService
     ) {
 
     }
 
     ngOnInit() {
-        this.setCreateNewRedirection();
         this.populateDataTable();
     }
 
     private populateDataTable() {
-        this._entreeDetailService.getEntreeDetails(this.entreeDetailType)
+        this._entreeService.getEntrees(this.splitBy, this.splitById)
             .subscribe(result => {
                 this.ngx_rows = this.temp_grid = result;
                 setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
@@ -78,26 +81,7 @@ export class EntreeDetailListComponent implements OnInit {
     }
 
     editRowRedirection(value) {
-        switch (this.entreeDetailType.toLowerCase()) {
-            case 'meat':
-                this._router.navigate(['/meal/meatForm/meat/' + value]);
-                break;
-            case 'vegetable':
-                this._router.navigate(['/meal/vegetableForm/vegetable/' + value]);
-                break;
-            case 'seafood':
-                this._router.navigate(['/meal/seafoodForm/seafood/' + value]);
-                break;
-            case 'ingredient':
-                this._router.navigate(['/meal/ingredientForm/ingredient/' + value]);
-                break;
-            case 'stapleFood':
-                this._router.navigate(['/meal/staplefoodForm/staplefood/' + value]);
-                break;
-            case 'sauce':
-                this._router.navigate(['/meal/SauceForm/sauce/' + value]);
-                break;
-        }
+       
     }
 
     updateFilter(event) {
@@ -105,7 +89,7 @@ export class EntreeDetailListComponent implements OnInit {
 
         // filter our data
         const temp = this.temp_grid.filter(function (d) {
-            return d.keyValuePairInfo.name.toLowerCase().indexOf(val) !== -1 || !val;
+            return d.entreeName.toLowerCase().indexOf(val) !== -1 || !val;
         });
 
         // update the rows
@@ -114,32 +98,9 @@ export class EntreeDetailListComponent implements OnInit {
         this.mainTable.offset = 0;
     }
 
-    newEntreeDetailRedirection() {
+    newEntreeRedirection() {
         //this._router.navigate(['/meal/meatForm/meat/new']);
-        this.createNewClick.emit(this.entreeDetailType);
-    }
-
-    setCreateNewRedirection() {
-        switch (this.entreeDetailType.toLowerCase()) {
-            case 'meat':
-                this.createNewRouterLink = ['/meal/meatForm/meat/new'];
-                break;
-            case 'vegetable':
-                this.createNewRouterLink = ['/meal/vegetableForm/vegetable/new'];
-                break;
-            case 'seafood':
-                this.createNewRouterLink = ['/meal/seafoodForm/seafood/new'];
-                break;
-            case 'ingredient':
-                this.createNewRouterLink = ['/meal/ingredientForm/ingredient/new'];
-                break;
-            case 'stapleFood':
-                this.createNewRouterLink = ['/meal/staplefoodForm/staplefood/new'];
-                break;
-            case 'sauce':
-                this.createNewRouterLink = ['/meal/sauceForm/sauce/new'];
-                break;
-        }
+        this.createNewClick.emit(this.splitBy);
     }
 
     onPageMainTable(event) {
@@ -159,7 +120,7 @@ export class EntreeDetailListComponent implements OnInit {
     toggleExpandRow(row, expanded) {
         console.log('toggleExpandRow Row: ', row);
         console.log('toggleExpandRow expanded: ', expanded);
-        let id = row.keyValuePairInfo.Id;
+        let id = row.entreeId;
         this.mainTable.rowDetail.toggleExpandRow(row);
         this.toggleExpandRowClick.emit(id);
     }

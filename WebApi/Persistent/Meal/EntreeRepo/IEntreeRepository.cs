@@ -10,7 +10,8 @@ namespace WebApi.Persistent.Meal
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithVegeId(int VegeId);
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithMeatId(int MeatId);
         Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithStapleFoodId(int StapleFoodId);
-        Task<IEnumerable<EntreeInfoResource>> GetEntreesList();
+        Task<IEnumerable<EntreeInfoResource>> GetEntireEntreesList();
+        Task<IEnumerable<EntreeInfoResource>> GetSplitEntreesList(string SplitBy, int Id);
         Task<IEnumerable<EntreeDetailResource>> GetEntreeDetailWithEntreeId(int EntreeId);
 
         Task<bool> IsDuplicateEntree(string name, int? Id = null);

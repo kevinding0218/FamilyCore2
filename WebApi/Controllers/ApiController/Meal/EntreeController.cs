@@ -36,20 +36,15 @@ namespace WebApi.Controllers.ApiController.Meal
         }
 
         #region READ LIST OF OBJECTS
-        [HttpGet]
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntrees()
+        //api/entree/group?splitBy=a&id=b
+        [HttpGet("group")]
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntrees(string splitBy, int id)
         {
-            var entrees = await this._entreeRepository.GetEntrees();
-            var gridResult = _mapper.Map<IEnumerable<Entree>, IEnumerable<EntreeInfoResource>>(entrees);
+            var gridResult = await this._entreeRepository.GetSplitEntreesList(splitBy, id);
 
             foreach (var gridEntree in gridResult)
             {
-                var AddedByUserId = gridEntree.AddedById;
                 var entreeDetailId = gridEntree.EntreeId;
-
-                gridEntree.AddedByUserName = await _userRepository.GetUserFullName(AddedByUserId);
-                gridEntree.VegetableCount = 1;
-                gridEntree.MeatCount = 1;
                 gridEntree.EntreeDetailList = await this._entreeRepository.GetEntreeDetailWithEntreeId(entreeDetailId);
             }
 

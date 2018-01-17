@@ -1,7 +1,7 @@
-import { EntreeDetailService } from './../../../../services/meal/entree-detail.service';
-import { StaplefoodService } from './../../../../services/meal/staplefood.service';
+import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
+import { StaplefoodService } from '../../../../../services/meal/staplefood.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SaveEntreeDetail } from '../../../../viewModels/meal/entreeDetail';
+import { SaveEntreeDetail } from '../../../../../viewModels/meal/entreeDetail';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';

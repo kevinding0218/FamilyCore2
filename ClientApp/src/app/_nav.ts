@@ -14,6 +14,11 @@ export const navigation = [
     icon: 'icon-fire',
     children: [
       {
+        name: 'Entrees',
+        url: '/meal/entreeListByStyle',
+        icon: 'icon-star'
+      },
+      {
         name: 'Vegetables',
         url: '/meal/vegetableList/vegetable',
         icon: 'icon-list'

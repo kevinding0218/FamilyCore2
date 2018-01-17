@@ -13,6 +13,7 @@ namespace WebApi.Resource.Meal.EntreeResource
         public string StapleFood { get; set; }
         public string Style { get; set; }
         public string Catagory { get; set; }
+        public int Rank { get; set; }
         public string Note { get; set; }
 
         public int AddedById { get; set; }

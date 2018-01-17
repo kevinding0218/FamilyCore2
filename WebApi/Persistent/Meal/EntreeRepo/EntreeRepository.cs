@@ -59,12 +59,26 @@ namespace WebApi.Persistent.Meal
             return entreeInfo;
         }
 
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntreesList()
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntireEntreesList()
         {
             var entreeInfo = new List<EntreeInfoResource>();
             await _context.LoadStoredProc("dbo.GetEntreeInfoById")
                 .WithSqlParam("Id", 0)
                 .WithSqlParam("Type", "Entree")
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
+                    // do something with your results.
+                });
+            return entreeInfo;
+        }
+
+        public async Task<IEnumerable<EntreeInfoResource>> GetSplitEntreesList(string SplitBy, int Id)
+        {
+            var entreeInfo = new List<EntreeInfoResource>();
+            await _context.LoadStoredProc("dbo.GetEntreeInfoBySplit")
+                .WithSqlParam("Id", Id)
+                .WithSqlParam("SplitBy", SplitBy)
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
