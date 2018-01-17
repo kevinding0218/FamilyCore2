@@ -1,5 +1,9 @@
+import { EntreeDetailListComponent } from './common/list/entree-detail.list.component';
+import { EntreeDetailService } from './../../services/meal/entree-detail.service';
+import { SauceFormComponent } from './sauce/form/sauce-form.component';
+import { SauceListComponent } from './sauce/list/sauce-list.component';
+import { EntreeDetailFormComponent } from './common/form/entree-detail-form.component';
 import { StaplefoodService } from './../../services/meal/staplefood.service';
-import { MeatService } from './../../services/meal/meat.service';
 import { MeatFormComponent } from './meat/meat-form/meat-form.component';
 import { AppNgxBootstrapModule } from './../../ngxModule/app-ngx-bootstrap.module';
 import { PaginationComponent } from './../../components/table-pagination/pagination.component';
@@ -17,14 +21,18 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
 @NgModule({
   imports: [ FormsModule, CommonModule, MealRoutingModule, AppNgxBootstrapModule ],
   declarations: [
+    EntreeDetailFormComponent,
+    EntreeDetailListComponent,
     VegetableListComponent,
     VegetableFormComponent,
     PaginationComponent,
     MeatListComponent,
     MeatFormComponent,
     StaplefoodFormComponent,
-    StaplefoodListComponent
+    StaplefoodListComponent,
+    SauceFormComponent,
+    SauceListComponent
   ],
-  providers: [ VegetableService, MeatService, StaplefoodService ]
+  providers: [ VegetableService, StaplefoodService, EntreeDetailService ]
 })
 export class MealModule { }

@@ -22,9 +22,10 @@ export class StaplefoodFormComponent implements OnInit {
             name: ''
         },
         addedOn: null,
-        addedByUserId: null,
+        addedById: null,
         updatedOn: null,
-        lastUpdatedByUserId: null,
+        lastUpdatedById: null,
+        detailType: '',
         note: ''
     };
     constructor(
@@ -62,15 +63,15 @@ export class StaplefoodFormComponent implements OnInit {
     private setstaplefood(vege: any) {
         this.staplefood.keyValuePairInfo.name = vege.keyValuePairInfo.name;
         this.staplefood.addedOn = vege.addedOn;
-        this.staplefood.addedByUserId = vege.addedByUserId;
+        this.staplefood.addedById = vege.addedById;
         this.staplefood.updatedOn = vege.updatedOn;
-        this.staplefood.lastUpdatedByUserId = vege.lastUpdatedByUserId;
+        this.staplefood.lastUpdatedById = vege.lastUpdatedById;
         this.staplefood.note = vege.note;
     }
 
     submit() {
         if (this.staplefood.keyValuePairInfo.id) {
-            this.staplefood.lastUpdatedByUserId = 2;
+            this.staplefood.lastUpdatedById = 2;
 
             this._staplefoodService.update(this.staplefood)
                 .subscribe(
@@ -91,7 +92,7 @@ export class StaplefoodFormComponent implements OnInit {
                     }
                 });
         } else {
-            this.staplefood.addedByUserId = 2;
+            this.staplefood.addedById = 2;
             this.staplefood.addedOn = new Date();
             this._staplefoodService.create(this.staplefood)
                 .subscribe(x => {

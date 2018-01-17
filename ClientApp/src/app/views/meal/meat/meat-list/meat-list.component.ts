@@ -1,87 +1,43 @@
-import { Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MeatService } from '../../../../services/meal/meat.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-meat-list',
   templateUrl: './meat-list.component.html'
 })
 export class MeatListComponent implements OnInit {
-  isDevelopment: boolean = (JSON.parse(localStorage.getItem('currentUser')) == 'true' ? true : false);
-  @ViewChild('mainTable') mainTable: any;
-  @ViewChild('levelOneDetailTable') detailtable: any;
-  ngx_rows = [];
-  ngx_loadingIndicator: boolean = true;
-  ngx_reorderable: boolean = true;
-  ngx_timeout: any;
-  temp = [];
+  entreeDetailType: string = '';
+  entreeListFormHeader: string = '';
+  newEntreeButtonText: string = '';
 
-  ngx_columns = [
-    { prop: 'keyValuePairInfo.id', name: 'Id' },
-    { prop: 'keyValuePairInfo.name', name: 'Name' },
-    { prop: 'addedOn', name: 'Added On' },
-    { prop: 'addedByUserName', name: 'Added By' },
-    { prop: 'numberOfEntreeIncluded', name: 'Entrees Included' },
-    { prop: 'lastUpdatedByOn', name: 'Updated On' },
-    { prop: 'note', name: 'Note' }
-  ];
+  constructor( 
+      private _route: ActivatedRoute
+  ) 
+  { 
+      _route.params.subscribe(p => {
+          let entree_type : string = (typeof p['type'] == 'undefined') ? 'entreeDetail' : p['type'];
+          console.log('In MeatListComponent entree_type is ' + entree_type);
 
-  constructor(private _meatService: MeatService, private router: Router) { }
-
-  ngOnInit() {
-    this.populateDataTable();
-  }
-
-  private populateDataTable() {
-    this._meatService.getMeats()
-      .subscribe(result => {
-        this.ngx_rows = this.temp = result;
-        setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
+          this.entreeDetailType = entree_type;
+          this.entreeListFormHeader = 'List of ' + entree_type.capitalizeFirstLetter();
+          this.newEntreeButtonText = 'Create New ' + entree_type.capitalizeFirstLetter();
       });
   }
 
-  editMainTableItem(value) {
-    console.log('editMainTableItem value: ' + value);
-    this.router.navigate(['/meal/meatForm/' + value]);
+  ngOnInit() {  }
+
+  OnEntreeDetailCreateNewClick(eventArgs){
+      console.log('OnEntreeDetailCreateNewClick');
+      console.log(eventArgs);
   }
 
-  updateFilter(event) {
-    const val = event.target.value.toLowerCase();
-
-    // filter our data
-    const temp = this.temp.filter(function(d) {
-      return d.keyValuePairInfo.name.toLowerCase().indexOf(val) !== -1 || !val;
-    });
-
-    // update the rows
-    this.ngx_rows = temp;
-    // Whenever the filter changes, always go back to the first page
-    this.mainTable.offset = 0;
+  OnEntreeDetailEditRowClick(eventArgs){
+      console.log('OnEntreeDetailEditRowClick');
+      console.log(eventArgs);
   }
 
-  onPageMainTable(event) {
-    clearTimeout(this.ngx_timeout);
-    this.ngx_timeout = setTimeout(() => {
-      console.log('onPageMainTable!', event);
-    }, 100);
+  OnEntreeDetailToggleExpandRow(eventArgs){
+      console.log('OnEntreeDetailToggleExpandRow');
+      console.log(eventArgs);
   }
-
-  onPageDetailTable(event) {
-    clearTimeout(this.ngx_timeout);
-    this.ngx_timeout = setTimeout(() => {
-      console.log('onPageDetailTable!', event);
-    }, 100);
-  }
-
-  toggleExpandRow(row, expanded) {
-    console.log('toggleExpandRow Row: ', row);
-    console.log('toggleExpandRow expanded: ', expanded);
-    let vegeId = row.keyValuePairInfo.Id;
-    this.mainTable.rowDetail.toggleExpandRow(row);
-  }
-
-  onDetailToggle(){
-    console.log('Detail Toggled', event);
-  }
-
 }

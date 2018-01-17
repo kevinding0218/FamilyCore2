@@ -39,7 +39,10 @@ namespace WebApi.Mapping
         {
             this.CreateMap<EntreeDetail, SaveEntreeDetailResource>()
                 .ForMember
-                (svr => svr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }));
+                (svr => svr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }))
+                .ForMember
+                (svr => svr.DetailType, opt => opt.MapFrom(ed => ed.EntreeDetailType.DetailType));
+
             this.CreateMap<EntreeDetail, GridEntreeDetailResource>()
                 .ForMember(gvr => gvr.NumberOfEntreeIncluded, opt => opt.Ignore())
                 .ForMember(gvr => gvr.EntreesIncluded, opt => opt.Ignore())
@@ -83,8 +86,10 @@ namespace WebApi.Mapping
         private void ApiToDomainEntreeDetail()
         {
             this.CreateMap<SaveEntreeDetailResource, EntreeDetail>()
-                                .ForMember(v => v.Id, opt => opt.Ignore())
-                                .ForMember(v => v.Name, opt => opt.MapFrom(svr => svr.keyValuePairInfo.Name));
+                                .ForMember(ed => ed.Id, opt => opt.Ignore())
+                                .ForMember(ed => ed.Name, opt => opt.MapFrom(svr => svr.keyValuePairInfo.Name))
+                                .ForMember(ed => ed.EntreeDetailTypeId, opt => opt.Ignore())
+                                .ForMember(ed => ed.EntreeDetailType, opt => opt.Ignore());
         }
 
         private void ApiToDomainStapleFood()

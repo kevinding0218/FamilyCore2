@@ -15,12 +15,17 @@ export const navigation = [
     children: [
       {
         name: 'Vegetables',
-        url: '/meal/vegetableList',
+        url: '/meal/vegetableList/vegetable',
         icon: 'icon-list'
       },
       {
         name: 'Meats',
-        url: '/meal/meatList',
+        url: '/meal/meatList/meat',
+        icon: 'icon-list'
+      },
+      {
+        name: 'Sauce',
+        url: '/meal/sauceList/sauce',
         icon: 'icon-list'
       },
       {

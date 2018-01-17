@@ -130,6 +130,7 @@ namespace WebApi.Controllers.ApiController.Meal
             // Convert from View Model to Domain Model
             var newVegetable = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newVegetableResource);
             newVegetable.AddedOn = DateTime.Now;
+            newVegetable.EntreeDetailTypeId = 6;
 
             // Insert into database by using Domain Model
             _vegeRepository.AddVegetable(newVegetable);

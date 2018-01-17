@@ -1,118 +1,59 @@
-import { SaveEntreeDetail } from './../../../../viewModels/meal/entreeDetail';
-import { NgForm } from '@angular/forms/src/directives';
-import { Observable } from 'rxjs/Rx';
-import { ToastrService } from 'ngx-toastr';
-import { MeatService } from './../../../../services/meal/meat.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { SaveEntreeDetail } from '../../../../viewModels/meal/entreeDetail';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-meat-form',
     templateUrl: './meat-form.component.html'
 })
 export class MeatFormComponent implements OnInit {
-    FormHeader: string = 'Update Meat Item';
-    isDevelopment: boolean = (JSON.parse(localStorage.getItem('currentUser')) == 'true' ? true : false);
-    successfulSave: boolean = false;
-    oldName: string;
-    oldNote: string;
-    meat: SaveEntreeDetail = {
+    entreeDetailFormHeader: string = '';
+    entreeDetailType: string = '';
+    entreeDetail: SaveEntreeDetail = {
         keyValuePairInfo: {
             id: null,
             name: ''
         },
         addedOn: null,
-        addedByUserId: null,
+        addedById: null,
         updatedOn: null,
-        lastUpdatedByUserId: null,
+        lastUpdatedById: null,
+        detailType: 'meat',
         note: ''
     };
-    constructor(
-        private _route: ActivatedRoute,
-        private _router: Router,
-        private _meatService: MeatService,
-        private toastr: ToastrService
-    ) {
+
+    constructor( 
+        private _route: ActivatedRoute
+    ) 
+    { 
         _route.params.subscribe(p => {
-            this.meat.keyValuePairInfo.id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
+            let entree_type : string = (typeof p['type'] == 'undefined') ? 'entreeDetail' : p['type'];
+            let meat_id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
+            console.log('In meatFormComponent entree_type is ' + entree_type + '\nmeat_id is ' + meat_id);
+            this.entreeDetail.keyValuePairInfo.id = meat_id;
+            this.entreeDetailType = entree_type.capitalizeFirstLetter();
+            if (meat_id != 0)
+                this.entreeDetailFormHeader = 'Update ' + entree_type.capitalizeFirstLetter() + ' Form';
+            else
+                this.entreeDetailFormHeader = 'Create ' + entree_type.capitalizeFirstLetter() + ' Form';
         });
     }
 
-    ngOnInit() {
-        var sources = [];
+    ngOnInit() {  }
 
-        if (this.meat.keyValuePairInfo.id)
-        {
-            sources.push(this._meatService.getMeat(this.meat.keyValuePairInfo.id));
-
-            Observable.forkJoin(sources).subscribe(data => {
-                if (this.meat.keyValuePairInfo.id) {
-                    this.FormHeader = 'Update Meat Item';
-                    this.setmeat(data[0]);
-                }
-            }, err => {
-                if (err.status == 404)
-                    this._router.navigate(['/pages/404']);
-            });
-        } else {
-            this.FormHeader = 'Create New Meat';
-        }
+    OnEntreeDetailSubmitClick(eventArgs){
+        console.log('OnEntreeDetailSubmitClick');
+        console.log(eventArgs);
     }
 
-    private setmeat(vege: any) {
-        this.meat.keyValuePairInfo.name = vege.keyValuePairInfo.name;
-        this.meat.addedOn = vege.addedOn;
-        this.meat.addedByUserId = vege.addedByUserId;
-        this.meat.updatedOn = vege.updatedOn;
-        this.meat.lastUpdatedByUserId = vege.lastUpdatedByUserId;
-        this.meat.note = vege.note;
+    OnEntreeDetailResetClick(eventArgs){
+        console.log('OnEntreeDetailResetClick');
+        console.log(eventArgs);
     }
 
-    submit() {
-        if (this.meat.keyValuePairInfo.id) {
-            this.meat.lastUpdatedByUserId = 2;
-
-            this._meatService.update(this.meat)
-                .subscribe(
-                (data) => {
-                    this.successfulSave = true;
-                    this._router.navigate(['/meal/meatList']);
-                },
-                (err) => {
-                    this.successfulSave = false;
-                    if (err.status === 400) {
-                        // handle validation error
-                        let validationErrorDictionary = JSON.parse(err.text());
-                        for (var fieldName in validationErrorDictionary) {
-                            if (validationErrorDictionary.hasOwnProperty(fieldName)) {
-                                this.toastr.warning('Invalid Update', validationErrorDictionary[fieldName]);
-                            }
-                        }
-                    }
-                });
-        } else {
-            this.meat.addedByUserId = 2;
-            this.meat.addedOn = new Date();
-            this._meatService.create(this.meat)
-                .subscribe(x => {
-                    this.toastr.success('This meat has been successfully inserted!', 'INSERT SUCCESS');
-                    this._router.navigate(['/meal/meatList']);
-                });
-        }
-    }
-
-    resetFormValue() {
-        this.meat.keyValuePairInfo.name = this.oldName;
-        this.meat.note = this.oldNote;
-    }
-
-    deleteMeat() {
-        if (confirm("Are you sure?")) {
-            // this._meatService.delete(this.meat.keyValuePairInfo.id)
-            //     .subscribe(x => {
-            //         this._router.navigate(['/meal/meatForm/new']);
-            //     });
-        }
+    OnEntreeDetailDeleteClick(eventArgs){
+        console.log('OnEntreeDetailDeleteClick');
+        console.log(eventArgs);
     }
 
 }

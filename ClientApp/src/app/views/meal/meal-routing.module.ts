@@ -1,3 +1,5 @@
+import { SauceListComponent } from './sauce/list/sauce-list.component';
+import { SauceFormComponent } from './sauce/form/sauce-form.component';
 import { StaplefoodFormComponent } from './staplefood/staplefood-form/staplefood-form.component';
 import { MeatFormComponent } from './meat/meat-form/meat-form.component';
 import { MeatListComponent } from './meat/meat-list/meat-list.component';
@@ -22,42 +24,42 @@ const routes: Routes = [
         }
       },
       {
-        path: 'vegetableList',
+        path: 'vegetableList/:type',
         component: VegetableListComponent,
         data: {
           title: 'Vegetable List'
         }
       },
       {
-        path: 'vegetableForm/new',
+        path: 'vegetableForm/:type/new',
         component: VegetableFormComponent,
         data: {
           title: 'Create New Vegetable'
         }
       },
       {
-        path: 'vegetableForm/:id',
+        path: 'vegetableForm/:type/:id',
         component: VegetableFormComponent,
         data: {
           title: 'Update Vegetable'
         }
       },
       {
-        path: 'meatList',
+        path: 'meatList/:type',
         component: MeatListComponent,
         data: {
           title: 'Meat List'
         }
       },
       {
-        path: 'meatForm/new',
+        path: 'meatForm/:type/new',
         component: MeatFormComponent,
         data: {
           title: 'Create New Meat'
         }
       },
       {
-        path: 'meatForm/:id',
+        path: 'meatForm/:type/:id',
         component: MeatFormComponent,
         data: {
           title: 'Update Meat'
@@ -82,6 +84,27 @@ const routes: Routes = [
         component: StaplefoodFormComponent,
         data: {
           title: 'Update Staple Food'
+        }
+      },
+      {
+        path: 'sauceList/:type',
+        component: SauceListComponent,
+        data: {
+          title: 'Sauce List'
+        }
+      },
+      {
+        path: 'sauceForm/:type/new',
+        component: SauceFormComponent,
+        data: {
+          title: 'Create New Sauce'
+        }
+      },
+      {
+        path: 'SauceForm/:type/:id',
+        component: SauceFormComponent,
+        data: {
+          title: 'Update Sauce'
         }
       }
     ]

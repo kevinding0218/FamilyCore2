@@ -40,29 +40,11 @@ namespace WebApi.Controllers.ApiController.Meal
         }
 
         #region READ LIST OF OBJECTS
-        [HttpGet("{entreeType}")]
-        public async Task<IEnumerable<GridEntreeDetailResource>> GetEntreeDetails(string entreeType)
+        [HttpGet("{entreeDetailType}")]
+        public async Task<IEnumerable<GridEntreeDetailResource>> GetEntreeDetails(string entreeDetailType)
         {
-            var convertEntreeType = string.Empty;
-            switch (entreeType)
-            {
-                case "entreeDetail":
-                    convertEntreeType = EntreeDetailTypeEnum.Meat;
-                    break;
-                case "vegetable":
-                    convertEntreeType = EntreeDetailTypeEnum.Vegetable;
-                    break;
-                case "seafood":
-                    convertEntreeType = EntreeDetailTypeEnum.Seafood;
-                    break;
-                case "ingredient":
-                    convertEntreeType = EntreeDetailTypeEnum.Ingredient;
-                    break;
-                case "sauce":
-                    convertEntreeType = EntreeDetailTypeEnum.Sauce;
-                    break;
-            }
-            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(convertEntreeType);
+            var convertEntreeDetailType = TranslateEntreeDetailType(entreeDetailType);
+            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(convertEntreeDetailType);
             var gridResult = _mapper.Map<IEnumerable<EntreeDetail>, IEnumerable<GridEntreeDetailResource>>(entreeDetails);
 
             foreach (var gridEntreeDetail in gridResult)
@@ -85,10 +67,29 @@ namespace WebApi.Controllers.ApiController.Meal
 
             return gridResult;
         }
+
+        private static string TranslateEntreeDetailType(string entreeType)
+        {
+            switch (entreeType.ToLower())
+            {
+                case "meat":
+                    return EntreeDetailTypeEnum.Meat;
+                case "vegetable":
+                    return EntreeDetailTypeEnum.Vegetable;
+                case "seafood":
+                    return EntreeDetailTypeEnum.Seafood;
+                case "ingredient":
+                    return EntreeDetailTypeEnum.Ingredient;
+                case "sauce":
+                    return EntreeDetailTypeEnum.Sauce;
+                default:
+                    return string.Empty;
+            }
+        }
         #endregion
 
         #region  READ SINGLE OBJECT
-        [HttpGet("{id}")]
+        [HttpGet("id")]
         public async Task<IActionResult> GetEntreeDetail(int id)
         {
             var isExistedentreeDetail = await _entreeDetailRepository.GetEntreeDetail(id);
@@ -122,20 +123,32 @@ namespace WebApi.Controllers.ApiController.Meal
                 return BadRequest(ModelState);
             }
 
-            // Convert from View Model to Domain Model
-            var newentreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
-            newentreeDetail.AddedOn = DateTime.Now;
+            try
+            {
+                // Convert from View Model to Domain Model 
+                var entreeDetailType = TranslateEntreeDetailType(newEntreeDetailResource.DetailType);
+                var newentreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
+                newentreeDetail.AddedOn = DateTime.Now;
+                if (!entreeDetailType.Equals(String.Empty))
+                {
+                    newentreeDetail.EntreeDetailTypeId = await _entreeDetailRepository.GetEntreeDetailTypeIdByType(entreeDetailType);
+                }
 
-            // Insert into database by using Domain Model
-            _entreeDetailRepository.AddEntreeDetail(newentreeDetail);
-            await _uow.CompleteAsync();
+                // Insert into database by using Domain Model
+                _entreeDetailRepository.AddEntreeDetail(newentreeDetail);
+                await _uow.CompleteAsync();
 
-            newentreeDetail = await _entreeDetailRepository.GetEntreeDetail(newentreeDetail.Id);
-            // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(newentreeDetail);
+                newentreeDetail = await _entreeDetailRepository.GetEntreeDetail(newentreeDetail.Id);
+                // Convert from Domain Model to View Model
+                var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(newentreeDetail);
 
-            // Return view Model
-            return Ok(result);
+                // Return view Model
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
         #endregion
 

@@ -6,27 +6,25 @@ import 'rxjs/add/operator/map';
 
 
 @Injectable()
-export class MeatService {
+export class EntreeDetailService {
   private readonly serviceApiEndPoint: string = 'http://localhost:49934/api/entreeDetail';
   private readonly debugApiEndPoint: string = 'http://localhost:5000/api/entreeDetail';
   private isDebug: boolean = false;
   private readonly apiEndPoint: string = this.isDebug ? this.debugApiEndPoint : this.serviceApiEndPoint;
   constructor(private _http: Http) { }
 
-  getMeat(id) {
-    return this._http.get(this.apiEndPoint + '/' + id)
+  getEntreeDetail(id) {
+    return this._http.get(this.apiEndPoint + '/id?=' + id)
       .map(res => res.json());
   }
 
-  create(meat: SaveEntreeDetail) {
-    console.log('In Create');
-    console.log(meat);
-    return this._http.post(this.apiEndPoint, meat)
+  create(entreeDetail: SaveEntreeDetail) {
+    return this._http.post(this.apiEndPoint, entreeDetail)
       .map(res => res.json());
   }
 
-  update(meat: SaveEntreeDetail) {
-    return this._http.put(this.apiEndPoint + '/' + meat.keyValuePairInfo.id, meat)
+  update(entreeDetail: SaveEntreeDetail) {
+    return this._http.put(this.apiEndPoint + '/' + entreeDetail.keyValuePairInfo.id, entreeDetail)
       .map(res => res.json());
   }
 
@@ -35,8 +33,8 @@ export class MeatService {
       .map(res => res.json());
   }
 
-  getMeats() {
-    return this._http.get(this.apiEndPoint + '/meat')
+  getEntreeDetails(entreeDetailType) {
+    return this._http.get(this.apiEndPoint + '/' + entreeDetailType)
       .map(res => res.json());
   }
 }

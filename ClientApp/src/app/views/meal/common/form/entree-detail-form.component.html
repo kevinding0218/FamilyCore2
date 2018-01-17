@@ -1,0 +1,41 @@
+<div class="card">
+  <div class="card-header">
+    <strong>{{ this.entreeDetailFormHeader }}</strong>
+  </div>
+  <div class="card-body">
+    <form #f="ngForm" novalidate class="form-horizontal">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="txtentreeDetailName">{{ this.entreeDetailType }}</label>
+        <div class="col-md-6">
+          <input type="text" id="entreeDetailName" class="form-control" placeholder="Enter Name.." [disabled]="this.action == 'update'"
+          [(ngModel)]="this.entreeDetail.keyValuePairInfo.name" name="entreeDetailName" required #entreeDetailName="ngModel">
+        </div>
+        <div class="col-md-3">
+          <label class="col-form-label" *ngIf="(entreeDetailName.dirty || entreeDetailName.touched) && entreeDetailName.invalid">
+            <span class="alert alert-danger">Name is Required!</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="txtEntreeDetailName">Note</label>
+        <div class="col-md-6">
+          <input type="text" id="txtEntreeDetailName" class="form-control" placeholder="Enter Note.." [(ngModel)]="this.entreeDetail.note"
+            name="entreeDetailNote">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="pull-right">
+      <button type="submit" class="btn btn-sm btn-success" (click)="this.submit()" [disabled]="!f.valid">
+        <i class="fa fa-dot-circle-o"></i> Submit</button>
+      <button type="button" class="btn btn-sm btn-warning" (click)="cancelForm()">
+        <i class="fa fa-ban"></i> Cancel</button>
+      <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()">
+        <i class="fa fa-undo"></i> Reset</button>
+
+      <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteEntreeDetail()" [disabled]="true">
+        <i class="fa fa-remove"></i> Delete</button>
+    </div>
+  </div>
+</div>

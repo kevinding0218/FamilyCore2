@@ -12,6 +12,7 @@ namespace WebApi.Resource.Meal.EntreeResource
         public int AddedById { get; set; }
 
         public int? LastUpdatedById { get; set; }
+        public string DetailType { get; set; }
         public string Note { get; set; }
     }
 }

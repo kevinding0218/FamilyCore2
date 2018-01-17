@@ -58,5 +58,11 @@ namespace WebApi.Persistent.Meal
 
             return numberOfEntreeWithVege;
         }
+
+        public async Task<int> GetEntreeDetailTypeIdByType(string detailType)
+        {
+            var entreeDetailType = await _context.EntreeDetailTypes.SingleOrDefaultAsync(edt => edt.DetailType.Equals(detailType));
+            return entreeDetailType.Id;
+        }
     }
 }

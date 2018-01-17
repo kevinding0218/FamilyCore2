@@ -3,11 +3,11 @@ import { SaveEntreeDetail } from '../../../../viewModels/meal/entreeDetail';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-vegetable-form',
-  templateUrl: './vegetable-form.component.html'
+    selector: 'app-sauce-form',
+    templateUrl: './sauce-form.component.html'
 })
-export class VegetableFormComponent implements OnInit {
-  entreeDetailFormHeader: string = '';
+export class SauceFormComponent implements OnInit {
+    entreeDetailFormHeader: string = '';
     entreeDetailType: string = '';
     entreeDetail: SaveEntreeDetail = {
         keyValuePairInfo: {
@@ -22,14 +22,13 @@ export class VegetableFormComponent implements OnInit {
         note: ''
     };
 
-    constructor( 
+    constructor(
         private _route: ActivatedRoute
-    ) 
-    { 
+    ) {
         _route.params.subscribe(p => {
-            let entree_type : string = (typeof p['type'] == 'undefined') ? 'entreeDetail' : p['type'];
+            let entree_type: string = (typeof p['type'] == 'undefined') ? 'entreeDetail' : p['type'];
             let sauce_id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
-            console.log('In VegetableFormComponent entree_type is ' + entree_type + '\nsauce_id is ' + sauce_id);
+            console.log('In SauceFormComponent entree_type is ' + entree_type + '\nsauce_id is ' + sauce_id);
             this.entreeDetail.keyValuePairInfo.id = sauce_id;
             this.entreeDetailType = entree_type.capitalizeFirstLetter();
             if (sauce_id != 0)
@@ -39,21 +38,20 @@ export class VegetableFormComponent implements OnInit {
         });
     }
 
-    ngOnInit() {  }
+    ngOnInit() { }
 
-    OnEntreeDetailSubmitClick(eventArgs){
+    OnEntreeDetailSubmitClick(eventArgs) {
         console.log('OnEntreeDetailSubmitClick');
         console.log(eventArgs);
     }
 
-    OnEntreeDetailResetClick(eventArgs){
+    OnEntreeDetailResetClick(eventArgs) {
         console.log('OnEntreeDetailResetClick');
         console.log(eventArgs);
     }
 
-    OnEntreeDetailDeleteClick(eventArgs){
+    OnEntreeDetailDeleteClick(eventArgs) {
         console.log('OnEntreeDetailDeleteClick');
         console.log(eventArgs);
     }
-
 }

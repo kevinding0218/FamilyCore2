@@ -12,5 +12,6 @@ namespace WebApi.Persistent.Meal
         void AddEntreeDetail(EntreeDetail newEntreeDetail);
         void Remove(EntreeDetail existedEntreeDetail);
         Task<int> GetNumberOfEntreesWithEntreeDetail(int EntreeDetailId);
+        Task<int> GetEntreeDetailTypeIdByType(string detailType);
     }
 }

@@ -6,9 +6,10 @@ export interface KeyValuePairInfo {
 export interface SaveEntreeDetail {
     keyValuePairInfo: KeyValuePairInfo;
     addedOn: Date;
-    addedByUserId: number;
+    addedById: number;
     updatedOn: Date;
-    lastUpdatedByUserId: number;
+    lastUpdatedById: number;
+    detailType: string;
     note: string;
 }
 

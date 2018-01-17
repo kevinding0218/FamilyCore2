@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import 'app/utility/extensions/stringExtension';
 
 @Component({
   // tslint:disable-next-line
