@@ -467,9 +467,9 @@ Use webpack will not have latest client app change
 Only ng serve + dotnet run works
 ---------------------------
 /* npm install --save @types/toastr */
+npm install ngx-datatable --save??check
 npm install ngx-toastr --save
 npm install @swimlane/ngx-datatable --save
-
 
 
 

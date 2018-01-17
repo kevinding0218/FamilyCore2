@@ -23,9 +23,9 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: VegetableListComponent,
+        component: EntreeListByStyleComponent,
         data: {
-          title: 'Vegetables'
+          title: 'Entrees'
         }
       },
       {
