@@ -24,6 +24,16 @@ export const navigation = [
         icon: 'icon-list'
       },
       {
+        name: 'Seafood',
+        url: '/meal/seafoodList/seafood',
+        icon: 'icon-list'
+      },
+      {
+        name: 'Ingredient',
+        url: '/meal/ingredientList/ingredient',
+        icon: 'icon-list'
+      },
+      {
         name: 'Sauce',
         url: '/meal/sauceList/sauce',
         icon: 'icon-list'

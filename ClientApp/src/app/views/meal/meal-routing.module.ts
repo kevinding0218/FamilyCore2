@@ -1,3 +1,7 @@
+import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
+import { IngredientFormComponent } from './ingredient/form/ingredient-form.component';
+import { SeafoodFormComponent } from './seafood/form/seafood-form.component';
+import { SeafoodListComponent } from './seafood/list/seafood-list.component';
 import { SauceListComponent } from './sauce/list/sauce-list.component';
 import { SauceFormComponent } from './sauce/form/sauce-form.component';
 import { StaplefoodFormComponent } from './staplefood/staplefood-form/staplefood-form.component';
@@ -105,6 +109,48 @@ const routes: Routes = [
         component: SauceFormComponent,
         data: {
           title: 'Update Sauce'
+        }
+      },
+      {
+        path: 'seafoodList/:type',
+        component: SeafoodListComponent,
+        data: {
+          title: 'Seafood List'
+        }
+      },
+      {
+        path: 'seafoodForm/:type/new',
+        component: SeafoodFormComponent,
+        data: {
+          title: 'Create New Seafood'
+        }
+      },
+      {
+        path: 'seafoodForm/:type/:id',
+        component: SeafoodFormComponent,
+        data: {
+          title: 'Update Seafood'
+        }
+      },
+      {
+        path: 'ingredientList/:type',
+        component: IngredientListComponent,
+        data: {
+          title: 'Ingredient List'
+        }
+      },
+      {
+        path: 'ingredientForm/:type/new',
+        component: IngredientFormComponent,
+        data: {
+          title: 'Create New Ingredient'
+        }
+      },
+      {
+        path: 'ingredientForm/:type/:id',
+        component: IngredientFormComponent,
+        data: {
+          title: 'Update Ingredient'
         }
       }
     ]

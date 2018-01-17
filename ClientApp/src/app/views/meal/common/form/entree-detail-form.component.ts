@@ -150,6 +150,12 @@ export class EntreeDetailFormComponent implements OnInit {
             case 'vegetable':
                 this._router.navigate(['/meal/vegetableList/vegetable']);
                 break;
+            case 'seafood':
+                this._router.navigate(['/meal/seafoodList/seafood']);
+                break;
+            case 'ingredient':
+                this._router.navigate(['/meal/ingredientList/ingredient']);
+                break;
             case 'stapleFood':
                 this._router.navigate(['/meal/staplefoodList/staplefood']);
                 break;

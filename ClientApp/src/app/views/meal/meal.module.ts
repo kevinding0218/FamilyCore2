@@ -1,3 +1,7 @@
+import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
+import { IngredientFormComponent } from './ingredient/form/ingredient-form.component';
+import { SeafoodFormComponent } from './seafood/form/seafood-form.component';
+import { SeafoodListComponent } from './seafood/list/seafood-list.component';
 import { EntreeDetailListComponent } from './common/list/entree-detail.list.component';
 import { EntreeDetailService } from './../../services/meal/entree-detail.service';
 import { SauceFormComponent } from './sauce/form/sauce-form.component';
@@ -31,7 +35,11 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
     StaplefoodFormComponent,
     StaplefoodListComponent,
     SauceFormComponent,
-    SauceListComponent
+    SauceListComponent,
+    SeafoodFormComponent,
+    SeafoodListComponent,
+    IngredientFormComponent,
+    IngredientListComponent
   ],
   providers: [ VegetableService, StaplefoodService, EntreeDetailService ]
 })

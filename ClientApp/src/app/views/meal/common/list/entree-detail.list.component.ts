@@ -85,6 +85,12 @@ export class EntreeDetailListComponent implements OnInit {
             case 'vegetable':
                 this._router.navigate(['/meal/vegetableForm/vegetable/' + value]);
                 break;
+            case 'seafood':
+                this._router.navigate(['/meal/seafoodForm/seafood/' + value]);
+                break;
+            case 'ingredient':
+                this._router.navigate(['/meal/ingredientForm/ingredient/' + value]);
+                break;
             case 'stapleFood':
                 this._router.navigate(['/meal/staplefoodForm/staplefood/' + value]);
                 break;
@@ -120,6 +126,12 @@ export class EntreeDetailListComponent implements OnInit {
                 break;
             case 'vegetable':
                 this.createNewRouterLink = ['/meal/vegetableForm/vegetable/new'];
+                break;
+            case 'seafood':
+                this.createNewRouterLink = ['/meal/seafoodForm/seafood/new'];
+                break;
+            case 'ingredient':
+                this.createNewRouterLink = ['/meal/ingredientForm/ingredient/new'];
                 break;
             case 'stapleFood':
                 this.createNewRouterLink = ['/meal/staplefoodForm/staplefood/new'];
