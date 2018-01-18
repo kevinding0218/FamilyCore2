@@ -62,7 +62,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
                 gridVegetable.AddedByUserName = await _userRepository.GetUserFullName(AddedByUserId);
                 gridVegetable.NumberOfEntreeIncluded = await _vegeRepository.GetNumberOfEntreesWithVege(VegeId);
-                gridVegetable.EntreesIncluded = await this._entreeRepository.GetEntreeInfoWithVegeId(VegeId);
+                //gridVegetable.EntreesIncluded = await this._entreeRepository.GetEntreeInfoWithVegeId(VegeId);
 
                 if (gridVegetable.EntreesIncluded != null && gridVegetable.EntreesIncluded.Count() > 0)
                 {

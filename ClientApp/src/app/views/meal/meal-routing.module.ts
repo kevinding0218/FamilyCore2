@@ -1,3 +1,4 @@
+import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
 import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
 import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
 import { IngredientFormComponent } from './ingredient/form/ingredient-form.component';
@@ -33,6 +34,20 @@ const routes: Routes = [
         component: EntreeListByStyleComponent,
         data: {
           title: 'Entree List By Style'
+        }
+      },
+      {
+        path: 'entreeForm/new/:splitBy/:splitId',
+        component: EntreeFormCommonComponent,
+        data: {
+          title: 'Create New Entree'
+        }
+      },
+      {
+        path: 'entreeForm/:id',
+        component: EntreeFormCommonComponent,
+        data: {
+          title: 'Update Entree'
         }
       },
       {

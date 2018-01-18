@@ -1,6 +1,7 @@
 ﻿using DomainLibrary.Meal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Persistent.Meal
 {
@@ -11,6 +12,7 @@ namespace WebApi.Persistent.Meal
         Task<EntreeDetail> GetEntreeDetail(int id);
         void AddEntreeDetail(EntreeDetail newEntreeDetail);
         void Remove(EntreeDetail existedEntreeDetail);
+        Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithEntreeDetailId(int EntreeDetailId);
         Task<int> GetNumberOfEntreesWithEntreeDetail(int EntreeDetailId);
         Task<int> GetEntreeDetailTypeIdByType(string detailType);
     }

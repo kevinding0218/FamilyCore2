@@ -1,3 +1,4 @@
+import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
 import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
 import { EntreeService } from './../../services/meal/entree.service';
 import { EntreeListCommonComponent } from './common/entree/list/entree-list-common.component';
@@ -43,7 +44,8 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
     IngredientFormComponent,
     IngredientListComponent,
     EntreeListCommonComponent,
-    EntreeListByStyleComponent
+    EntreeListByStyleComponent,
+    EntreeFormCommonComponent
   ],
   providers: [ StaplefoodService, EntreeDetailService, EntreeService ]
 })

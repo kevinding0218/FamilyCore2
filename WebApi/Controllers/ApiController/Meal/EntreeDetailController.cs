@@ -40,11 +40,10 @@ namespace WebApi.Controllers.ApiController.Meal
         }
 
         #region READ LIST OF OBJECTS
-        [HttpGet("{entreeDetailType}")]
+        [HttpGet("{entreeDetailType}")] ///api/entreeDetail/entreeDetailType
         public async Task<IEnumerable<GridEntreeDetailResource>> GetEntreeDetails(string entreeDetailType)
         {
-            var convertEntreeDetailType = TranslateEntreeDetailType(entreeDetailType);
-            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(convertEntreeDetailType);
+            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(EntreeDetailTypeEnum.TranslateEntreeDetailType(entreeDetailType));
             var gridResult = _mapper.Map<IEnumerable<EntreeDetail>, IEnumerable<GridEntreeDetailResource>>(entreeDetails);
 
             foreach (var gridEntreeDetail in gridResult)
@@ -54,7 +53,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
                 gridEntreeDetail.AddedByUserName = await _userRepository.GetUserFullName(AddedByUserId);
                 gridEntreeDetail.NumberOfEntreeIncluded = await _entreeDetailRepository.GetNumberOfEntreesWithEntreeDetail(entreeDetailId);
-                gridEntreeDetail.EntreesIncluded = await _entreeRepository.GetEntreeInfoWithMeatId(entreeDetailId);
+                gridEntreeDetail.EntreesIncluded = await _entreeDetailRepository.GetEntreeInfoWithEntreeDetailId(entreeDetailId);
 
                 if (gridEntreeDetail.EntreesIncluded != null && gridEntreeDetail.EntreesIncluded.Count() > 0)
                 {
@@ -67,29 +66,10 @@ namespace WebApi.Controllers.ApiController.Meal
 
             return gridResult;
         }
-
-        private static string TranslateEntreeDetailType(string entreeType)
-        {
-            switch (entreeType.ToLower())
-            {
-                case "meat":
-                    return EntreeDetailTypeEnum.Meat;
-                case "vegetable":
-                    return EntreeDetailTypeEnum.Vegetable;
-                case "seafood":
-                    return EntreeDetailTypeEnum.Seafood;
-                case "ingredient":
-                    return EntreeDetailTypeEnum.Ingredient;
-                case "sauce":
-                    return EntreeDetailTypeEnum.Sauce;
-                default:
-                    return string.Empty;
-            }
-        }
         #endregion
 
         #region  READ SINGLE OBJECT
-        [HttpGet("id")]
+        [HttpGet("id")] ///api/entreeDetail/id?id=a
         public async Task<IActionResult> GetEntreeDetail(int id)
         {
             var isExistedentreeDetail = await _entreeDetailRepository.GetEntreeDetail(id);
@@ -126,12 +106,14 @@ namespace WebApi.Controllers.ApiController.Meal
             try
             {
                 // Convert from View Model to Domain Model 
-                var entreeDetailType = TranslateEntreeDetailType(newEntreeDetailResource.DetailType);
                 var newentreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
                 newentreeDetail.AddedOn = DateTime.Now;
-                if (!entreeDetailType.Equals(String.Empty))
+                if (!EntreeDetailTypeEnum.TranslateEntreeDetailType(newEntreeDetailResource.DetailType).Equals(String.Empty))
                 {
-                    newentreeDetail.EntreeDetailTypeId = await _entreeDetailRepository.GetEntreeDetailTypeIdByType(entreeDetailType);
+                    newentreeDetail.EntreeDetailTypeId = await _entreeDetailRepository
+                                                                    .GetEntreeDetailTypeIdByType(
+                                                                        EntreeDetailTypeEnum.TranslateEntreeDetailType(newEntreeDetailResource.DetailType)
+                                                                    );
                 }
 
                 // Insert into database by using Domain Model

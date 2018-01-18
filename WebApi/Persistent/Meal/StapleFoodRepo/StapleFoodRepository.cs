@@ -1,8 +1,10 @@
 ﻿using DomainLibrary.Meal;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
+using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Persistent.Meal
 {
@@ -38,6 +40,20 @@ namespace WebApi.Persistent.Meal
         public void Remove(StapleFood existedStapleFood)
         {
             _context.Remove(existedStapleFood);
+        }
+
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithStapleFoodId(int StapleFoodId)
+        {
+            var entreeInfo = new List<EntreeInfoResource>();
+            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
+                .WithSqlParam("Id", StapleFoodId)
+                .WithSqlParam("Type", "StapleFood")
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
+                    // do something with your results.
+                });
+            return entreeInfo;
         }
 
         public async Task<int> GetNumberOfEntreesWithStapleFood(int StapleFoodId)

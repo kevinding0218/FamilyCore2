@@ -38,7 +38,6 @@ export class EntreeListCommonComponent implements OnInit {
         { prop: 'stapleFood', name: 'Staple Food' },
         { prop: 'style', name: 'Style' },
         { prop: 'catagory', name: 'Catagory' },
-        { prop: 'rank', name: 'Rank' },
         { prop: 'note', name: 'Entree Note' },
         { prop: 'addedByUserName', name: 'Added By' }
     ];
@@ -76,12 +75,8 @@ export class EntreeListCommonComponent implements OnInit {
 
     editMainTableItem(value) {
         console.log('editMainTableItem value: ' + value);
-        this.editRowRedirection(value);
+        this._router.navigate(['/meal/entreeForm/' + this.splitById]);
         this.editRowClick.emit(value);
-    }
-
-    editRowRedirection(value) {
-       
     }
 
     updateFilter(event) {
@@ -98,10 +93,10 @@ export class EntreeListCommonComponent implements OnInit {
         this.mainTable.offset = 0;
     }
 
-    newEntreeRedirection() {
-        //this._router.navigate(['/meal/meatForm/meat/new']);
+   /*  newEntreeRedirection() {
+        this._router.navigate(['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]);
         this.createNewClick.emit(this.splitBy);
-    }
+    } */
 
     onPageMainTable(event) {
         clearTimeout(this.ngx_timeout);

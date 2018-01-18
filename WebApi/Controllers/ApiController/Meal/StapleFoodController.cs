@@ -20,7 +20,6 @@ namespace WebApi.Controllers.ApiController.Meal
         public readonly IStapleFoodRepository _stapleFoodRepository;
         private readonly IUnitOfWork _uow;
         private readonly IUserRepository _userRepository;
-        private readonly IEntreeRepository _entreeRepository;
 
         public StapleFoodController(
             IMapper mapper,
@@ -31,7 +30,6 @@ namespace WebApi.Controllers.ApiController.Meal
         )
         {
             this._userRepository = userRepository;
-            this._entreeRepository = entreeRepository;
             this._uow = uow;
             this._stapleFoodRepository = StapleFoodRepository;
             this._mapper = mapper;
@@ -51,7 +49,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
                 gridStapleFood.AddedByUserName = await _userRepository.GetUserFullName(AddedByUserId);
                 gridStapleFood.NumberOfEntreeIncluded = await _stapleFoodRepository.GetNumberOfEntreesWithStapleFood(StapleFoodId);
-                gridStapleFood.EntreesIncluded = await _entreeRepository.GetEntreeInfoWithStapleFoodId(StapleFoodId);
+                gridStapleFood.EntreesIncluded = await _stapleFoodRepository.GetEntreeInfoWithStapleFoodId(StapleFoodId);
             }
 
             return gridResult;

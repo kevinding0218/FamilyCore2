@@ -17,54 +17,12 @@ namespace WebApi.Persistent.Meal
             this._context = context;
         }
 
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithVegeId(int VegeId)
-        {
-            var entreeInfo = new List<EntreeInfoResource>();
-            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
-                .WithSqlParam("Id", VegeId)
-                .WithSqlParam("Type", "Vegetable")
-                .ExecuteStoredProcAsync((handler) =>
-                {
-                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
-                    // do something with your results.
-                });
-            return entreeInfo;
-        }
-
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithMeatId(int MeatId)
-        {
-            var entreeInfo = new List<EntreeInfoResource>();
-            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
-                .WithSqlParam("Id", MeatId)
-                .WithSqlParam("Type", "Meat")
-                .ExecuteStoredProcAsync((handler) =>
-                {
-                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
-                    // do something with your results.
-                });
-            return entreeInfo;
-        }
-
-        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithStapleFoodId(int StapleFoodId)
-        {
-            var entreeInfo = new List<EntreeInfoResource>();
-            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
-                .WithSqlParam("Id", StapleFoodId)
-                .WithSqlParam("Type", "StapleFood")
-                .ExecuteStoredProcAsync((handler) =>
-                {
-                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
-                    // do something with your results.
-                });
-            return entreeInfo;
-        }
-
         public async Task<IEnumerable<EntreeInfoResource>> GetEntireEntreesList()
         {
             var entreeInfo = new List<EntreeInfoResource>();
-            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
-                .WithSqlParam("Id", 0)
-                .WithSqlParam("Type", "Entree")
+            await _context.LoadStoredProc("dbo.GetEntreeInfoBySplit")
+                .WithSqlParam("Id", -1)
+                .WithSqlParam("SplitBy", "")
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
@@ -73,6 +31,7 @@ namespace WebApi.Persistent.Meal
             return entreeInfo;
         }
 
+        #region Entree Main Grid
         public async Task<IEnumerable<EntreeInfoResource>> GetSplitEntreesList(string SplitBy, int Id)
         {
             var entreeInfo = new List<EntreeInfoResource>();
@@ -86,7 +45,9 @@ namespace WebApi.Persistent.Meal
                 });
             return entreeInfo;
         }
+        #endregion
 
+        #region Entree Detail Grid
         public async Task<IEnumerable<EntreeDetailResource>> GetEntreeDetailWithEntreeId(int EntreeId)
         {
             var entreeDetails = new List<EntreeDetailResource>();
@@ -100,13 +61,7 @@ namespace WebApi.Persistent.Meal
                 });
             return entreeDetails;
         }
-
-        public async Task<bool> IsDuplicateEntree(string name, int? Id = null)
-        {
-            if (Id.HasValue)
-                return await _context.Entrees.AnyAsync(e => e.Name == name && e.Id != Id);
-            return await _context.Entrees.AnyAsync(e => e.Name == name);
-        }
+        #endregion
 
         public async Task<IEnumerable<Entree>> GetEntrees()
         {
@@ -117,23 +72,34 @@ namespace WebApi.Persistent.Meal
                 .ToListAsync();
         }
 
+        #region Read Single Entree
         public async Task<Entree> GetEntree(int id)
         {
             return await this._context.Entrees
-                .Include(e => e.StapleFood)
-                .Include(e => e.EntreeStyle)
-                .Include(e => e.EntreeCatagory)
+                .Include(e => e.MappingDetailsWithCurrentEntree)
                 .SingleOrDefaultAsync(m => m.Id == id);
         }
+        #endregion
 
+        #region Create Entree
         public void AddEntree(Entree newEntree)
         {
             _context.Add(newEntree);
         }
+        #endregion
 
+        #region Delete Entree
         public void Remove(Entree existedEntree)
         {
             _context.Remove(existedEntree);
+        }
+        #endregion
+
+        public async Task<bool> IsDuplicateEntree(string name, int? Id = null)
+        {
+            if (Id.HasValue)
+                return await _context.Entrees.AnyAsync(e => e.Name == name && e.Id != Id);
+            return await _context.Entrees.AnyAsync(e => e.Name == name);
         }
 
         //public async Task<int> GetNumberOfEntreeDetailsWithCurrentEntree(int EntreeId)

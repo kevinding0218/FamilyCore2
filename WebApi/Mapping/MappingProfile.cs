@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.QueryResource;
@@ -20,6 +21,8 @@ namespace WebApi.Mapping
             DomainToApiStapleFood();
             // Entree
             DomainToApiEntree();
+            // Entree Helper
+            DomainToApiEntreeHelper();
             #endregion
 
             #region API Resource/View Model to Domain
@@ -64,6 +67,7 @@ namespace WebApi.Mapping
                 .ForMember(gvr => gvr.LastUpdatedByOn, opt => opt.MapFrom(v => v.LastUpdatedByOn.HasValue ? v.LastUpdatedByOn.Value.ToString() : string.Empty))
                 .ForMember
                 (gvr => gvr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }));
+            this.CreateMap<StapleFood, KeyValuePairResource>();
         }
 
         private void DomainToApiEntree()
@@ -78,7 +82,17 @@ namespace WebApi.Mapping
                 .ForMember(eir => eir.Catagory, opt => opt.MapFrom(e => e.EntreeCatagory.Catagory))
                 .ForMember(eir => eir.AddedOn, opt => opt.MapFrom(e => e.AddedOn.ToString()))
                 .ForMember(eir => eir.EntreeDetailList, opt => opt.Ignore());
-            this.CreateMap<Entree, SaveEntreeResource>();
+            this.CreateMap<Entree, SaveEntreeResource>()
+                .ForMember(svr => svr.EntreeDetailIds,
+                opt => opt.MapFrom(e => e.MappingDetailsWithCurrentEntree.Select(ed => ed.EntreeDetailId)));
+        }
+
+        private void DomainToApiEntreeHelper()
+        {
+            this.CreateMap<EntreeStyle, KeyValuePairResource>()
+                .ForMember(kpr => kpr.Name, opt => opt.MapFrom(es => es.Style));
+            this.CreateMap<EntreeCatagory, KeyValuePairResource>()
+                .ForMember(kpr => kpr.Name, opt => opt.MapFrom(ec => ec.Catagory));
         }
         #endregion
 
@@ -105,7 +119,31 @@ namespace WebApi.Mapping
                 .ForMember(e => e.StapleFood, opt => opt.Ignore())
                 .ForMember(e => e.EntreeCatagory, opt => opt.Ignore())
                 .ForMember(e => e.EntreeStyle, opt => opt.Ignore())
-                .ForMember(e => e.MappingDetailsWithCurrentEntree, opt => opt.Ignore());
+                .ForMember(e => e.MappingDetailsWithCurrentEntree, opt => opt.Ignore())
+                .AfterMap((se, e) =>
+                {
+                    // Remove unselected entree details
+                    //var removedEntreeDetails = new List<Entrees_Details>();
+                    //foreach (var ed in e.MappingDetailsWithCurrentEntree)
+                    //    if (!se.EntreeDetailIds.Contains(ed.EntreeDetailId))
+                    //        removedEntreeDetails.Add(ed);
+
+
+                    var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
+
+                    foreach (var esds in removedEntreeDetails)
+                        e.MappingDetailsWithCurrentEntree.Remove(esds);
+
+                    // Add new entree details
+                    //foreach (var id in se.EntreeDetailIds)
+                    //    if (!e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
+                    //        e.MappingDetailsWithCurrentEntree.Add(new Entrees_Details { EntreeId = id });
+                    var addedEntreeDetails = se.EntreeDetailIds
+                                                    .Where(id => !e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
+                                                    .Select(id => new Entrees_Details { EntreeId = id }).ToList();
+                    foreach (var esds in addedEntreeDetails)
+                        e.MappingDetailsWithCurrentEntree.Add(esds);
+                });
         }
         #endregion
     }

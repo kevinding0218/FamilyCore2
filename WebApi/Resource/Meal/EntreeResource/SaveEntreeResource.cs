@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WebApi.Resource.Meal.EntreeResource
 {
@@ -15,5 +16,6 @@ namespace WebApi.Resource.Meal.EntreeResource
         public DateTime AddedOn { get; set; }
         public int? LastUpdatedById { get; set; }
         public DateTime? LastUpdatedByOn { get; set; }
+        public ICollection<int> EntreeDetailIds { get; set; }
     }
 }

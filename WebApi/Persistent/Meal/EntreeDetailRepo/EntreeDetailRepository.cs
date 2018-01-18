@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
+using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Persistent.Meal
 {
@@ -41,6 +42,20 @@ namespace WebApi.Persistent.Meal
         public void Remove(EntreeDetail existedEntreeDetail)
         {
             _context.Remove(existedEntreeDetail);
+        }
+
+        public async Task<IEnumerable<EntreeInfoResource>> GetEntreeInfoWithEntreeDetailId(int EntreeDetailId)
+        {
+            var entreeInfo = new List<EntreeInfoResource>();
+            await _context.LoadStoredProc("dbo.GetEntreeInfoById")
+                .WithSqlParam("Id", EntreeDetailId)
+                .WithSqlParam("Type", "EntreeDetail")
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    entreeInfo = handler.ReadToList<EntreeInfoResource>().ToList();
+                    // do something with your results.
+                });
+            return entreeInfo;
         }
 
         public async Task<int> GetNumberOfEntreesWithEntreeDetail(int EntreeDetailId)

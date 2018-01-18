@@ -4,7 +4,6 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-align-justify"></i>
-          <star-rating-comp [starType]="'svg'" [rating]="2.63"></star-rating-comp>
           <b>{{ entreeListFormHeader }}</b>
           <b>{{ splitBy }}</b>
           <b>{{ splitById }}</b>
@@ -20,7 +19,7 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12"></div>
             <div class="col-lg-2 col-ms-2 col-sm-12">
-              <a [routerLink]="this.createNewRouterLink" class="btn btn-success">
+              <a [routerLink]="['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]" class="btn btn-success">
                 <i class="icon-plus"></i> {{ newEntreeButtonText }}</a>
             </div>
           </div>
@@ -50,6 +49,11 @@
             <div *ngFor="let c of ngx_columns">
               <ngx-datatable-column [name]="c.name" sortable="false" [prop]="c.prop"></ngx-datatable-column>
             </div>
+            <ngx-datatable-column name="Rank" sortable="false">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                  <star-rating-comp [starType]="'svg'" [rating]="row.rank" [readOnly]="true" [size]="'small'" [staticColor]="(row.rank > 4) ? 'positive': ((row.rank >= 3) ? 'ok':'negative')" style="position: fixed;"></star-rating-comp>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Actions" sortable="false" prop="entreeId">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <button md-icon-button class="btn btn-primary" (click)="editMainTableItem(value)">
