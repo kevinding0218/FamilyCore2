@@ -70,7 +70,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region CREATE
         [HttpPost]
-        public async Task<IActionResult> CreateEntreeDetail([FromBody] SaveEntreeResource newEntreeResource)
+        public async Task<IActionResult> CreateEntree([FromBody] SaveEntreeResource newEntreeResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -1,3 +1,4 @@
+import { EntreeHelperService } from './../../services/meal/entree-helper.service';
 import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
 import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
 import { EntreeService } from './../../services/meal/entree.service';
@@ -47,6 +48,6 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
     EntreeListByStyleComponent,
     EntreeFormCommonComponent
   ],
-  providers: [ StaplefoodService, EntreeDetailService, EntreeService ]
+  providers: [ StaplefoodService, EntreeDetailService, EntreeService, EntreeHelperService ]
 })
 export class MealModule { }

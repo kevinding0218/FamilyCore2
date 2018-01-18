@@ -6,7 +6,7 @@
     <form #f="ngForm" novalidate class="form-horizontal">
       <div class="form-group row">
         <label class="col-md-3 col-form-label" for="txtentreeDetailName">{{ this.entreeDetailType }}</label>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <input type="text" id="entreeDetailName" class="form-control" placeholder="Enter Name.." [disabled]="this.action == 'update'"
           [(ngModel)]="this.entreeDetail.keyValuePairInfo.name" name="entreeDetailName" required #entreeDetailName="ngModel">
         </div>
@@ -17,10 +17,10 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-md-3 col-form-label" for="txtEntreeDetailName">Note</label>
+        <label class="col-md-3 col-form-label" for="entreeDetailNote">Note</label>
         <div class="col-md-6">
-          <input type="text" id="txtEntreeDetailName" class="form-control" placeholder="Enter Note.." [(ngModel)]="this.entreeDetail.note"
-            name="entreeDetailNote">
+            <textarea id="entreeDetailNote" class="form-control" placeholder="Enter Note.." rows='5'
+            [(ngModel)]="this.entreeDetail.note" name="entreeDetailNote"></textarea>
         </div>
       </div>
     </form>
@@ -33,7 +33,6 @@
         <i class="fa fa-ban"></i> Cancel</button>
       <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()">
         <i class="fa fa-undo"></i> Reset</button>
-
       <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteEntreeDetail()" [disabled]="true">
         <i class="fa fa-remove"></i> Delete</button>
     </div>

@@ -25,7 +25,8 @@
           </div>
           <ngx-datatable #mainTable class="bootstrap expandable" style="border: lightblue 3px double;" [rows]="ngx_rows" [loadingIndicator]="ngx_loadingIndicator"
             [columnMode]="'force'" [headerHeight]="40" [footerHeight]="40" [limit]="5" [rowHeight]="'auto'" [reorderable]="ngx_reorderable"
-            (page)="onPageMainTable($event)">
+            (page)="onPageMainTable($event)" [selected]="selected" [selectionType]="'checkbox'" (activate)="onActivate($event)"
+            (select)='onSelect($event)'>
             <!-- Row Detail Template -->
             <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
@@ -39,6 +40,14 @@
                 </div>
               </ng-template>
             </ngx-datatable-row-detail>
+            <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)" />
+              </ng-template>
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                 <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
@@ -51,7 +60,8 @@
             </div>
             <ngx-datatable-column name="Rank" sortable="false">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                  <star-rating-comp [starType]="'svg'" [rating]="row.rank" [readOnly]="true" [size]="'small'" [staticColor]="(row.rank > 4) ? 'positive': ((row.rank >= 3) ? 'ok':'negative')" style="position: fixed;"></star-rating-comp>
+                <star-rating-comp [starType]="'svg'" [rating]="row.rank" [readOnly]="true" [size]="'small'" [staticColor]="(row.rank > 4) ? 'positive': ((row.rank >= 3) ? 'ok':'negative')"
+                  style="position: fixed;"></star-rating-comp>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Actions" sortable="false" prop="entreeId">
@@ -62,6 +72,19 @@
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
+        </div>
+        <div class="card-footer">
+          <div class='selected-column'>
+            <h4>Selections
+              <small>({{selected?.length}})</small>
+            </h4>
+            <ul>
+              <li *ngFor='let sel of selected'>
+                {{sel.entreeId}} - {{sel.entreeName}}
+              </li>
+              <li *ngIf="!selected?.length">No Selections</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

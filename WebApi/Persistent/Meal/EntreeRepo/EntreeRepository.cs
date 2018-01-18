@@ -53,7 +53,7 @@ namespace WebApi.Persistent.Meal
             var entreeDetails = new List<EntreeDetailResource>();
             await _context.LoadStoredProc("dbo.GetEntreeInfoById")
                 .WithSqlParam("Id", EntreeId)
-                .WithSqlParam("Type", "EntreeDetail")
+                .WithSqlParam("Type", "Entree")
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     entreeDetails = handler.ReadToList<EntreeDetailResource>().ToList();

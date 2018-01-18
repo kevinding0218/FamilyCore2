@@ -3,3 +3,127 @@
 <p>splitBy - {{ splitBy }}</p>
 <p>splitId - {{ splitId }}</p>
 <p>updatedId - {{ updatedId }}</p>
+<p>{{f.value | json}}</p>
+<p>{{ f.valid }}</p>
+<p>{{ entree | json }}</p>
+
+<div class="card">
+  <div class="card-header">
+    <strong>{{ this.entreeFormCommonHeader }}</strong>
+  </div>
+  <div class="card-body">
+    <form #f="ngForm" novalidate class="form-horizontal">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeStyle">Style</label>
+        <div class="col-md-2">
+          <select id="entreeStyle" class="form-control" [(ngModel)]="this.entree.entreeStyleId" name="entreeStyleId" [disabled]="this.splitBy == 'style'"
+            required #entreeStyle="ngModel">
+            <option value="">-- Please Select --</option>
+            <option *ngFor="let s of entreeStyles" value="{{ s.id }}">{{ s.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="col-form-label" *ngIf="(entreeStyle.dirty || entreeStyle.touched) && entreeStyle.invalid">
+            <span class="alert alert-danger">Please specify the style.</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeCatagory">Catagory</label>
+        <div class="col-md-2">
+          <select id="entreeCatagory" class="form-control" [(ngModel)]="this.entree.entreeCatagoryId" name="entreeCatagoryId" [disabled]="this.splitBy == 'catagory'"
+            required #entreeCatagory="ngModel">
+            <option value="">-- Please Select --</option>
+            <option *ngFor="let c of entreeCatagories" value="{{ c.id }}">{{ c.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="col-form-label" *ngIf="(entreeCatagory.dirty || entreeCatagory.touched) && entreeCatagory.invalid">
+            <span class="alert alert-danger">Please specify the catagory.</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeStapleFood">Staple Food</label>
+        <div class="col-md-2">
+          <select id="entreeStapleFood" class="form-control" [(ngModel)]="this.entree.stapleFoodId" name="stapleFoodId" #stapleFood="ngModel">
+            <option value="0">Not really necessary</option>
+            <option *ngFor="let sf of stapleFoods" value="{{ sf.id }}">{{ sf.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeName">Name</label>
+        <div class="col-md-3">
+          <input type="text" id="entreeName" class="form-control" placeholder="Enter Name.." [disabled]="this.action == 'update'" [(ngModel)]="this.entree.name"
+            name="entreeName" required #entreeName="ngModel">
+        </div>
+        <div class="col-md-3">
+          <label class="col-form-label" *ngIf="(entreeName.dirty || entreeName.touched) && entreeName.invalid">
+            <span class="alert alert-danger">Name is Required!</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeRank">Rank</label>
+        <div class="col-md-3">
+          <star-rating-comp [starType]="'svg'" [rating]="this.entree.currentRank" [size]="'medium'" (onClick)="this.onClick($event)"
+            [getColor]="this.getColor()" style="position:static;"></star-rating-comp>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label">Vegetable</label>
+        <div class="col-md-5">
+          <label class="col-form-label" [innerHTML]="this.entree.vegetables"></label>
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-sm btn-primary" (click)="readyToAddVegetable()" *ngIf="!this.showVegetableDropdown">
+            <i class="fa fa-plus-circle"></i> Add More Vegetable
+          </button>
+          <div class="input-group" *ngIf="this.showVegetableDropdown">
+            <select id="availVegetables" class="col-md-3 form-control" [(ngModel)]="this.availVegetables" name="entreeDetailId">
+              <option *ngFor="let s of entreeStyles" value="{{ s.id }}">{{ s.name }}</option>
+            </select>
+            <span class="input-sm-space"></span>
+            <label class="col-form-label">with Quantity of </label>
+            <span class="input-sm-space"></span>
+            <select id="vegetableCount" class="col-md-1 form-control" name="vegetableCount">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <span class="input-md-space"></span>
+            <button type="button" class="btn btn-sm btn-success" (click)="addSelectedVegetable()">
+              <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+            <button type="button" class="btn btn-sm btn-warning" (click)="this.cancelAddVegetables()">
+              <i class="fa fa-ban"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label" for="entreeNote">Note</label>
+        <div class="col-md-6">
+          <textarea id="entreeNote" class="form-control" placeholder="Enter Note.." rows='5' [(ngModel)]="this.entree.note" name="entreeNote"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="pull-right">
+      <button type="submit" class="btn btn-sm btn-success" (click)="this.submit()" [disabled]="!f.valid">
+        <i class="fa fa-dot-circle-o"></i> Submit</button>
+      <button type="button" class="btn btn-sm btn-warning" (click)="cancelForm()">
+        <i class="fa fa-ban"></i> Cancel</button>
+      <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()">
+        <i class="fa fa-undo"></i> Reset</button>
+      <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteEntree()" [disabled]="true">
+        <i class="fa fa-remove"></i> Delete</button>
+    </div>
+  </div>
+</div>

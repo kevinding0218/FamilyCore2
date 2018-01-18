@@ -29,6 +29,8 @@ export class EntreeListCommonComponent implements OnInit {
     ngx_reorderable: boolean = true;
     ngx_timeout: any;
     temp_grid = [];
+    //selected row
+    selected = [];
 
     ngx_columns = [
         { prop: 'entreeId', name: 'Id' },
@@ -93,10 +95,10 @@ export class EntreeListCommonComponent implements OnInit {
         this.mainTable.offset = 0;
     }
 
-   /*  newEntreeRedirection() {
-        this._router.navigate(['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]);
-        this.createNewClick.emit(this.splitBy);
-    } */
+    /*  newEntreeRedirection() {
+         this._router.navigate(['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]);
+         this.createNewClick.emit(this.splitBy);
+     } */
 
     onPageMainTable(event) {
         clearTimeout(this.ngx_timeout);
@@ -122,5 +124,37 @@ export class EntreeListCommonComponent implements OnInit {
 
     onDetailToggle() {
         console.log('Detail Toggled', event);
+    }
+
+    // Select row
+    onSelect({ selected }) {
+        console.log('Select Event', selected, this.selected);
+
+        this.selected.splice(0, this.selected.length);
+        this.selected.push(...selected);
+    }
+
+    onActivate(event) {
+        console.log('Activate Event', event);
+    }
+
+    selectFn(value) {
+        console.log('selectFn value:', value);
+    }
+
+    onCheckboxChangeFn(event) {
+        console.log('onCheckboxChangeFn', event);
+    }
+
+    add() {
+        this.selected.push(this.ngx_rows[1], this.ngx_rows[3]);
+    }
+
+    update() {
+        this.selected = [this.ngx_rows[1], this.ngx_rows[3]];
+    }
+
+    remove() {
+        this.selected = [];
     }
 }
