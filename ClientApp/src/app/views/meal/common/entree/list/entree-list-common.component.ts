@@ -77,7 +77,7 @@ export class EntreeListCommonComponent implements OnInit {
 
     editMainTableItem(value) {
         console.log('editMainTableItem value: ' + value);
-        this._router.navigate(['/meal/entreeForm/' + 12]);
+        this._router.navigate(['/meal/entreeForm/' + value]);
         this.editRowClick.emit(value);
     }
 

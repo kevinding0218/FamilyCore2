@@ -71,12 +71,12 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpGet("id")] ///api/entreeDetail/id?id=a
         public async Task<IActionResult> GetEntreeDetail(int id)
         {
-            var isExistedentreeDetail = await _entreeDetailRepository.GetEntreeDetail(id);
-            if (isExistedentreeDetail == null)
+            var existedEntreeDetailFromDB = await _entreeDetailRepository.GetEntreeDetail(id);
+            if (existedEntreeDetailFromDB == null)
                 return NotFound();
 
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedentreeDetail);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(existedEntreeDetailFromDB);
 
             // Return view Model
             return Ok(result);
@@ -105,21 +105,21 @@ namespace WebApi.Controllers.ApiController.Meal
             try
             {
                 // Convert from View Model to Domain Model 
-                var newentreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
-                newentreeDetail.AddedOn = DateTime.Now;
+                var newEntreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
+                newEntreeDetail.AddedOn = DateTime.Now;
                 if (!newEntreeDetailResource.DetailType.Equals(String.Empty))
                 {
-                    newentreeDetail.EntreeDetailTypeId = await _entreeDetailRepository
+                    newEntreeDetail.EntreeDetailTypeId = await _entreeDetailRepository
                                                                     .GetEntreeDetailTypeIdByType(newEntreeDetailResource.DetailType);
                 }
 
                 // Insert into database by using Domain Model
-                _entreeDetailRepository.AddEntreeDetail(newentreeDetail);
+                _entreeDetailRepository.AddEntreeDetail(newEntreeDetail);
                 await _uow.CompleteAsync();
 
-                newentreeDetail = await _entreeDetailRepository.GetEntreeDetail(newentreeDetail.Id);
+                newEntreeDetail = await _entreeDetailRepository.GetEntreeDetail(newEntreeDetail.Id);
                 // Convert from Domain Model to View Model
-                var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(newentreeDetail);
+                var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(newEntreeDetail);
 
                 // Return view Model
                 return Ok(result);
@@ -138,8 +138,8 @@ namespace WebApi.Controllers.ApiController.Meal
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isExistedentreeDetail = await _entreeDetailRepository.GetEntreeDetail(id);
-            if (isExistedentreeDetail == null)
+            var existedEntreeDetailFromDB = await _entreeDetailRepository.GetEntreeDetail(id);
+            if (existedEntreeDetailFromDB == null)
                 return NotFound();
 
             if (await _entreeDetailRepository.IsDuplicateEntreeDetail(SaveEntreeDetailResource.keyValuePairInfo.Name, SaveEntreeDetailResource.keyValuePairInfo.Id))
@@ -149,16 +149,16 @@ namespace WebApi.Controllers.ApiController.Meal
             }
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeDetailResource, isExistedentreeDetail);
-            isExistedentreeDetail.LastUpdatedByOn = DateTime.Now;
+            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeDetailResource, existedEntreeDetailFromDB);
+            existedEntreeDetailFromDB.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model
             await _uow.CompleteAsync();
 
             // Fetch complete object from database
-            isExistedentreeDetail = await _entreeDetailRepository.GetEntreeDetail(isExistedentreeDetail.Id);
+            existedEntreeDetailFromDB = await _entreeDetailRepository.GetEntreeDetail(existedEntreeDetailFromDB.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedentreeDetail);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(existedEntreeDetailFromDB);
 
             // Return view Model
             return Ok(result);
@@ -169,11 +169,11 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpDelete("{id}")] //api/entreeDetail/id
         public async Task<IActionResult> DeleteEntreeDetail(int id)
         {
-            var existedEntreeDetail = await _entreeDetailRepository.GetEntreeDetail(id);
-            if (existedEntreeDetail == null)
+            var existedEntreeDetailFromDB = await _entreeDetailRepository.GetEntreeDetail(id);
+            if (existedEntreeDetailFromDB == null)
                 return NotFound();
 
-            _entreeDetailRepository.Remove(existedEntreeDetail);
+            _entreeDetailRepository.Remove(existedEntreeDetailFromDB);
             await _uow.CompleteAsync();
 
             return Ok(id);

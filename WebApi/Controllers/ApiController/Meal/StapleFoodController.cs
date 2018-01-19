@@ -60,12 +60,12 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStapleFood(int id)
         {
-            var isExistedStapleFood = await _stapleFoodRepository.GetStapleFood(id);
-            if (isExistedStapleFood == null)
+            var existedStapleFoodFromDB = await _stapleFoodRepository.GetStapleFood(id);
+            if (existedStapleFoodFromDB == null)
                 return NotFound();
 
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(isExistedStapleFood);
+            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(existedStapleFoodFromDB);
 
             // Return view Model
             return Ok(result);
@@ -115,21 +115,21 @@ namespace WebApi.Controllers.ApiController.Meal
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isExistedStapleFood = await _stapleFoodRepository.GetStapleFood(id);
-            if (isExistedStapleFood == null)
+            var existedStapleFoodFromDB = await _stapleFoodRepository.GetStapleFood(id);
+            if (existedStapleFoodFromDB == null)
                 return NotFound();
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeDetailResource, StapleFood>(SaveEntreeDetailResource, isExistedStapleFood);
-            isExistedStapleFood.LastUpdatedByOn = DateTime.Now;
+            _mapper.Map<SaveEntreeDetailResource, StapleFood>(SaveEntreeDetailResource, existedStapleFoodFromDB);
+            existedStapleFoodFromDB.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model
             await _uow.CompleteAsync();
 
             // Fetch complete object from database
-            isExistedStapleFood = await _stapleFoodRepository.GetStapleFood(isExistedStapleFood.Id);
+            existedStapleFoodFromDB = await _stapleFoodRepository.GetStapleFood(existedStapleFoodFromDB.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(isExistedStapleFood);
+            var result = _mapper.Map<StapleFood, SaveEntreeDetailResource>(existedStapleFoodFromDB);
 
             // Return view Model
             return Ok(result);
@@ -140,11 +140,11 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpDelete("{id}")] //api/StapleFood/id
         public async Task<IActionResult> DeleteStapleFood(int id)
         {
-            var existedStapleFood = await _stapleFoodRepository.GetStapleFood(id);
-            if (existedStapleFood == null)
+            var existedStapleFoodFromDB = await _stapleFoodRepository.GetStapleFood(id);
+            if (existedStapleFoodFromDB == null)
                 return NotFound();
 
-            _stapleFoodRepository.Remove(existedStapleFood);
+            _stapleFoodRepository.Remove(existedStapleFoodFromDB);
             await _uow.CompleteAsync();
 
             return Ok(id);

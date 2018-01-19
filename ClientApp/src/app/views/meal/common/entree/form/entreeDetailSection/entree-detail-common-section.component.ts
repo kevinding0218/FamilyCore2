@@ -49,6 +49,18 @@ export class EntreeDetailCommonSectionComponent implements OnInit {
         Observable.forkJoin(sources).subscribe(data => {
             this.availEntreeDetails = data[0];
         }, err => { });
+
+        this.initNewEntreeDetailObj();
+    }
+
+    initNewEntreeDetailObj() {
+        this.newEntreeDetail = <EntreeDetailMappingResource>{
+            entreeDetailId: 0,
+            name: '',
+            quantity: 1,
+            entreeDetailTypeName: this.entreeDetailType,
+            displayMode: true
+        };
     }
 
     addNewEntreeDetail() {
@@ -91,13 +103,7 @@ export class EntreeDetailCommonSectionComponent implements OnInit {
                 this.newEntreeDetail.entreeDetailTypeName = this.entreeDetailType;
                 this.newEntreeDetail.displayMode = true;
                 this.addNewEntreeDetailEmitter.emit(this.newEntreeDetail);
-                this.newEntreeDetail = <EntreeDetailMappingResource>{
-                    entreeDetailId: 0,
-                    name: '',
-                    quantity: 1,
-                    entreeDetailTypeName: '',
-                    displayMode: true
-                };
+                this.initNewEntreeDetailObj();
             }
         }
     }

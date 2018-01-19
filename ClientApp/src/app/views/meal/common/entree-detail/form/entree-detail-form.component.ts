@@ -27,9 +27,9 @@ export class EntreeDetailFormComponent implements OnInit {
         note: ''
     };
 
-    @Output('submitFormClick') submitFormClick = new EventEmitter();
-    @Output('resetFormClick') resetFormClick = new EventEmitter();
-    @Output('deleteFormClick') deleteFormClick = new EventEmitter();
+    @Output('submitEntreeFormClick') submitFormClick = new EventEmitter();
+    @Output('resetEntreeDetailFormClick') resetFormClick = new EventEmitter();
+    @Output('deleteEntreeDetailFormClick') deleteFormClick = new EventEmitter();
 
     oldName: string;
     oldNote: string;

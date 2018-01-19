@@ -1,5 +1,4 @@
 <p>splitBy - {{ splitBy }} - splitId - {{ splitId }} - updatedId - {{ updatedId }}</p>
-<p>{{f.value | json}}</p>
 <p>{{ entree | json }}</p>
 
 <div class="card">
@@ -64,17 +63,12 @@
       <div class="form-group row">
         <label class="col-md-3 col-form-label" for="entreeRank">Rank</label>
         <div class="col-md-3">
-          <star-rating-comp [starType]="'svg'" [rating]="this.entree.currentRank" [size]="'medium'" (onClick)="this.onClick($event)"
-            [getColor]="this.getColor()" style="display: inline-flex;"></star-rating-comp>
+          <star-rating-comp [starType]="'svg'" [rating]="this.entree.currentRank" [size]="'medium'" (onClick)="this.onStarRatingClick($event)"
+            [getColor]="this.getStarRatingColor()" style="display: inline-flex;"></star-rating-comp>
         </div>
       </div>
-      <entree-detail-common-section *ngFor="let edt of entreeDetailTypes"
-      [entreeId]="this.updatedId"
-      [entreeDetailType]="edt.name.capitalizeFirstLetter()"
-      [entreeDetailList]="filterEntreeDetailList(edt.name)"
-      (addNewEntreeDetail)="addNewEntreeDetailTrigger($event)"
-      (removeEntreeDetail)="removeEntreeDetailTrigger($event)"
-      ></entree-detail-common-section>
+      <entree-detail-common-section *ngFor="let edt of entreeDetailTypes" [entreeId]="this.updatedId" [entreeDetailType]="edt.name.capitalizeFirstLetter()"
+        [entreeDetailList]="filterEntreeDetailList(edt.name)" (addNewEntreeDetail)="addNewEntreeDetailTrigger($event)" (removeEntreeDetail)="removeEntreeDetailTrigger($event)"></entree-detail-common-section>
       <div class="form-group row">
         <label class="col-md-3 col-form-label" for="entreeNote">Note</label>
         <div class="col-md-6">
@@ -89,10 +83,39 @@
         <i class="fa fa-dot-circle-o"></i> Submit</button>
       <button type="button" class="btn btn-sm btn-warning" (click)="cancelForm()">
         <i class="fa fa-ban"></i> Cancel</button>
-      <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()">
+      <button type="reset" class="btn btn-sm btn-primary" (click)="resetFormValue()" *ngIf="false">
         <i class="fa fa-undo"></i> Reset</button>
-      <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteEntree()" [disabled]="true">
+      <button type="button" class="btn btn-sm btn-danger" (click)="this.deleteEntree()" [disabled]="false">
         <i class="fa fa-remove"></i> Delete</button>
     </div>
   </div>
 </div>
+
+<button type="button" class="btn btn-info" data-toggle="modal" (click)="openModal()">
+    Info modal
+  </button>
+<br>
+<br>
+<pre>{{message}}</pre>
+<div bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Modal title</h4>
+        <button type="button" class="close" (click)="decline()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="decline()">Close</button>
+        <button type="button" class="btn btn-info" (click)="confirm()">Save changes</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

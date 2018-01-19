@@ -1,7 +1,8 @@
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { EntreeService } from './../../../../../services/meal/entree.service';
 import { EntreeHelperService } from './../../../../../services/meal/entree-helper.service';
 import { SaveEntree, EntreeDetailMappingResource } from './../../../../../viewModels/meal/entree';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
@@ -27,7 +28,9 @@ export class EntreeFormCommonComponent implements OnInit {
     vegetables: any;
     meats: any;
 
-
+    // Modal
+    modalRef: BsModalRef;
+    message: string;
 
     @Input() entree: SaveEntree = {
         id: 0,
@@ -36,7 +39,7 @@ export class EntreeFormCommonComponent implements OnInit {
         entreeCatagoryId: 9,
         entreeStyleId: 12,
         currentRank: 3,
-        addedOn: null,
+        addedOn: new Date(),
         addedById: 0,
         lastUpdatedByOn: null,
         lastUpdatedById: 0,
@@ -46,9 +49,9 @@ export class EntreeFormCommonComponent implements OnInit {
 
     @Input() entreeFormCommonHeader: string = '';
 
-    @Output('submitFormClick') submitFormClick = new EventEmitter();
-    @Output('resetFormClick') resetFormClick = new EventEmitter();
-    @Output('deleteFormClick') deleteFormClick = new EventEmitter();
+    @Output('submitEntreeFormClick') submitFormClick = new EventEmitter();
+    @Output('resetEntreeFormClick') resetFormClick = new EventEmitter();
+    @Output('deleteEntreeFormClick') deleteFormClick = new EventEmitter();
 
 
     constructor(
@@ -56,7 +59,8 @@ export class EntreeFormCommonComponent implements OnInit {
         private _router: Router,
         private _entreeService: EntreeService,
         private _entreeHelperService: EntreeHelperService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private modalService: BsModalService
     ) {
         _route.params.subscribe(p => {
             this.splitBy = (typeof p['splitBy'] == 'undefined') ? 'update' : p['splitBy'];
@@ -116,24 +120,80 @@ export class EntreeFormCommonComponent implements OnInit {
     }
 
     filterEntreeDetailList(detailType) {
-        if (this.entree.entreeDetails.length > 0) {
+        if (this.entree.entreeDetails != null && this.entree.entreeDetails.length > 0) {
             return this.entree.entreeDetails.filter(ed => ed.entreeDetailTypeName === detailType);
+        } else {
+            return Array<EntreeDetailMappingResource>();
         }
     }
 
     // Rank Control
-    getColor(): string {
+    getStarRatingColor(): string {
         return (this.entree.currentRank > 4) ? 'positive' : ((this.entree.currentRank >= 3) ? 'ok' : 'negative');
     };
 
-    onClick(event) {
+    onStarRatingClick(event) {
         console.log('onClick ', event);
         this.entree.currentRank = event.rating;
     }
 
     // Button Event
     submit() {
-        this.submitFormClick.emit('submitEntreeForm id: ' + this.updatedId);
+        if (this.entree.entreeDetails.length == 0) {
+            this.toastr.warning('Please add at least one material', 'Invalid Operation');
+        } else {
+            if (this.entree.id != 0) {
+                this.updateEntree();
+            }
+            else {
+                this.addEntree();
+            }
+            this.submitFormClick.emit(this.entree);
+        }
+    }
+
+    addEntree() {
+        this.entree.addedById = 2;
+        this.entree.addedOn = new Date();
+        this._entreeService.createEntree(this.entree)
+            .subscribe(
+            (data) => {
+                this.toastr.success(this.entree.name + ' has been successfully inserted!', 'INSERT SUCCESS');
+                this.returnToList();
+            },
+            (err) => {
+                if (err.status === 400) {
+                    // handle validation error
+                    let validationErrorDictionary = JSON.parse(err.text());
+                    for (var fieldName in validationErrorDictionary) {
+                        if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                            this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
+                        }
+                    }
+                }
+            });
+    }
+
+    updateEntree() {
+        this.entree.lastUpdatedById = 2;
+
+        this._entreeService.updateEntree(this.entree)
+            .subscribe(
+            (data) => {
+                this.toastr.success(this.entree.name + ' has been successfully updated!', 'UPDATE SUCCESS');
+                this.returnToList();
+            },
+            (err) => {
+                if (err.status === 400) {
+                    // handle validation error
+                    let validationErrorDictionary = JSON.parse(err.text());
+                    for (var fieldName in validationErrorDictionary) {
+                        if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                            this.toastr.warning('Invalid Update', validationErrorDictionary[fieldName]);
+                        }
+                    }
+                }
+            });
     }
 
     resetFormValue() {
@@ -145,6 +205,13 @@ export class EntreeFormCommonComponent implements OnInit {
     }
 
     deleteEntree() {
+        if (confirm("Are you sure?")) {
+            this._entreeService.deleteEntree(this.entree.id)
+                .subscribe(x => {
+                    //this._router.navigate(['/meal/vegetableForm/new']);
+                    this.toastr.success(this.entree.name + ' has been successfully deleted!', 'DELETE SUCCESS');
+                });
+        }
         this.deleteFormClick.emit('deleteEntreeForm');
     }
 
@@ -173,5 +240,21 @@ export class EntreeFormCommonComponent implements OnInit {
         }
 
         this.toastr.success(entreeDetail.name + ' has been removed!', 'Removed Notification');
+    }
+
+    // Modal
+    @ViewChild('infoModal') infoModal: any;
+    openModal(template: TemplateRef<any>) {
+        this.infoModal.show();
+    }
+
+    confirm(): void {
+        this.message = 'Confirmed!';
+        this.infoModal.hide();
+    }
+
+    decline(): void {
+        this.message = 'Declined!';
+        this.infoModal.hide();
     }
 }

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.QueryResource;
@@ -123,26 +126,40 @@ namespace WebApi.Mapping
                 .AfterMap((se, e) =>
                 {
                     // Remove unselected entree details
-                    //var removedEntreeDetails = new List<Entrees_Details>();
-                    //foreach (var ed in e.MappingDetailsWithCurrentEntree)
-                    //    if (!se.EntreeDetailIds.Contains(ed.EntreeDetailId))
-                    //        removedEntreeDetails.Add(ed);
+                    var removedEntreeDetails = new List<Entrees_Details>();
+                    foreach (var ed in e.MappingDetailsWithCurrentEntree)
+                    {
+                        if (!se.EntreeDetails.Any(edm => edm.EntreeDetailId == ed.EntreeDetailId))
+                            removedEntreeDetails.Add(ed);
+                    }
+
+                    foreach (var esds in removedEntreeDetails)
+                        e.MappingDetailsWithCurrentEntree.Remove(esds);
+
+                    // Add new entree details
+                    //var addedEntreeDetails = new List<Entrees_Details>();
+                    //foreach (var edm in se.EntreeDetails)
+                    //{
+                    //    if (!e.MappingDetailsWithCurrentEntree.Any(esds => esds.EntreeDetailId == edm.EntreeDetailId))
+                    //        addedEntreeDetails.Add(new Entrees_Details { EntreeId = e.Id, EntreeDetailId = edm.EntreeDetailId });
+                    //} 
+                    var addedEntreeDetails = se.EntreeDetails
+                                                    .Where(edm => !e.MappingDetailsWithCurrentEntree.Any(esds => esds.EntreeDetailId == edm.EntreeDetailId))
+                                                    .Select(edm => new Entrees_Details { EntreeId = e.Id, EntreeDetailId = edm.EntreeDetailId, Quantity = edm.Quantity, AddedById = se.AddedById, AddedOn = DateTime.Now }).ToList();
+
+                    foreach (var esds in addedEntreeDetails)
+                        e.MappingDetailsWithCurrentEntree.Add(esds);
 
 
-                    //var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
 
-                    //foreach (var esds in removedEntreeDetails)
-                    //    e.MappingDetailsWithCurrentEntree.Remove(esds);
-
-                    //// Add new entree details
-                    ////foreach (var id in se.EntreeDetailIds)
-                    ////    if (!e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
-                    ////        e.MappingDetailsWithCurrentEntree.Add(new Entrees_Details { EntreeId = id });
-                    //var addedEntreeDetails = se.EntreeDetailIds
-                    //                                .Where(id => !e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
-                    //                                .Select(id => new Entrees_Details { EntreeId = id }).ToList();
-                    //foreach (var esds in addedEntreeDetails)
-                    //    e.MappingDetailsWithCurrentEntree.Add(esds);
+                    #region Old Linq
+                    /*
+                    foreach (var ed in e.MappingDetailsWithCurrentEntree)
+                        if (!se.EntreeDetailIds.Contains(ed.EntreeDetailId))
+                            removedEntreeDetails.Add(ed);
+                    var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
+                    */
+                    #endregion
                 });
         }
         #endregion

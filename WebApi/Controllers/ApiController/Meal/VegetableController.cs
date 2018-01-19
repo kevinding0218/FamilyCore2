@@ -96,12 +96,12 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVegetable(int id)
         {
-            var isExistedVegetable = await _vegeRepository.GetVegetable(id);
-            if (isExistedVegetable == null)
+            var existedVegetableFromDB = await _vegeRepository.GetVegetable(id);
+            if (existedVegetableFromDB == null)
                 return NotFound();
 
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedVegetable);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(existedVegetableFromDB);
 
             // Return view Model
             return Ok(result);
@@ -152,8 +152,8 @@ namespace WebApi.Controllers.ApiController.Meal
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isExistedVegetable = await _vegeRepository.GetVegetable(id);
-            if (isExistedVegetable == null)
+            var existedVegetableFromDB = await _vegeRepository.GetVegetable(id);
+            if (existedVegetableFromDB == null)
                 return NotFound();
 
             if (await _vegeRepository.IsDuplicateVegetable(SaveEntreeComponentResource.keyValuePairInfo.Name, SaveEntreeComponentResource.keyValuePairInfo.Id))
@@ -170,16 +170,16 @@ namespace WebApi.Controllers.ApiController.Meal
             //}
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeComponentResource, isExistedVegetable);
-            isExistedVegetable.LastUpdatedByOn = DateTime.Now;
+            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeComponentResource, existedVegetableFromDB);
+            existedVegetableFromDB.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model
             await _uow.CompleteAsync();
 
             // Fetch complete object from database
-            isExistedVegetable = await _vegeRepository.GetVegetable(isExistedVegetable.Id);
+            existedVegetableFromDB = await _vegeRepository.GetVegetable(existedVegetableFromDB.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(isExistedVegetable);
+            var result = _mapper.Map<EntreeDetail, SaveEntreeDetailResource>(existedVegetableFromDB);
 
             // Return view Model
             return Ok(result);
@@ -190,11 +190,11 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpDelete("{id}")] //api/vegetable/id
         public async Task<IActionResult> DeleteVegetable(int id)
         {
-            var existedVegetable = await _vegeRepository.GetVegetable(id);
-            if (existedVegetable == null)
+            var existedVegetableFromDB = await _vegeRepository.GetVegetable(id);
+            if (existedVegetableFromDB == null)
                 return NotFound();
 
-            _vegeRepository.Remove(existedVegetable);
+            _vegeRepository.Remove(existedVegetableFromDB);
             await _uow.CompleteAsync();
 
             return Ok(id);
