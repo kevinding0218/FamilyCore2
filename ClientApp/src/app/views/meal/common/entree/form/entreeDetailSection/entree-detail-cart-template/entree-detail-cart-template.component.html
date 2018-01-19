@@ -1,0 +1,33 @@
+<div style="border: 1px #1b8eb7 solid; padding: .25rem;border-radius: 15px;" *ngIf="entreeDetail.displayMode">
+  <label class="col-form-label">{{ entreeDetail.name }}</label> x
+  <label class="col-form-label">{{ entreeDetail.quantity }}</label>
+  <span class="input-group-btn"></span>
+  <button type="button" class="btn btn-sm btn-primary" style="border-radius: 15px; margin-bottom: 2px;" (click)="editEntreeDetail(entreeDetail)">
+    <i class="fa fa-edit"></i> Edit
+  </button>
+  <span class="input-group-btn"></span>
+  <button type="button" class="btn btn-sm btn-danger" style="border-radius: 15px; margin-bottom: 2px;" (click)="removeEntreeDetail(entreeDetail)">
+    <i class="fa fa-remove"></i> Remove
+  </button>
+</div>
+<div class="input-group" style="border: 1px #1b8eb7 solid; padding: .5rem;border-radius: 15px;" *ngIf="!entreeDetail.displayMode">
+  <select id="availEntreeDetail" class="form-control form-control-sm" style="width: 40px;" (change)="onAvailEntreeDetailChange($event)"
+    [(ngModel)]="entreeDetail.entreeDetailId" name="entreeDetailId">
+    <option *ngFor="let ed of availEntreeDetails" value="{{ ed.id }}">{{ ed.name }}</option>
+  </select>
+  <span class="input-sm-space"></span>x
+  <span class="input-sm-space"></span>
+  <input type="number" id="entreeQty" class="form-control form-control-sm" min="1" value="1" [(ngModel)]="entreeDetail.quantity">
+  <span class="input-sm-space"></span>
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-sm btn-primary" style="border-radius: 15px;" (click)="saveEntreeDetail(entreeDetail)">
+      <i class="fa fa-save"></i> Save
+    </button>
+  </span>
+  <span class="input-sm-space"></span>
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-sm btn-warning" style="border-radius: 15px;" (click)="cancelEntreeDetail(entreeDetail)">
+      <i class="fa fa-ban"></i> Cancel
+    </button>
+  </span>
+</div>

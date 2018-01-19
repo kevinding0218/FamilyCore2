@@ -26,12 +26,14 @@ namespace WebApi.Persistent.Meal
 
         public async Task<IEnumerable<EntreeDetail>> GetEntreeDetails(string EntreeDetailType)
         {
-            return await this._context.EntreeDetails.Include(ed => ed.EntreeDetailType).Where(ed => ed.EntreeDetailType.DetailType == EntreeDetailType).ToListAsync();
+            return await this._context.EntreeDetails.Include(ed => ed.EntreeDetailType).Where(ed => ed.EntreeDetailType.DetailName.ToLower() == EntreeDetailType.ToLower()).ToListAsync();
         }
 
         public async Task<EntreeDetail> GetEntreeDetail(int id)
         {
-            return await _context.EntreeDetails.SingleOrDefaultAsync(m => m.Id == id);
+            return await _context.EntreeDetails
+                            .Include(ed => ed.EntreeDetailType)
+                            .SingleOrDefaultAsync(m => m.Id == id);
         }
 
         public void AddEntreeDetail(EntreeDetail newEntreeDetail)
@@ -76,7 +78,7 @@ namespace WebApi.Persistent.Meal
 
         public async Task<int> GetEntreeDetailTypeIdByType(string detailType)
         {
-            var entreeDetailType = await _context.EntreeDetailTypes.SingleOrDefaultAsync(edt => edt.DetailType.Equals(detailType));
+            var entreeDetailType = await _context.EntreeDetailTypes.SingleOrDefaultAsync(edt => edt.DetailName.ToLower().Equals(detailType.ToLower()));
             return entreeDetailType.Id;
         }
     }

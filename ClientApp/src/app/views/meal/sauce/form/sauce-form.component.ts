@@ -18,7 +18,7 @@ export class SauceFormComponent implements OnInit {
         addedById: null,
         updatedOn: null,
         lastUpdatedById: null,
-        detailType: '',
+        detailType: 'sauce',
         note: ''
     };
 

@@ -18,7 +18,7 @@ export class EntreeListByStyleComponent implements OnInit {
     { 
         _route.params.subscribe(p => {
             this.splitBy = 'style';
-            this.splitById = 13;
+            this.splitById = 12;
             this.entreeListFormHeader = 'List of Entrees By Style';
             this.newEntreeButtonText = 'Create New Entree';
         });

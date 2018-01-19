@@ -14,6 +14,9 @@ namespace DomainLibrary.Meal
         [Required]
         [StringLength(20)]
         public string DetailType { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string DetailName { get; set; }
 
         public ICollection<EntreeDetail> EntreeDetails { get; set; }
 

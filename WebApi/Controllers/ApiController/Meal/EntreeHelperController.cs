@@ -44,9 +44,14 @@ namespace WebApi.Controllers.ApiController.Meal
                 var staplefoods = await this._entreeHelperRepository.GetStapleFoods();
                 return _mapper.Map<List<StapleFood>, List<KeyValuePairResource>>(staplefoods);
             }
+            else if (attribute.ToLower().Equals("entreedetailtype"))
+            {
+                var entreeDetails = await this._entreeHelperRepository.GetEntreeDetailTypes();
+                return _mapper.Map<List<EntreeDetailType>, List<KeyValuePairResource>>(entreeDetails);
+            }
             else
             {
-                return await this._entreeHelperRepository.GetAvailableEntreeDetailByType(currentEntreeId, attribute);
+                return await this._entreeHelperRepository.GetAvailableEntreeDetailByType(attribute, currentEntreeId);
             }
         }
     }

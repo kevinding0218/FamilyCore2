@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
-using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.QueryResource;
@@ -44,7 +43,7 @@ namespace WebApi.Mapping
                 .ForMember
                 (svr => svr.keyValuePairInfo, opt => opt.MapFrom(v => new KeyValuePairResource { Id = v.Id, Name = v.Name }))
                 .ForMember
-                (svr => svr.DetailType, opt => opt.MapFrom(ed => ed.EntreeDetailType.DetailType));
+                (svr => svr.DetailType, opt => opt.MapFrom(ed => ed.EntreeDetailType.DetailName.ToLower()));
 
             this.CreateMap<EntreeDetail, GridEntreeDetailResource>()
                 .ForMember(gvr => gvr.NumberOfEntreeIncluded, opt => opt.Ignore())
@@ -83,8 +82,7 @@ namespace WebApi.Mapping
                 .ForMember(eir => eir.AddedOn, opt => opt.MapFrom(e => e.AddedOn.ToString()))
                 .ForMember(eir => eir.EntreeDetailList, opt => opt.Ignore());
             this.CreateMap<Entree, SaveEntreeResource>()
-                .ForMember(svr => svr.EntreeDetailIds,
-                opt => opt.MapFrom(e => e.MappingDetailsWithCurrentEntree.Select(ed => ed.EntreeDetailId)));
+                .ForMember(svr => svr.EntreeDetails, opt => opt.Ignore());
         }
 
         private void DomainToApiEntreeHelper()
@@ -93,6 +91,8 @@ namespace WebApi.Mapping
                 .ForMember(kpr => kpr.Name, opt => opt.MapFrom(es => es.Style));
             this.CreateMap<EntreeCatagory, KeyValuePairResource>()
                 .ForMember(kpr => kpr.Name, opt => opt.MapFrom(ec => ec.Catagory));
+            this.CreateMap<EntreeDetailType, KeyValuePairResource>()
+                .ForMember(kpr => kpr.Name, opt => opt.MapFrom(edt => edt.DetailName));
         }
         #endregion
 
@@ -129,20 +129,20 @@ namespace WebApi.Mapping
                     //        removedEntreeDetails.Add(ed);
 
 
-                    var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
+                    //var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
 
-                    foreach (var esds in removedEntreeDetails)
-                        e.MappingDetailsWithCurrentEntree.Remove(esds);
+                    //foreach (var esds in removedEntreeDetails)
+                    //    e.MappingDetailsWithCurrentEntree.Remove(esds);
 
-                    // Add new entree details
-                    //foreach (var id in se.EntreeDetailIds)
-                    //    if (!e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
-                    //        e.MappingDetailsWithCurrentEntree.Add(new Entrees_Details { EntreeId = id });
-                    var addedEntreeDetails = se.EntreeDetailIds
-                                                    .Where(id => !e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
-                                                    .Select(id => new Entrees_Details { EntreeId = id }).ToList();
-                    foreach (var esds in addedEntreeDetails)
-                        e.MappingDetailsWithCurrentEntree.Add(esds);
+                    //// Add new entree details
+                    ////foreach (var id in se.EntreeDetailIds)
+                    ////    if (!e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
+                    ////        e.MappingDetailsWithCurrentEntree.Add(new Entrees_Details { EntreeId = id });
+                    //var addedEntreeDetails = se.EntreeDetailIds
+                    //                                .Where(id => !e.MappingDetailsWithCurrentEntree.Any(ed => ed.EntreeDetailId == id))
+                    //                                .Select(id => new Entrees_Details { EntreeId = id }).ToList();
+                    //foreach (var esds in addedEntreeDetails)
+                    //    e.MappingDetailsWithCurrentEntree.Add(esds);
                 });
         }
         #endregion

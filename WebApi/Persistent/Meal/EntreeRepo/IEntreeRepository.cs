@@ -13,7 +13,7 @@ namespace WebApi.Persistent.Meal
 
         Task<bool> IsDuplicateEntree(string name, int? Id = null);
         Task<IEnumerable<Entree>> GetEntrees();
-        Task<Entree> GetEntree(int id);
+        Task<Entree> GetEntree(int EntreeId, bool includeRelated = true);
         void AddEntree(Entree newEntree);
         void Remove(Entree existedEntree);
     }

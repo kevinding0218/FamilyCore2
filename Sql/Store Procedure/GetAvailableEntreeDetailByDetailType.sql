@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[GetAvailableEntreeDetailByDetailType]
+ALTER PROCEDURE [dbo].[GetAvailableEntreeDetailByDetailType]
 	@Id INT = NULL,
 	@EntreeDetailType NVARCHAR(20) = NULL
 AS
@@ -22,12 +22,12 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT ed.Id, ed.Name FROM dbo.EntreeDetail ed
 	INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId
-	WHERE edt.DetailType = @EntreeDetailType
-	AND
-	NOT ExistS 
-	(
-	SELECT * FROM dbo.Entrees_Details esds
-	WHERE ed.Id = esds.EntreeDetailId and esds.EntreeId = @Id
-	)
+	WHERE LOWER(edt.DetailName) = @EntreeDetailType
+	--AND
+	--NOT ExistS 
+	--(
+	--SELECT * FROM dbo.Entrees_Details esds
+	--WHERE ed.Id = esds.EntreeDetailId and esds.EntreeId = @Id
+	--)
 END
 

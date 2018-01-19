@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Persistent.Meal;
-using WebApi.Persistent.Shared;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
 using WebApi.Resource.Meal.EntreeResource;
@@ -43,7 +42,7 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpGet("{entreeDetailType}")] ///api/entreeDetail/entreeDetailType
         public async Task<IEnumerable<GridEntreeDetailResource>> GetEntreeDetails(string entreeDetailType)
         {
-            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(EntreeDetailTypeEnum.TranslateEntreeDetailType(entreeDetailType));
+            var entreeDetails = await this._entreeDetailRepository.GetEntreeDetails(entreeDetailType);
             var gridResult = _mapper.Map<IEnumerable<EntreeDetail>, IEnumerable<GridEntreeDetailResource>>(entreeDetails);
 
             foreach (var gridEntreeDetail in gridResult)
@@ -108,12 +107,10 @@ namespace WebApi.Controllers.ApiController.Meal
                 // Convert from View Model to Domain Model 
                 var newentreeDetail = _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(newEntreeDetailResource);
                 newentreeDetail.AddedOn = DateTime.Now;
-                if (!EntreeDetailTypeEnum.TranslateEntreeDetailType(newEntreeDetailResource.DetailType).Equals(String.Empty))
+                if (!newEntreeDetailResource.DetailType.Equals(String.Empty))
                 {
                     newentreeDetail.EntreeDetailTypeId = await _entreeDetailRepository
-                                                                    .GetEntreeDetailTypeIdByType(
-                                                                        EntreeDetailTypeEnum.TranslateEntreeDetailType(newEntreeDetailResource.DetailType)
-                                                                    );
+                                                                    .GetEntreeDetailTypeIdByType(newEntreeDetailResource.DetailType);
                 }
 
                 // Insert into database by using Domain Model
@@ -136,7 +133,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region  UPDATE
         [HttpPut("{id}")] //api/entreeDetail/id
-        public async Task<IActionResult> UpdateEntreeDetail(int id, [FromBody] SaveEntreeDetailResource SaveEntreeResource)
+        public async Task<IActionResult> UpdateEntreeDetail(int id, [FromBody] SaveEntreeDetailResource SaveEntreeDetailResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -145,14 +142,14 @@ namespace WebApi.Controllers.ApiController.Meal
             if (isExistedentreeDetail == null)
                 return NotFound();
 
-            if (await _entreeDetailRepository.IsDuplicateEntreeDetail(SaveEntreeResource.keyValuePairInfo.Name, SaveEntreeResource.keyValuePairInfo.Id))
+            if (await _entreeDetailRepository.IsDuplicateEntreeDetail(SaveEntreeDetailResource.keyValuePairInfo.Name, SaveEntreeDetailResource.keyValuePairInfo.Id))
             {
-                ModelState.AddModelError("DuplicateEntreeDetail", SaveEntreeResource.keyValuePairInfo.Name + " already existed!");
+                ModelState.AddModelError("DuplicateEntreeDetail", SaveEntreeDetailResource.keyValuePairInfo.Name + " already existed!");
                 return BadRequest(ModelState);
             }
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeResource, isExistedentreeDetail);
+            _mapper.Map<SaveEntreeDetailResource, EntreeDetail>(SaveEntreeDetailResource, isExistedentreeDetail);
             isExistedentreeDetail.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model

@@ -18,7 +18,7 @@ export class IngredientFormComponent implements OnInit {
         addedById: null,
         updatedOn: null,
         lastUpdatedById: null,
-        detailType: '',
+        detailType: 'ingredient',
         note: ''
     };
 

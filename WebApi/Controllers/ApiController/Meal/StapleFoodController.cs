@@ -110,7 +110,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region  UPDATE
         [HttpPut("{id}")] //api/StapleFood/id
-        public async Task<IActionResult> UpdateStapleFood(int id, [FromBody] SaveEntreeDetailResource SaveEntreeResource)
+        public async Task<IActionResult> UpdateStapleFood(int id, [FromBody] SaveEntreeDetailResource SaveEntreeDetailResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -120,7 +120,7 @@ namespace WebApi.Controllers.ApiController.Meal
                 return NotFound();
 
             // Convert from View Model to Domain Model
-            _mapper.Map<SaveEntreeDetailResource, StapleFood>(SaveEntreeResource, isExistedStapleFood);
+            _mapper.Map<SaveEntreeDetailResource, StapleFood>(SaveEntreeDetailResource, isExistedStapleFood);
             isExistedStapleFood.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model

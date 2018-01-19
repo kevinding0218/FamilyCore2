@@ -56,12 +56,23 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEntree(int id)
         {
+            var EntreeDetails = new List<EntreeDetailMappingResource>();
             var isExistedentree = await _entreeRepository.GetEntree(id);
             if (isExistedentree == null)
                 return NotFound();
 
-            // Convert from Domain Model to View Model
             var result = _mapper.Map<Entree, SaveEntreeResource>(isExistedentree);
+
+            if (isExistedentree.MappingDetailsWithCurrentEntree != null && isExistedentree.MappingDetailsWithCurrentEntree.Count > 0)
+            {
+                foreach (var esds in isExistedentree.MappingDetailsWithCurrentEntree)
+                {
+                    EntreeDetailMappingResource map = new EntreeDetailMappingResource(esds.EntreeDetailId, esds.EntreeDetail.Name, esds.Quantity, esds.EntreeDetail.EntreeDetailType.DetailName);
+                    EntreeDetails.Add(map);
+                }
+
+                result.EntreeDetails = EntreeDetails;
+            }
 
             // Return view Model
             return Ok(result);
@@ -142,7 +153,7 @@ namespace WebApi.Controllers.ApiController.Meal
         [HttpDelete("{id}")] //api/entreeDetail/id
         public async Task<IActionResult> DeleteEntree(int id)
         {
-            var existedEntree = await _entreeRepository.GetEntree(id);
+            var existedEntree = await _entreeRepository.GetEntree(id, includeRelated: false);
             if (existedEntree == null)
                 return NotFound();
 

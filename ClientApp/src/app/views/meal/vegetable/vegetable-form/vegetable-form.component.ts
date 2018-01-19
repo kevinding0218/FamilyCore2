@@ -18,7 +18,7 @@ export class VegetableFormComponent implements OnInit {
         addedById: null,
         updatedOn: null,
         lastUpdatedById: null,
-        detailType: '',
+        detailType: 'vegetable',
         note: ''
     };
 

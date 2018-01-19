@@ -73,11 +73,16 @@ namespace WebApi.Persistent.Meal
         }
 
         #region Read Single Entree
-        public async Task<Entree> GetEntree(int id)
+        public async Task<Entree> GetEntree(int EntreeId, bool includeRelated = true)
         {
+            if (!includeRelated)
+                return await this._context.Entrees.SingleOrDefaultAsync(e => e.Id == EntreeId);
+
             return await this._context.Entrees
-                .Include(e => e.MappingDetailsWithCurrentEntree)
-                .SingleOrDefaultAsync(m => m.Id == id);
+                                .Include(e => e.MappingDetailsWithCurrentEntree)
+                                    .ThenInclude(esds => esds.EntreeDetail)
+                                        .ThenInclude(ed => ed.EntreeDetailType)
+                                .SingleOrDefaultAsync(e => e.Id == EntreeId);
         }
         #endregion
 

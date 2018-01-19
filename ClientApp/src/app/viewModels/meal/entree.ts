@@ -7,13 +7,16 @@ export interface SaveEntree {
     currentRank: number;
     addedOn: Date;
     addedById: number;
-    updatedOn: Date;
+    lastUpdatedByOn: Date;
     lastUpdatedById: number;
     note: string;
-    entreeDetailIds: number[];
-    vegetables: string;
-    meats: string;
-    seafoods: string;
-    sauces: string;
-    ingredients: string;
+    entreeDetails: EntreeDetailMappingResource[];
+}
+
+export interface EntreeDetailMappingResource {
+    entreeDetailId: number;
+    name: string;
+    quantity: number;
+    entreeDetailTypeName: string;
+    displayMode: boolean;
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
-using WebApi.Persistent.Shared;
 using WebApi.Resource.Shared;
 
 namespace WebApi.Persistent.Meal.EntreeHelperRepo
@@ -35,13 +34,13 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         }
         #endregion
 
-        public async Task<List<KeyValuePairResource>> GetAvailableEntreeDetailByType(int currentEntreeId, string entreeDetailType)
+        public async Task<List<KeyValuePairResource>> GetAvailableEntreeDetailByType(string entreeDetailType, int currentEntreeId)
         {
             var availableEntreeDetails = new List<KeyValuePairResource>();
 
             await _context.LoadStoredProc("dbo.GetAvailableEntreeDetailByDetailType")
                 .WithSqlParam("Id", currentEntreeId)
-                .WithSqlParam("EntreeDetailType", EntreeDetailTypeEnum.TranslateEntreeDetailType(entreeDetailType))
+                .WithSqlParam("EntreeDetailType", entreeDetailType)
                 .ExecuteStoredProcAsync((handler) =>
                 {
                     availableEntreeDetails = handler.ReadToList<KeyValuePairResource>().ToList();
@@ -49,6 +48,11 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
                 });
 
             return availableEntreeDetails;
+        }
+
+        public async Task<List<EntreeDetailType>> GetEntreeDetailTypes()
+        {
+            return await this._context.EntreeDetailTypes.ToListAsync();
         }
     }
 }

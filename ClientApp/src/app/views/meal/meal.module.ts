@@ -1,3 +1,5 @@
+import { EntreeDetailCartTemplateComponent } from './common/entree/form/entreeDetailSection/entree-detail-cart-template/entree-detail-cart-template.component';
+import { EntreeDetailCommonSectionComponent } from './common/entree/form/entreeDetailSection/entree-detail-common-section.component';
 import { EntreeHelperService } from './../../services/meal/entree-helper.service';
 import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
 import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
@@ -46,6 +48,8 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
     IngredientListComponent,
     EntreeListCommonComponent,
     EntreeListByStyleComponent,
+    EntreeDetailCartTemplateComponent,
+    EntreeDetailCommonSectionComponent,
     EntreeFormCommonComponent
   ],
   providers: [ StaplefoodService, EntreeDetailService, EntreeService, EntreeHelperService ]

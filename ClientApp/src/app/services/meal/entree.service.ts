@@ -9,7 +9,7 @@ export class EntreeService {
   constructor(private _http: Http) { }
 
   getEntree(id) {
-    return this._http.get(this.apiEndPoint + '/id?=' + id)
+    return this._http.get(this.apiEndPoint + '/' + id)
       .map(res => res.json());
   }
 
