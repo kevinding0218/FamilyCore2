@@ -91,12 +91,7 @@
   </div>
 </div>
 
-<button type="button" class="btn btn-info" data-toggle="modal" (click)="openModal()">
-    Info modal
-  </button>
-<br>
-<br>
-<pre>{{message}}</pre>
+<!-- Modal -->
 <div bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-info" role="document">
     <div class="modal-content">
@@ -107,11 +102,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>One fine body&hellip;</p>
+        <span>We may found some similar entree that matches your current one as below:</span>
+        <ul style="margin-left: -10px;">
+          <li *ngFor="let e of similarEntreeList">
+            {{ e.name }}
+          </li>
+        </ul>
+        <span>Are you sure to continue saving?</span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="decline()">Close</button>
-        <button type="button" class="btn btn-info" (click)="confirm()">Save changes</button>
+        <button type="button" class="btn btn-secondary" (click)="decline()">Cancel</button>
+        <button type="button" class="btn btn-info" (click)="confirm()">Continue Saving</button>
       </div>
     </div>
     <!-- /.modal-content -->

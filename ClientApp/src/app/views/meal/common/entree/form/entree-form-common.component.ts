@@ -1,12 +1,12 @@
+import { KeyValuePairInfo } from './../../../../../viewModels/meal/entreeDetail';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { EntreeService } from './../../../../../services/meal/entree.service';
 import { EntreeHelperService } from './../../../../../services/meal/entree-helper.service';
-import { SaveEntree, EntreeDetailMappingResource } from './../../../../../viewModels/meal/entree';
+import { SaveEntree, EntreeDetailMappingResource, SimilarEntreeInputObj } from './../../../../../viewModels/meal/entree';
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
-import { KeyValuePairInfo } from '../../../../../viewModels/meal/entreeDetail';
 
 @Component({
     selector: 'entree-form-common',
@@ -29,8 +29,10 @@ export class EntreeFormCommonComponent implements OnInit {
     meats: any;
 
     // Modal
+    @ViewChild('infoModal') infoModal: any;
     modalRef: BsModalRef;
     message: string;
+    similarEntreeList: KeyValuePairInfo[] = [];
 
     @Input() entree: SaveEntree = {
         id: 0,
@@ -139,6 +141,38 @@ export class EntreeFormCommonComponent implements OnInit {
 
     // Button Event
     submit() {
+        let entreeInputObj: SimilarEntreeInputObj = {
+            stapleFoodId: 1,
+            entreeName: '西红柿炒鸡蛋',
+            entreeDetailIdList: '30, 45'
+        };
+        this._entreeHelperService.getSimilarEntreeList(entreeInputObj)
+            .subscribe(
+            (data) => {
+                //console.log(data);
+                if (data != null && data instanceof Array && data.length > 0) {
+                    this.similarEntreeList = data;
+                    this.infoModal.show();
+                } else {
+                    console.log('No similar entree found');
+                    this.continueSavingEntree();
+                }
+            },
+            (err) => {
+                if (err.status === 400) {
+                    // handle validation error
+                    let validationErrorDictionary = JSON.parse(err.text());
+                    for (var fieldName in validationErrorDictionary) {
+                        if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                            this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
+                        }
+                    }
+                }
+            });
+
+    }
+
+    continueSavingEntree() {
         if (this.entree.entreeDetails.length == 0) {
             this.toastr.warning('Please add at least one material', 'Invalid Operation');
         } else {
@@ -242,19 +276,13 @@ export class EntreeFormCommonComponent implements OnInit {
         this.toastr.success(entreeDetail.name + ' has been removed!', 'Removed Notification');
     }
 
-    // Modal
-    @ViewChild('infoModal') infoModal: any;
-    openModal(template: TemplateRef<any>) {
-        this.infoModal.show();
-    }
-
+    // Modal 
     confirm(): void {
-        this.message = 'Confirmed!';
         this.infoModal.hide();
+        this.continueSavingEntree();
     }
 
     decline(): void {
-        this.message = 'Declined!';
         this.infoModal.hide();
     }
 }

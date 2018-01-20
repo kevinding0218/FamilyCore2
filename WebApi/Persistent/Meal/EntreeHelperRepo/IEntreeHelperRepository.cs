@@ -12,5 +12,6 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         Task<List<StapleFood>> GetStapleFoods();
         Task<List<KeyValuePairResource>> GetAvailableEntreeDetailByType(string entreeDetailType, int currentEntreeId);
         Task<List<EntreeDetailType>> GetEntreeDetailTypes();
+        Task<List<KeyValuePairResource>> GetSimilarEntreeList(string entreeName, int stapleFoodId, string EntreeDetailIdList);
     }
 }

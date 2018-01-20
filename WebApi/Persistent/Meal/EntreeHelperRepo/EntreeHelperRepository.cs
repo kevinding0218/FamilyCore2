@@ -54,5 +54,22 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         {
             return await this._context.EntreeDetailTypes.ToListAsync();
         }
+
+        public async Task<List<KeyValuePairResource>> GetSimilarEntreeList(string entreeName, int stapleFoodId, string EntreeDetailIdList)
+        {
+            var similarEntreeList = new List<KeyValuePairResource>();
+
+            await _context.LoadStoredProc("dbo.GetSimilarEntreeList")
+                .WithSqlParam("entreeName", entreeName)
+                .WithSqlParam("stapleFoodId", stapleFoodId)
+                .WithSqlParam("entreeDetailIdList", EntreeDetailIdList)
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    similarEntreeList = handler.ReadToList<KeyValuePairResource>().ToList();
+                    // do something with your results.
+                });
+
+            return similarEntreeList;
+        }
     }
 }

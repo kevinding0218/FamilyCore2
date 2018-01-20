@@ -1,3 +1,4 @@
+import { SimilarEntreeInputObj } from './../../viewModels/meal/entree';
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
@@ -21,5 +22,10 @@ export class EntreeHelperService {
     // Make the API call using the new parameters.
     return this._http.get(this.apiEndPoint + '/attribute', { params: httpParams })
       .map(res => res.json()); */
+  }
+
+  getSimilarEntreeList(entreeInputObj: SimilarEntreeInputObj) {
+    return this._http.post(this.apiEndPoint + '/similar', entreeInputObj)
+      .map(res => res.json());
   }
 }

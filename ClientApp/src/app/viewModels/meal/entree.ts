@@ -20,3 +20,9 @@ export interface EntreeDetailMappingResource {
     entreeDetailTypeName: string;
     displayMode: boolean;
 }
+
+export interface SimilarEntreeInputObj {
+    stapleFoodId: number;
+    entreeName: string;
+    entreeDetailIdList: string;
+}

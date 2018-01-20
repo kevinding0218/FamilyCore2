@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Persistent.Meal.EntreeHelperRepo;
+using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.Shared;
 
 namespace WebApi.Controllers.ApiController.Meal
@@ -53,6 +54,12 @@ namespace WebApi.Controllers.ApiController.Meal
             {
                 return await this._entreeHelperRepository.GetAvailableEntreeDetailByType(attribute, currentEntreeId);
             }
+        }
+
+        [HttpPost("similar")]  //api/entreeHelper/similar
+        public async Task<IEnumerable<KeyValuePairResource>> GetSimilarEntreeList([FromBody] SimilarEntreeInputObj entreeObj)
+        {
+            return await this._entreeHelperRepository.GetSimilarEntreeList(entreeObj.entreeName, entreeObj.stapleFoodId, entreeObj.entreeDetailIdList);
         }
     }
 }
