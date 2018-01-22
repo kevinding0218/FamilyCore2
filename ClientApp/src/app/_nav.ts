@@ -15,7 +15,7 @@ export const navigation = [
     children: [
       {
         name: 'Entrees',
-        url: '/meal/entreeListByStyle',
+        url: '/meal/entreeSummary',
         icon: 'icon-star'
       },
       {

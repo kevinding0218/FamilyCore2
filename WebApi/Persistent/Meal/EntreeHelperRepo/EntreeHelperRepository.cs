@@ -34,6 +34,7 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         }
         #endregion
 
+        #region Entree Detail Cart
         public async Task<List<KeyValuePairResource>> GetAvailableEntreeDetailByType(string entreeDetailType, int currentEntreeId)
         {
             var availableEntreeDetails = new List<KeyValuePairResource>();
@@ -54,7 +55,9 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         {
             return await this._context.EntreeDetailTypes.ToListAsync();
         }
+        #endregion
 
+        #region Entree Validation
         public async Task<List<KeyValuePairResource>> GetSimilarEntreeList(string entreeName, int stapleFoodId, string EntreeDetailIdList)
         {
             var similarEntreeList = new List<KeyValuePairResource>();
@@ -71,5 +74,27 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
 
             return similarEntreeList;
         }
+        #endregion
+
+        #region Entree List Main Page
+        public async Task<string> GetEntreeStyleOrCatagoryById(string splitBy, int splitId)
+        {
+            if (splitBy.ToLower().Equals("style"))
+            {
+                var selectedStyle = await this._context.EntreeStyles.SingleOrDefaultAsync(es => es.Id == splitId);
+                return selectedStyle.Style;
+            }
+            else if (splitBy.ToLower().Equals("catagory"))
+            {
+                var selectedStyle = await this._context.EntreeCatagorys.SingleOrDefaultAsync(es => es.Id == splitId);
+                return selectedStyle.Catagory;
+            }
+            else
+            {
+                return "NotFound";
+            }
+
+        }
+        #endregion
     }
 }

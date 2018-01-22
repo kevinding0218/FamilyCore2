@@ -55,7 +55,7 @@ BEGIN
 			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
-		--WHERE es.Id = @Id
+		WHERE es.Id = @Id
 		ORDER BY e.LastUpdatedByOn DESC, e.CurrentRank DESC
 	END
 	ELSE IF @SplitBy = 'catagory'

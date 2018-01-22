@@ -13,7 +13,8 @@ import { concat } from 'rxjs/observable/concat';
     styles: [
         '.edit_ul_li { display: inline-block;padding-right: 10px; }',
         '.input-sm-space { padding-left: 10px; }',
-        '.input-md-space { padding-left: 15px; }'
+        '.input-md-space { padding-left: 15px; }',
+        '.col-form-label { font-weight: bold; }'
     ]
 })
 

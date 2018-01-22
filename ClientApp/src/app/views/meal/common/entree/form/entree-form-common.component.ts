@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { KeyValuePairInfo } from './../../../../../viewModels/meal/entreeDetail';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { EntreeService } from './../../../../../services/meal/entree.service';
@@ -37,10 +38,10 @@ export class EntreeFormCommonComponent implements OnInit {
     @Input() entree: SaveEntree = {
         id: 0,
         name: '',
-        stapleFoodId: 8,
-        entreeCatagoryId: 9,
-        entreeStyleId: 12,
-        currentRank: 3,
+        stapleFoodId: 0,
+        entreeCatagoryId: 0,
+        entreeStyleId: 0,
+        currentRank: 0,
         addedOn: new Date(),
         addedById: 0,
         lastUpdatedByOn: null,
@@ -84,6 +85,10 @@ export class EntreeFormCommonComponent implements OnInit {
             sources.push(this._entreeService.getEntree(this.updatedId));
         else {
             this.entreeFormCommonHeader = 'Create New Entree';
+            if (this.splitBy == 'style')
+                this.entree.entreeStyleId = this.splitId;
+            else if (this.splitBy == 'catagory')
+            this.entree.entreeCatagoryId = this.splitId;
             this.entree.entreeDetails = [];
         }
 
@@ -141,49 +146,61 @@ export class EntreeFormCommonComponent implements OnInit {
 
     // Button Event
     submit() {
-        let entreeInputObj: SimilarEntreeInputObj = {
-            stapleFoodId: 1,
-            entreeName: '西红柿炒鸡蛋',
-            entreeDetailIdList: '30, 45'
-        };
-        this._entreeHelperService.getSimilarEntreeList(entreeInputObj)
-            .subscribe(
-            (data) => {
-                //console.log(data);
-                if (data != null && data instanceof Array && data.length > 0) {
-                    this.similarEntreeList = data;
-                    this.infoModal.show();
-                } else {
-                    console.log('No similar entree found');
-                    this.continueSavingEntree();
-                }
-            },
-            (err) => {
-                if (err.status === 400) {
-                    // handle validation error
-                    let validationErrorDictionary = JSON.parse(err.text());
-                    for (var fieldName in validationErrorDictionary) {
-                        if (validationErrorDictionary.hasOwnProperty(fieldName)) {
-                            this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
-                        }
-                    }
-                }
-            });
-
+        this.SavingEntree();
     }
 
-    continueSavingEntree() {
+    generateEntreeDetailIdList(entreeDetails) {
+        let entreeDetailIdList: number[] = [];
+        entreeDetails.forEach(function (element) { entreeDetailIdList.push(element.entreeDetailId) });
+        //console.log('entreeDetailIdList', entreeDetailIdList.toString());
+
+        return entreeDetailIdList.join();
+    }
+
+    SavingEntree() {
         if (this.entree.entreeDetails.length == 0) {
             this.toastr.warning('Please add at least one material', 'Invalid Operation');
         } else {
-            if (this.entree.id != 0) {
-                this.updateEntree();
-            }
-            else {
-                this.addEntree();
-            }
-            this.submitFormClick.emit(this.entree);
+            let entreeInputObj: SimilarEntreeInputObj = {
+                stapleFoodId: this.entree.stapleFoodId,
+                entreeName: this.entree.name,
+                entreeDetailIdList: this.generateEntreeDetailIdList(this.entree.entreeDetails)
+            };
+            this._entreeHelperService.getSimilarEntreeList(entreeInputObj)
+                .subscribe(
+                (data) => {
+                    //console.log(data);
+                    if (data != null && data instanceof Array && data.length > 0) {
+                        this.similarEntreeList = data;
+                        this.infoModal.show();
+                    } else {
+                        console.log('No similar entree found');
+                        this.continueSavingEntree();
+                    }
+                },
+                (err) => {
+                    if (err.status === 400) {
+                        // handle validation error
+                        let validationErrorDictionary = JSON.parse(err.text());
+                        for (var fieldName in validationErrorDictionary) {
+                            if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                                this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
+                            }
+                        }
+                    }
+                });
+
         }
+    }
+
+    continueSavingEntree() {
+        if (this.entree.id != 0) {
+            this.updateEntree();
+        }
+        else {
+            this.addEntree();
+        }
+        this.submitFormClick.emit(this.entree);
     }
 
     addEntree() {
@@ -192,6 +209,34 @@ export class EntreeFormCommonComponent implements OnInit {
         this._entreeService.createEntree(this.entree)
             .subscribe(
             (data) => {
+                let entreeInputObj: SimilarEntreeInputObj = {
+                    stapleFoodId: 1,
+                    entreeName: '西红柿炒鸡蛋',
+                    entreeDetailIdList: '30, 45'
+                };
+                this._entreeHelperService.getSimilarEntreeList(entreeInputObj)
+                    .subscribe(
+                    (data) => {
+                        //console.log(data);
+                        if (data != null && data instanceof Array && data.length > 0) {
+                            this.similarEntreeList = data;
+                            this.infoModal.show();
+                        } else {
+                            console.log('No similar entree found');
+                            this.continueSavingEntree();
+                        }
+                    },
+                    (err) => {
+                        if (err.status === 400) {
+                            // handle validation error
+                            let validationErrorDictionary = JSON.parse(err.text());
+                            for (var fieldName in validationErrorDictionary) {
+                                if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                                    this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
+                                }
+                            }
+                        }
+                    });
                 this.toastr.success(this.entree.name + ' has been successfully inserted!', 'INSERT SUCCESS');
                 this.returnToList();
             },

@@ -96,23 +96,31 @@
   <div class="modal-dialog modal-info" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Modal title</h4>
+        <h4 class="modal-title">Confirm Message</h4>
         <button type="button" class="close" (click)="decline()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <span>We may found some similar entree that matches your current one as below:</span>
-        <ul style="margin-left: -10px;">
-          <li *ngFor="let e of similarEntreeList">
+        <div class="row">
+          <div class="col-md text-primary">We may found some similar entree that matches your current one as below:</div>
+        </div>
+        <br />
+        <ul class="list-group" style="margin-left: -10px;">
+          <li class="list-group-item text-danger" *ngFor="let e of similarEntreeList">
             {{ e.name }}
           </li>
         </ul>
-        <span>Are you sure to continue saving?</span>
+        <br />
+        <div class="row">
+          <div class="col-md text-primary">Are you sure to continue saving?</div>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="decline()">Cancel</button>
-        <button type="button" class="btn btn-info" (click)="confirm()">Continue Saving</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="decline()">
+          <i class="fa fa-ban"></i> Cancel</button>
+        <button type="submit" class="btn btn-sm btn-success" (click)="confirm()" [disabled]="!f.valid">
+          <i class="fa fa-dot-circle-o"></i> Continue Saving</button>
       </div>
     </div>
     <!-- /.modal-content -->

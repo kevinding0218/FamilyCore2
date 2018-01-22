@@ -101,6 +101,8 @@ namespace WebApi.Controllers.ApiController.Meal
             // Convert from View Model to Domain Model
             var newEntree = _mapper.Map<SaveEntreeResource, Entree>(newEntreeResource);
             newEntree.AddedOn = DateTime.Now;
+            if (newEntree.StapleFoodId == 0)
+                newEntree.StapleFoodId = null;
 
             // Insert into database by using Domain Model
             _entreeRepository.AddEntree(newEntree);

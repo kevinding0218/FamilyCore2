@@ -28,4 +28,9 @@ export class EntreeHelperService {
     return this._http.post(this.apiEndPoint + '/similar', entreeInputObj)
       .map(res => res.json());
   }
+
+  getEntreeStyleOrCatagoryById(splitBy, splitId) {
+    return this._http.get(this.apiEndPoint + '/getEntreeStyleOrCatagory?splitBy=' + splitBy + '&splitId=' + splitId)
+      .map(res => res.json());
+  }
 }

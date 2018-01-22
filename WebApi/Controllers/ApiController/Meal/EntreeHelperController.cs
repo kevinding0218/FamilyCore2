@@ -61,5 +61,11 @@ namespace WebApi.Controllers.ApiController.Meal
         {
             return await this._entreeHelperRepository.GetSimilarEntreeList(entreeObj.entreeName, entreeObj.stapleFoodId, entreeObj.entreeDetailIdList);
         }
+
+        [HttpGet("getEntreeStyleOrCatagory")]  //api/entreeHelper/getEntreeStyleOrCatagory?splitBy=a&splitId=b
+        public async Task<string> GetEntreeStyleOrCatagoryById(string splitBy, int splitId)
+        {
+            return await this._entreeHelperRepository.GetEntreeStyleOrCatagoryById(splitBy, splitId);
+        }
     }
 }

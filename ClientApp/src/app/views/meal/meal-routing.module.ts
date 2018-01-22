@@ -1,3 +1,4 @@
+import { EntreeSummaryBoardComponent } from './entree/form/entree-summary-board.component';
 import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
 import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
 import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
@@ -30,7 +31,14 @@ const routes: Routes = [
         }
       },
       {
-        path: 'entreeListByStyle',
+        path: 'entreeSummary',
+        component: EntreeSummaryBoardComponent,
+        data: {
+          title: 'Entrees'
+        }
+      },
+      {
+        path: 'entreeListSplitBy/:splitBy/:splitId',
         component: EntreeListByStyleComponent,
         data: {
           title: 'Entree List By Style'

@@ -37,6 +37,6 @@ BEGIN
 	From dbo.Entrees_Details ST2
 	) EntreeDetailMapping ON EntreeDetailMapping.EntreeId = e.Id
 	WHERE LEFT(EntreeDetailMapping.EntreeDetails,Len(EntreeDetailMapping.EntreeDetails)-1) = @entreeDetailIdList
-	AND e.Name <> @entreeName --AND e.StapleFoodId = @stapleFoodId
+	AND e.Name <> @entreeName AND e.StapleFoodId = @stapleFoodId
 END
 

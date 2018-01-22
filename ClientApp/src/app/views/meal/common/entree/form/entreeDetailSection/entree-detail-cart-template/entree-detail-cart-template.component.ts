@@ -56,8 +56,6 @@ export class EntreeDetailCartTemplateComponent implements OnInit {
         }
     }
 
-
-
     editEntreeDetail(entreeDetail) {
         entreeDetail.displayMode = false;
     }
