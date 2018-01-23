@@ -1,1 +1,44 @@
-<span>EntreeSummary</span>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 mb-12">
+      <!-- Nav tabs -->
+      <tabset>
+        <tab heading="STYLE">
+          <div class="card">
+            <div class="card-header">
+              <strong>Entree By Style</strong>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6 col-md-2" *ngFor="let es of entreeCountByStyle">
+                  <entree-by-style-widget [styleCount]="es.splitByCount" [styleId]="es.splitId" [styleName]="es.splitByName" [styleValue]="es.splitByPercentage"
+                    [styleBgId]="es.styleBgId"></entree-by-style-widget>
+                </div>
+                <!--/.col-->
+              </div>
+            </div>
+          </div>
+          <!--/.row-->
+        </tab>
+        <tab heading="CATAGORY">
+          <div class="card">
+            <div class="card-header">
+              <strong>Entree By Catagory</strong>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6 col-lg-3" *ngFor="let ec of entreeCountByCatagory">
+                  <entree-by-catagory-widget [catagoryCount]="ec.splitByCount" [catagoryId]="ec.splitId" [catagoryName]="ec.splitByName" [catagoryValue]="ec.splitByPercentage"
+                    [styleBgId]="ec.styleBgId"></entree-by-catagory-widget>
+                </div>
+                <!--/.col-->
+              </div>
+            </div>
+          </div>
+          <!--/.row-->
+        </tab>
+      </tabset>
+    </div>
+    <!--/.col-->
+  </div>
+</div>

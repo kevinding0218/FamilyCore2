@@ -66,12 +66,9 @@ export class EntreeFormCommonComponent implements OnInit {
         private modalService: BsModalService
     ) {
         _route.params.subscribe(p => {
-            this.splitBy = (typeof p['splitBy'] == 'undefined') ? 'update' : p['splitBy'];
-            if (this.splitBy == 'update') {
-                this.updatedId = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
-            } else {
-                this.splitId = (typeof p['splitId'] == 'undefined') ? 0 : +p['splitId'];
-            }
+            this.splitBy = (typeof p['splitBy'] == 'undefined') ? '' : p['splitBy'];
+            this.splitId = (typeof p['splitId'] == 'undefined') ? 0 : +p['splitId'];
+            this.updatedId = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
         });
     }
 
@@ -112,7 +109,7 @@ export class EntreeFormCommonComponent implements OnInit {
     private setEntree(_data: any) {
         this.entree.id = _data.id;
         this.entree.name = _data.name;
-        this.entree.stapleFoodId = _data.stapleFoodId;
+        this.entree.stapleFoodId = _data.stapleFoodId == null ? 0 : _data.stapleFoodId;
         this.entree.note = _data.note;
         this.entree.entreeCatagoryId = _data.entreeCatagoryId;
         this.entree.entreeStyleId = _data.entreeStyleId;
@@ -206,37 +203,10 @@ export class EntreeFormCommonComponent implements OnInit {
     addEntree() {
         this.entree.addedById = 2;
         this.entree.addedOn = new Date();
+        this.entree.stapleFoodId = this.entree.stapleFoodId == 0 ? null: this.entree.stapleFoodId;
         this._entreeService.createEntree(this.entree)
             .subscribe(
             (data) => {
-                let entreeInputObj: SimilarEntreeInputObj = {
-                    stapleFoodId: 1,
-                    entreeName: '西红柿炒鸡蛋',
-                    entreeDetailIdList: '30, 45'
-                };
-                this._entreeHelperService.getSimilarEntreeList(entreeInputObj)
-                    .subscribe(
-                    (data) => {
-                        //console.log(data);
-                        if (data != null && data instanceof Array && data.length > 0) {
-                            this.similarEntreeList = data;
-                            this.infoModal.show();
-                        } else {
-                            console.log('No similar entree found');
-                            this.continueSavingEntree();
-                        }
-                    },
-                    (err) => {
-                        if (err.status === 400) {
-                            // handle validation error
-                            let validationErrorDictionary = JSON.parse(err.text());
-                            for (var fieldName in validationErrorDictionary) {
-                                if (validationErrorDictionary.hasOwnProperty(fieldName)) {
-                                    this.toastr.warning(validationErrorDictionary[fieldName], 'Invalid Insert');
-                                }
-                            }
-                        }
-                    });
                 this.toastr.success(this.entree.name + ' has been successfully inserted!', 'INSERT SUCCESS');
                 this.returnToList();
             },
@@ -255,6 +225,7 @@ export class EntreeFormCommonComponent implements OnInit {
 
     updateEntree() {
         this.entree.lastUpdatedById = 2;
+        this.entree.stapleFoodId = this.entree.stapleFoodId == 0 ? null: this.entree.stapleFoodId;
 
         this._entreeService.updateEntree(this.entree)
             .subscribe(
@@ -297,10 +268,10 @@ export class EntreeFormCommonComponent implements OnInit {
     returnToList() {
         switch (this.splitBy.toLowerCase()) {
             case 'style':
-                this._router.navigate(['/meal/entreeListByStyle']);
+                this._router.navigate(['/meal/entreeListSplitBy/style/' + this.splitId]);
                 break;
             case 'catagory':
-                this._router.navigate(['/meal/entreeListByStyle']);
+                this._router.navigate(['/meal/entreeListSplitBy/catagory/' + this.splitId]);
                 break;
         }
     }

@@ -26,7 +26,7 @@ namespace WebApi.Controllers.ApiController.Meal
             this._mapper = mapper;
         }
 
-        [HttpGet("attribute")]  //api/entreeHelper/attribute?attribute=a&currentEntreeId=b
+        [HttpGet("getEntreeHelperDropdownItems")]  //api/entreeHelper/attribute?attribute=a&currentEntreeId=b
         public async Task<IEnumerable<KeyValuePairResource>> GetEntreeHelperDropdownItems(string attribute, int currentEntreeId)
         {
             if (attribute.ToLower().Equals("style"))
@@ -56,16 +56,22 @@ namespace WebApi.Controllers.ApiController.Meal
             }
         }
 
-        [HttpPost("similar")]  //api/entreeHelper/similar
-        public async Task<IEnumerable<KeyValuePairResource>> GetSimilarEntreeList([FromBody] SimilarEntreeInputObj entreeObj)
-        {
-            return await this._entreeHelperRepository.GetSimilarEntreeList(entreeObj.entreeName, entreeObj.stapleFoodId, entreeObj.entreeDetailIdList);
-        }
-
         [HttpGet("getEntreeStyleOrCatagory")]  //api/entreeHelper/getEntreeStyleOrCatagory?splitBy=a&splitId=b
         public async Task<string> GetEntreeStyleOrCatagoryById(string splitBy, int splitId)
         {
             return await this._entreeHelperRepository.GetEntreeStyleOrCatagoryById(splitBy, splitId);
+        }
+
+        [HttpGet("getEntreeCountBySplit")]  //api/entreeHelper/getEntreeCountBySplit?splitBy=a
+        public async Task<List<EntreeCountBySplit>> GetEntreeCountBySplit(string splitBy)
+        {
+            return await this._entreeHelperRepository.GetEntreeCountBySplit(splitBy);
+        }
+
+        [HttpPost("getSimilarEntreeList")]  //api/entreeHelper/similar
+        public async Task<IEnumerable<KeyValuePairResource>> GetSimilarEntreeList([FromBody] SimilarEntreeInputObj entreeObj)
+        {
+            return await this._entreeHelperRepository.GetSimilarEntreeList(entreeObj.entreeName, entreeObj.stapleFoodId, entreeObj.entreeDetailIdList);
         }
     }
 }

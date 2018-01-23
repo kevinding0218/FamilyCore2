@@ -7,7 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'entree-common-list',
-    templateUrl: './entree-list-common.component.html'
+    templateUrl: './entree-list-common.component.html',
+    styleUrls:['./entree-list-common.component.css']
 })
 
 export class EntreeListCommonComponent implements OnInit {
@@ -77,7 +78,7 @@ export class EntreeListCommonComponent implements OnInit {
 
     editMainTableItem(value) {
         console.log('editMainTableItem value: ' + value);
-        this._router.navigate(['/meal/entreeForm/' + value]);
+        this._router.navigate(['/meal/entreeForm/update/' + this.splitBy + '/' + this.splitById + '/' + value]);
         this.editRowClick.emit(value);
     }
 

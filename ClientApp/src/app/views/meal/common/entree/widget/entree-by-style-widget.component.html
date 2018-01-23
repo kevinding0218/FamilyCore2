@@ -1,0 +1,17 @@
+<a [routerLink]="['/meal/entreeListSplitBy/style/' + this.styleId]">
+  <div class="card text-white" [class.bg-primary]="styleBgId == 0" [class.bg-warning]="styleBgId == 1" [class.bg-danger]="styleBgId == 2"
+    [class.bg-info]="styleBgId == 3" [class.bg-success]="styleBgId == 4">
+    <div class="card-body">
+      <div class="h1 text-right mb-4">
+        <i class="icon-people" [class.icon-people]="styleBgId == 0" [class.icon-user-follow]="styleBgId == 1" [class.icon-basket-loaded]="styleBgId == 2"
+          [class.icon-pie-chart]="styleBgId == 3" [class.icon-speedometer]="styleBgId == 4"></i>
+      </div>
+      <div class="h4 mb-0">{{ styleCount }}</div>
+      <small class="text-uppercase font-weight-bold">{{ styleName }}</small>
+      <div class="progress progress-white progress-xs mt-3">
+        <div class="progress-bar" role="progressbar" [style.width]="stylePercent" [attr.aria-valuenow]="styleValue" aria-valuemin="0"
+          aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
+</a>

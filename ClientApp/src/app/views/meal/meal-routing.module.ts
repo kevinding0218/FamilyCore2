@@ -25,7 +25,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: EntreeListByStyleComponent,
+        component: EntreeSummaryBoardComponent,
         data: {
           title: 'Entrees'
         }
@@ -52,7 +52,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'entreeForm/:id',
+        path: 'entreeForm/update/:splitBy/:splitId/:id',
         component: EntreeFormCommonComponent,
         data: {
           title: 'Update Entree'

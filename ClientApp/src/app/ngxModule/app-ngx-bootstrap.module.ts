@@ -5,6 +5,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { StarRatingModule } from 'angular-star-rating';
+// Import 3rd party components
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
   imports: [
@@ -13,8 +15,9 @@ import { StarRatingModule } from 'angular-star-rating';
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     StarRatingModule.forRoot(),
-    NgxDatatableModule
+    NgxDatatableModule,
+    TabsModule.forRoot()
   ],
-  exports: [BsDropdownModule, TooltipModule, ModalModule, NgxDatatableModule, StarRatingModule]
+  exports: [BsDropdownModule, TooltipModule, ModalModule, NgxDatatableModule, StarRatingModule, TabsModule]
 })
 export class AppNgxBootstrapModule { }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Extensions;
+using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.Shared;
 
 namespace WebApi.Persistent.Meal.EntreeHelperRepo
@@ -58,7 +59,7 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
         #endregion
 
         #region Entree Validation
-        public async Task<List<KeyValuePairResource>> GetSimilarEntreeList(string entreeName, int stapleFoodId, string EntreeDetailIdList)
+        public async Task<List<KeyValuePairResource>> GetSimilarEntreeList(string entreeName, int? stapleFoodId, string EntreeDetailIdList)
         {
             var similarEntreeList = new List<KeyValuePairResource>();
 
@@ -94,6 +95,23 @@ namespace WebApi.Persistent.Meal.EntreeHelperRepo
                 return "NotFound";
             }
 
+        }
+        #endregion
+
+        #region Entree Split By Count 
+        public async Task<List<EntreeCountBySplit>> GetEntreeCountBySplit(string splitBy)
+        {
+            var entreeCountBySplitList = new List<EntreeCountBySplit>();
+
+            await _context.LoadStoredProc("dbo.GetEntreeCountBySplit")
+                .WithSqlParam("splitBy", splitBy)
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    entreeCountBySplitList = handler.ReadToList<EntreeCountBySplit>().ToList();
+                    // do something with your results.
+                });
+
+            return entreeCountBySplitList;
         }
         #endregion
     }

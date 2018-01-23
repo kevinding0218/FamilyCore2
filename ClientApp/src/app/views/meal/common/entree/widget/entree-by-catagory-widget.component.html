@@ -1,0 +1,14 @@
+<a [routerLink]="['/meal/entreeListSplitBy/catagory/' + this.catagoryId]">
+  <div class="card text-white" [class.bg-primary]="styleBgId == 0" [class.bg-warning]="styleBgId == 1" [class.bg-danger]="styleBgId == 2"
+    [class.bg-info]="styleBgId == 3" [class.bg-success]="styleBgId == 4">
+    <div class="card-body">
+      <div class="h4 m-0">{{ catagoryCount }}</div>
+      <div>{{ catagoryName }}</div>
+      <div class="progress progress-white progress-xs my-3">
+        <div class="progress-bar" role="progressbar" [style.width]="catagoryPercent" [attr.aria-valuenow]="catagoryValue" aria-valuemin="0"
+          aria-valuemax="100"></div>
+      </div>
+      <small class="text-muted">Description...</small>
+    </div>
+  </div>
+</a>

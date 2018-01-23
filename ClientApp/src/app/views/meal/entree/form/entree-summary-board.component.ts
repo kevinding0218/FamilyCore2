@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Rx';
+import { EntreeHelperService } from './../../../../services/meal/entree-helper.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class EntreeSummaryBoardComponent implements OnInit {
-    constructor( ) { }
+    entreeCountByCatagory: any;
+    entreeCountByStyle: any;
 
-    ngOnInit() {  }
+    constructor(
+        private _entreeHelperService: EntreeHelperService
+    ) { }
+
+    ngOnInit() { 
+        var sources = [];
+        sources.push(this._entreeHelperService.getEntreeCountBySplit('catagory'));
+        sources.push(this._entreeHelperService.getEntreeCountBySplit('style'));
+
+        Observable.forkJoin(sources).subscribe(data => {
+            this.entreeCountByCatagory = data[0];
+            this.entreeCountByStyle = data[1];
+        }, err => {
+            
+        });
+     }
 }

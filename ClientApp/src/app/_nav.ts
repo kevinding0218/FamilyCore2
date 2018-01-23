@@ -16,37 +16,37 @@ export const navigation = [
       {
         name: 'Entrees',
         url: '/meal/entreeSummary',
-        icon: 'icon-star'
+        icon: 'fa fa-eercast'
       },
       {
         name: 'Vegetables',
         url: '/meal/vegetableList/vegetable',
-        icon: 'icon-list'
+        icon: 'fa fa-snowflake-o'
       },
       {
         name: 'Meats',
         url: '/meal/meatList/meat',
-        icon: 'icon-list'
+        icon: 'fa fa-superpowers'
       },
       {
         name: 'Seafood',
         url: '/meal/seafoodList/seafood',
-        icon: 'icon-list'
+        icon: 'fa fa-telegram'
       },
       {
         name: 'Ingredient',
         url: '/meal/ingredientList/ingredient',
-        icon: 'icon-list'
+        icon: 'fa fa-bandcamp'
       },
       {
         name: 'Sauce',
         url: '/meal/sauceList/sauce',
-        icon: 'icon-list'
+        icon: 'fa fa-free-code-camp'
       },
       {
         name: 'Staple Food',
         url: '/meal/staplefoodList',
-        icon: 'icon-list'
+        icon: 'icon-star'
       }
     ]
   },
