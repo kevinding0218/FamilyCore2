@@ -1,10 +1,11 @@
-﻿using DomainLibrary.Shared;
+﻿using DomainLibrary.Meal;
+using DomainLibrary.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DomainLibrary.Meal
+namespace DomainLibrary.Order
 {
     [Table("Order")]
     public class Order : TransLog

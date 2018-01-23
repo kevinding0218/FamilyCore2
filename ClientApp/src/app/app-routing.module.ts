@@ -28,6 +28,10 @@ const routes: Routes = [
       {
         path: 'meal',
         loadChildren: './views/meal/meal.module#MealModule'
+      },
+      {
+        path: 'order',
+        loadChildren: './views/order/order.module#OrderModule'
       }
     ]
   },

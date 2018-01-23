@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import 'app/utility/extensions/stringExtension';
+import 'app/utility/extensions/dateExtension';
 
 @Component({
   // tslint:disable-next-line

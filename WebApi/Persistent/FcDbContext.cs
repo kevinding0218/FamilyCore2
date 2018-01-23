@@ -21,7 +21,7 @@ namespace WebApi.Persistent
         public DbSet<DomainLibrary.Member.User> Users { get; set; }
         public DbSet<Supermarket> Supermarkets { get; set; }
         public DbSet<ContactAddress> ContactAddresses { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<DomainLibrary.Order.Order> Orders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

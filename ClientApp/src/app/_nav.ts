@@ -51,6 +51,15 @@ export const navigation = [
     ]
   },
   {
+    name: 'Order',
+    url: '/order',
+    icon: 'icon-calculator',
+    badge: {
+      variant: 'success',
+      text: '12'
+    }
+  },
+  {
     name: 'Pages',
     url: '/pages',
     icon: 'icon-star',

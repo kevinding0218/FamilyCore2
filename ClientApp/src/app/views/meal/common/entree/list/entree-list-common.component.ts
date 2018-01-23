@@ -1,14 +1,17 @@
+import { element } from 'protractor';
+import { SaveCurrentOrder } from './../../../../../viewModels/order/saveCurrentOrder';
 import { EntreeService } from './../../../../../services/meal/entree.service';
 import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CurrentOrderService } from '../../../../../services/order/current-order.service';
 
 @Component({
     selector: 'entree-common-list',
     templateUrl: './entree-list-common.component.html',
-    styleUrls:['./entree-list-common.component.css']
+    styleUrls: ['./entree-list-common.component.css']
 })
 
 export class EntreeListCommonComponent implements OnInit {
@@ -59,7 +62,8 @@ export class EntreeListCommonComponent implements OnInit {
         private _route: ActivatedRoute,
         private _router: Router,
         private _entreeService: EntreeService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private _currentOrderService: CurrentOrderService
     ) {
 
     }
@@ -157,5 +161,57 @@ export class EntreeListCommonComponent implements OnInit {
 
     remove() {
         this.selected = [];
+    }
+
+    // Ordering
+    addToOrder() {
+        console.log('addToOrder:', this.selected);
+        if (this.selected.length == 0) {
+            this.toastr.warning('Please select at least one entree.', 'Invalid Operation');
+        } else {
+            let entreeIdsList: number[] = [];
+            this.selected.forEach(function (element) {
+                entreeIdsList.push(element.entreeId);
+            });
+            let saveCurrentOrder: SaveCurrentOrder = {
+                id: 0,
+                startDate: new Date(),
+                endDate: new Date(),
+                addedOn: new Date(),
+                addedById: 2,
+                lastUpdatedByOn: null,
+                lastUpdatedById: 0,
+                note: '',
+                mappingEntreeIdsWithCurrentOrder: entreeIdsList
+            }
+
+            this.findCurrentOrderIdIfExisted(saveCurrentOrder);
+        }
+
+    }
+
+    findCurrentOrderIdIfExisted(saveCurrentOrder) {
+        let currentDate = new Date();
+        //console.log(currentDate);
+        let currentDateStr = currentDate.toUTCDateTimeDigits();
+        //console.log('currentDate is ' + currentDateStr);
+        this._currentOrderService.getOrderIdByCurrentDate(currentDateStr)
+            .subscribe(
+            (data) => {
+                console.log('existedOrderId: ', data);
+                if (data == null) {
+                    console.log('Ready to add', saveCurrentOrder);
+                    // this._currentOrderService.createEntree(saveCurrentOrder)
+                    //     .subscribe(
+                    //     (data) => {
+                    //         this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
+                    //     });
+                } else {
+                    // remove existed entree automatically
+                    // Update existed Order
+                    
+                }
+            }
+            );
     }
 }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using DomainLibrary.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
+using WebApi.Resource.Order;
 using WebApi.Resource.QueryResource;
 using WebApi.Resource.Shared;
 
@@ -25,6 +27,8 @@ namespace WebApi.Mapping
             DomainToApiEntree();
             // Entree Helper
             DomainToApiEntreeHelper();
+            // Order
+            DomainToApiOrder();
             #endregion
 
             #region API Resource/View Model to Domain
@@ -36,6 +40,8 @@ namespace WebApi.Mapping
             ApiToDomainStapleFood();
             // Entree
             ApiToDomainEntree();
+            // Order
+            ApiToDomainOrder();
             #endregion
         }
 
@@ -97,6 +103,12 @@ namespace WebApi.Mapping
             this.CreateMap<EntreeDetailType, KeyValuePairResource>()
                 .ForMember(kpr => kpr.Name, opt => opt.MapFrom(edt => edt.DetailName));
         }
+
+        private void DomainToApiOrder()
+        {
+            this.CreateMap<Order, SaveCurrentOrder>()
+                .ForMember(sc => sc.MappingEntreeIdsWithCurrentOrder, opt => opt.MapFrom(o => o.MappingEntreesWithCurrentOrder.Select(esos => esos.EntreeId).ToArray()));
+        }
         #endregion
 
         #region API Resource/View Model to Domain
@@ -126,6 +138,7 @@ namespace WebApi.Mapping
                 .AfterMap((se, e) =>
                 {
                     // Remove unselected entree details
+                    // e.g: save contains 1,2 origianl contains 1,2,3 need to remove 3
                     var removedEntreeDetails = new List<Entrees_Details>();
                     foreach (var ed in e.MappingDetailsWithCurrentEntree)
                     {
@@ -143,6 +156,7 @@ namespace WebApi.Mapping
                     //    if (!e.MappingDetailsWithCurrentEntree.Any(esds => esds.EntreeDetailId == edm.EntreeDetailId))
                     //        addedEntreeDetails.Add(new Entrees_Details { EntreeId = e.Id, EntreeDetailId = edm.EntreeDetailId });
                     //} 
+                    // e.g: save contains 1,2, 3 origianl contains 1,2 need to add 3
                     var addedEntreeDetails = se.EntreeDetails
                                                     .Where(edm => !e.MappingDetailsWithCurrentEntree.Any(esds => esds.EntreeDetailId == edm.EntreeDetailId))
                                                     .Select(edm => new Entrees_Details { EntreeId = e.Id, EntreeDetailId = edm.EntreeDetailId, Quantity = edm.Quantity, AddedById = se.AddedById, AddedOn = DateTime.Now }).ToList();
@@ -160,6 +174,31 @@ namespace WebApi.Mapping
                     var removedEntreeDetails = e.MappingDetailsWithCurrentEntree.Where(esds => !se.EntreeDetailIds.Contains(esds.EntreeDetailId));
                     */
                     #endregion
+                });
+        }
+
+        private void ApiToDomainOrder()
+        {
+            this.CreateMap<SaveCurrentOrder, Order>()
+                .ForMember(o => o.Id, opt => opt.Ignore())
+                .ForMember(o => o.MappingEntreesWithCurrentOrder, opt => opt.Ignore())
+                .AfterMap((so, o) =>
+                {
+                    // Remove unselected entree order mapping
+                    // e.g: save contains 1,2 origianl contains 1,2,3 need to remove 3
+                    var removedEntrees = o.MappingEntreesWithCurrentOrder.Where(esos => !so.MappingEntreeIdsWithCurrentOrder.Contains(esos.EntreeId)).ToList();
+                    foreach (var e in removedEntrees)
+                        o.MappingEntreesWithCurrentOrder.Remove(e);
+
+                    // Add new selected entree order mapping
+                    // e.g: save contains 1,2, 3 origianl contains 1,2 need to add 3
+                    var addedEntrees = so.MappingEntreeIdsWithCurrentOrder
+                                            .Where(id => !o.MappingEntreesWithCurrentOrder.Any(esos => esos.EntreeId == id))
+                                            .Select(id => new Entrees_Orders { EntreeId = id, OrderId = so.Id }).ToList();
+
+                    foreach (var e in addedEntrees)
+                        o.MappingEntreesWithCurrentOrder.Add(e);
+
                 });
         }
         #endregion

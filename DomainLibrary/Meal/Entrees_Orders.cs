@@ -12,6 +12,6 @@ namespace DomainLibrary.Meal
         // one Entrees_Orders could have only one Entree
         public Entree Entree { get; set; }
         // one Entrees_Orders could have only one Order
-        public Order Order { get; set; }
+        public DomainLibrary.Order.Order Order { get; set; }
     }
 }

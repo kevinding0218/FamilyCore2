@@ -17,14 +17,14 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12"></div>
             <div class="col-lg-2 col-ms-2 col-sm-12">
-              <a [routerLink]="['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]" class="btn btn-success">
+              <a [routerLink]="['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]" class="btn btn-warning">
                 <i class="icon-plus"></i> {{ newEntreeButtonText }}</a>
             </div>
           </div>
-          <ngx-datatable #mainTable class="bootstrap expandable fullscreen" style="border: lightblue 3px double;" [rows]="ngx_rows" [loadingIndicator]="ngx_loadingIndicator"
-            [columnMode]="'force'" [headerHeight]="40" [footerHeight]="40" [limit]="5" [rowHeight]="'auto'" [reorderable]="ngx_reorderable"
-            (page)="onPageMainTable($event)" [selected]="selected" [selectionType]="'checkbox'" (activate)="onActivate($event)"
-            (select)='onSelect($event)'>
+          <ngx-datatable #mainTable class="bootstrap expandable fullscreen" style="border: lightblue 3px double;" [rows]="ngx_rows"
+            [loadingIndicator]="ngx_loadingIndicator" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="40" [limit]="5"
+            [rowHeight]="'auto'" [reorderable]="ngx_reorderable" (page)="onPageMainTable($event)" [selected]="selected" [selectionType]="'checkbox'"
+            (activate)="onActivate($event)" (select)='onSelect($event)'>
             <!-- Row Detail Template -->
             <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
@@ -59,7 +59,7 @@
             <ngx-datatable-column name="Rank" sortable="false">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <star-rating-comp [starType]="'svg'" [rating]="row.rank" [readOnly]="true" [size]="'small'" [staticColor]="(row.rank > 4) ? 'positive': ((row.rank >= 3) ? 'ok':'negative')"
-                    style="display: inline-flex;"></star-rating-comp>
+                  style="display: inline-flex;"></star-rating-comp>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Actions" sortable="false" prop="entreeId">
@@ -72,6 +72,15 @@
           </ngx-datatable>
         </div>
         <div class="card-footer">
+          <div class="row">
+            <div class="col-lg-10 col-md-10 col-sm-12">
+            </div>
+            <div class="col-lg-2 col-ms-2 col-sm-12">
+              <button type="button" class="btn btn-lg btn-success" (click)="addToOrder()">
+                <i class="fa fa-cart-plus"></i> Add to Order</button>
+            </div>
+          </div>
+
           <div class='selected-column'>
             <h4>Selections
               <small>({{selected?.length}})</small>

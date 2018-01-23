@@ -1,3 +1,4 @@
+import { CurrentOrderService } from './../../services/order/current-order.service';
 import { EntreeByStyleWidgetComponent } from './common/entree/widget/entree-by-style-widget.component';
 import { EntreeByCatagoryWidgetComponent } from './common/entree/widget/entree-by-catagory-widget.component';
 import { EntreeSummaryBoardComponent } from './entree/form/entree-summary-board.component';
@@ -58,6 +59,6 @@ import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood
     EntreeDetailCommonSectionComponent,
     EntreeFormCommonComponent
   ],
-  providers: [ StaplefoodService, EntreeDetailService, EntreeService, EntreeHelperService ]
+  providers: [ StaplefoodService, EntreeDetailService, EntreeService, EntreeHelperService, CurrentOrderService ]
 })
 export class MealModule { }

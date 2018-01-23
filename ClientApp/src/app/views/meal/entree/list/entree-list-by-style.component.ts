@@ -50,14 +50,12 @@ export class EntreeListByStyleComponent implements OnInit {
             }
     
             this.entreeListFormHeader = 'List of Entrees Of ' + splitByName;
-            this.newEntreeButtonText = 'Create New ' + splitByName + ' Entree';
+            this.newEntreeButtonText = 'Create New ' + splitByName;
 
         }, err => {
             if (err.status == 404)
                 this._router.navigate(['/pages/404']);
         });
-
-
      }
 
     OnEntreeDetailCreateNewClick(eventArgs){

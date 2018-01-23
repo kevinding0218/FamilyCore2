@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApi.Persistent;
 using WebApi.Persistent.Meal;
 using WebApi.Persistent.Meal.EntreeHelperRepo;
+using WebApi.Persistent.Order.CurrentOrder;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
 
@@ -30,6 +31,7 @@ namespace WebApi
             services.AddScoped<IStapleFoodRepository, StapleFoodRepository>();
             services.AddScoped<IEntreeRepository, EntreeRepository>();
             services.AddScoped<IEntreeHelperRepository, EntreeHelperRepository>();
+            services.AddScoped<ICurrentOrder, CurrentOrder>();
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
