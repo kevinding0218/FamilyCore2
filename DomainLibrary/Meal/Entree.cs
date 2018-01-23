@@ -27,12 +27,15 @@ namespace DomainLibrary.Meal
         public EntreeCatagory EntreeCatagory { get; set; }
         // one Entree could have only one EntreeStyleId
         public EntreeStyle EntreeStyle { get; set; }
-        // one Entree could have many EntreeVegetable
+        // one Entree could have many Entrees_Details
         public ICollection<Entrees_Details> MappingDetailsWithCurrentEntree { get; set; }
+        // one Entree could have many Entrees_Orders
+        public ICollection<Entrees_Orders> MappingOrdersWithCurrentEntree { get; set; }
 
         public Entree()
         {
             MappingDetailsWithCurrentEntree = new Collection<Entrees_Details>();
+            MappingOrdersWithCurrentEntree = new Collection<Entrees_Orders>();
         }
     }
 }

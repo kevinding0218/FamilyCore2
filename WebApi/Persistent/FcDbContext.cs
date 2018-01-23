@@ -21,6 +21,7 @@ namespace WebApi.Persistent
         public DbSet<DomainLibrary.Member.User> Users { get; set; }
         public DbSet<Supermarket> Supermarkets { get; set; }
         public DbSet<ContactAddress> ContactAddresses { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -53,12 +54,14 @@ namespace WebApi.Persistent
 
 
             //Many to Many
-            modelBuilder.Entity<Entrees_Details>().HasKey(ewd =>
-                  new { ewd.EntreeId, ewd.EntreeDetailId });
+            modelBuilder.Entity<Entrees_Details>().HasKey(esds =>
+                  new { esds.EntreeId, esds.EntreeDetailId });
             modelBuilder.Entity<Supermarket_EntreeDetail>().HasKey(sbe =>
                   new { sbe.SupermarketId, sbe.EntreeDetailId });
             modelBuilder.Entity<Supermarket_StapleFood>().HasKey(sbs =>
                   new { sbs.SuperMarketId, sbs.StapleFoodId });
+            modelBuilder.Entity<Entrees_Orders>().HasKey(esos =>
+                  new { esos.OrderId, esos.EntreeId });
         }
     }
 }
