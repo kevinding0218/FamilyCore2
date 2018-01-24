@@ -4,24 +4,28 @@ using System.Threading.Tasks;
 
 namespace WebApi.Persistent.Order.CurrentOrder
 {
-    public class CurrentOrder : ICurrentOrder
+    public class CurrentOrderRepository : ICurrentOrderRepository
     {
         private readonly FcDbContext _context;
 
-        public CurrentOrder(FcDbContext context)
+        public CurrentOrderRepository(FcDbContext context)
         {
             this._context = context;
         }
 
         #region Read Single Order
-        public async Task<DomainLibrary.Order.Order> GetOrder(int OrderId, bool includeRelated = true)
+        public async Task<DomainLibrary.Order.Order> GetOrder(int OrderId, bool includeMapping = true, bool includeEntree = false)
         {
-            if (!includeRelated)
+            if (!includeMapping && !includeEntree)
                 return await this._context.Orders.SingleOrDefaultAsync(o => o.Id == OrderId);
-
-            return await this._context.Orders
+            else if (includeEntree)
+                return await this._context.Orders
                                 .Include(o => o.MappingEntreesWithCurrentOrder)
                                     .ThenInclude(e => e.Entree)
+                                .SingleOrDefaultAsync(o => o.Id == OrderId);
+            else
+                return await this._context.Orders
+                                .Include(o => o.MappingEntreesWithCurrentOrder)
                                 .SingleOrDefaultAsync(o => o.Id == OrderId);
         }
 

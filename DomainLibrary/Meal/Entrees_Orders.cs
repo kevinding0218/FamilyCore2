@@ -7,6 +7,7 @@ namespace DomainLibrary.Meal
     {
         public int OrderId { get; set; }
         public int EntreeId { get; set; }
+        public int? Count { get; set; }
         public string Note { get; set; }
 
         // one Entrees_Orders could have only one Entree

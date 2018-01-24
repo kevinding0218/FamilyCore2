@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WebApi.Extensions;
 using WebApi.Persistent.Order.CurrentOrder;
 using WebApi.Persistent.Utility;
 using WebApi.Resource.Order;
@@ -17,11 +16,11 @@ namespace WebApi.Controllers.ApiController.Order
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
-        private readonly ICurrentOrder _currentOrderRepository;
+        private readonly ICurrentOrderRepository _currentOrderRepository;
 
         public CurrentOrderController(
             IMapper mapper,
-            ICurrentOrder currentOrderRepository,
+            ICurrentOrderRepository currentOrderRepository,
             IUnitOfWork uow
         )
         {
@@ -31,13 +30,26 @@ namespace WebApi.Controllers.ApiController.Order
         }
 
         #region  READ SINGLE OBJECT
-        [HttpGet("{currentDateStr}")]
+        //api/currentOrder/byId?orderId=a&includeMapping=b&includeEntree=c
+        [HttpGet("byId")]
+        public async Task<IActionResult> GetOrderByOrderId(int orderId, bool includeMapping, bool includeEntree)
+        {
+            var currentOrder = await this._currentOrderRepository.GetOrder(orderId, includeMapping: includeMapping, includeEntree: includeEntree);
+
+            var saveCurrentOrder = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(currentOrder);
+            // Return view Model
+            return Ok(saveCurrentOrder);
+        }
+
+        //api/currentOrder/byCurrentDate?currentDateStr=a
+        [HttpGet("byCurrentDate")]
         public async Task<IActionResult> GetOrderByCurrentDate(string currentDateStr)
         {
-            //var currentDate = currentDateStr.ToDateTimeFromFormat();
-            var currentOrder = await this._currentOrderRepository.GetOrderByCurrentDate(ToDateTimeFromFormat(currentDateStr));
 
-            var saveCurrentOrder = _mapper.Map<DomainLibrary.Order.Order, SaveCurrentOrder>(currentOrder);
+            var currentDate = currentDateStr.ToDateTimeFromFormat();
+            var currentOrder = await this._currentOrderRepository.GetOrderByCurrentDate(currentDate);
+
+            var saveCurrentOrder = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(currentOrder);
             // Return view Model
             return Ok(saveCurrentOrder);
         }
@@ -45,10 +57,10 @@ namespace WebApi.Controllers.ApiController.Order
 
         #region CREATE
         [HttpPost]
-        public async Task<IActionResult> CreateCurrentOrder([FromBody] SaveCurrentOrder newSaveOrder)
+        public async Task<IActionResult> CreateCurrentOrder([FromBody] SaveInitialOrder newSaveOrder)
         {
             // Convert from View Model to Domain Model
-            var newOrder = _mapper.Map<SaveCurrentOrder, DomainLibrary.Order.Order>(newSaveOrder);
+            var newOrder = _mapper.Map<SaveInitialOrder, DomainLibrary.Order.Order>(newSaveOrder);
             newOrder.AddedOn = DateTime.Now;
 
             // Insert into database by using Domain Model
@@ -57,24 +69,44 @@ namespace WebApi.Controllers.ApiController.Order
 
             newOrder = await _currentOrderRepository.GetOrder(newOrder.Id);
             // Convert from Domain Model to View Model
-            var result = _mapper.Map<DomainLibrary.Order.Order, SaveCurrentOrder>(newOrder);
+            var result = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(newOrder);
 
             // Return view Model
             return Ok(result);
         }
         #endregion
 
-        private DateTime ToDateTimeFromFormat(string dateString)
+        #region  UPDATE
+        [HttpPut("{id}")] //api/currentOrder/id
+        public async Task<IActionResult> UpdateEntree(int id, [FromBody] SaveInitialOrder saveCurrentOrder)
         {
-            Regex r = new Regex(@"^\d{4}\d{2}\d{2}T\d{2}\d{2}Z$");
-            if (!r.IsMatch(dateString) || dateString == null)
+            var existedOrderFromDB = await _currentOrderRepository.GetOrder(saveCurrentOrder.Id);
+            if (existedOrderFromDB == null)
+                return NotFound();
+
+            // Convert from View Model to Domain Model
+            _mapper.Map<SaveInitialOrder, DomainLibrary.Order.Order>(saveCurrentOrder, existedOrderFromDB);
+            existedOrderFromDB.LastUpdatedByOn = DateTime.Now;
+
+            // Insert into database by using Domain Model
+            try
             {
-                //throw new FormatException(
-                //    string.Format("{0} is not the correct format. Should be yyyyMMddThhmmZ", dateString));
-                return DateTime.Now;
+                await _uow.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(ex.Message, ex.StackTrace);
+                return BadRequest(ModelState);
             }
 
-            return DateTime.ParseExact(dateString, "yyyyMMddThhmmZ", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+            // Fetch complete object from database
+            existedOrderFromDB = await _currentOrderRepository.GetOrder(existedOrderFromDB.Id);
+            // Convert from Domain Model to View Model
+            var result = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(existedOrderFromDB);
+
+            // Return view Model
+            return Ok(result);
         }
+        #endregion
     }
 }

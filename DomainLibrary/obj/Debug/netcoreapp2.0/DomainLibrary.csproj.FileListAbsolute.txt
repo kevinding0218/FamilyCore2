@@ -1,7 +1,6 @@
 H:\FamilyCore\DomainLibrary\bin\Debug\netcoreapp2.0\DomainLibrary.deps.json
 H:\FamilyCore\DomainLibrary\bin\Debug\netcoreapp2.0\DomainLibrary.dll
 H:\FamilyCore\DomainLibrary\bin\Debug\netcoreapp2.0\DomainLibrary.pdb
-H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.csprojResolveAssemblyReference.cache
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.csproj.CoreCompileInputs.cache
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.AssemblyInfoInputs.cache
 H:\FamilyCore\DomainLibrary\obj\Debug\netcoreapp2.0\DomainLibrary.AssemblyInfo.cs

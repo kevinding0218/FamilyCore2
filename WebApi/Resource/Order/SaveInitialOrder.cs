@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebApi.Resource.Order
 {
-    public class SaveCurrentOrder
+    public class SaveInitialOrder
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
@@ -16,7 +16,13 @@ namespace WebApi.Resource.Order
         public DateTime? LastUpdatedByOn { get; set; }
 
         // an int array containing all selected entree Ids
-        public ICollection<int> MappingEntreeIdsWithCurrentOrder { get; set; }
+        public ICollection<EntreeOrderMapping> EntreeOrderMappingsWithCurrentOrder { get; set; }
 
+    }
+
+    public class EntreeOrderMapping
+    {
+        public int EntreeId { get; set; }
+        public int? Count { get; set; }
     }
 }

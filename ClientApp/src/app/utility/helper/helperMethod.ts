@@ -26,4 +26,16 @@ export class HelperMethod {
 
         return outputValue;
     }
+
+    static subscribeErrorHandler(err, toastr) {
+        if (err.status === 400) {
+            // handle validation error
+            let validationErrorDictionary = JSON.parse(err.text());
+            for (var fieldName in validationErrorDictionary) {
+                if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                    toastr.warning(validationErrorDictionary[fieldName], 'Invalid Operation');
+                }
+            }
+        }
+    }
 }

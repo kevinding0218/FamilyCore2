@@ -11,7 +11,7 @@ namespace WebApi.Extensions
         /// </summary>
         /// <param name="dateString"></param>
         /// <returns></returns>
-        private static DateTime ToDateTimeFromFormat(this string dateString)
+        public static DateTime ToDateTimeFromFormat(this string dateString)
         {
             Regex r = new Regex(@"^\d{4}\d{2}\d{2}T\d{2}\d{2}Z$");
             if (!r.IsMatch(dateString) || dateString == null)

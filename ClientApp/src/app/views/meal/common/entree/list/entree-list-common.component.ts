@@ -1,5 +1,5 @@
-import { element } from 'protractor';
-import { SaveCurrentOrder } from './../../../../../viewModels/order/saveCurrentOrder';
+import { HelperMethod } from './../../../../../utility/helper/helperMethod';
+import { SaveInitialOrder, EntreeOrderMapping } from './../../../../../viewModels/order/saveOrder';
 import { EntreeService } from './../../../../../services/meal/entree.service';
 import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
@@ -140,7 +140,7 @@ export class EntreeListCommonComponent implements OnInit {
     }
 
     onActivate(event) {
-        console.log('Activate Event', event);
+        //console.log('Activate Event', event);
     }
 
     selectFn(value) {
@@ -169,28 +169,22 @@ export class EntreeListCommonComponent implements OnInit {
         if (this.selected.length == 0) {
             this.toastr.warning('Please select at least one entree.', 'Invalid Operation');
         } else {
-            let entreeIdsList: number[] = [];
+            let entreeOrderMappingList: EntreeOrderMapping[] = [];
             this.selected.forEach(function (element) {
-                entreeIdsList.push(element.entreeId);
+                let newEntreeOrderMapping: EntreeOrderMapping = {
+                    entreeId: element.entreeId,
+                    count: 1
+                }
+                entreeOrderMappingList.push(newEntreeOrderMapping);
             });
-            let saveCurrentOrder: SaveCurrentOrder = {
-                id: 0,
-                startDate: new Date(),
-                endDate: new Date(),
-                addedOn: new Date(),
-                addedById: 2,
-                lastUpdatedByOn: null,
-                lastUpdatedById: 0,
-                note: '',
-                mappingEntreeIdsWithCurrentOrder: entreeIdsList
-            }
 
-            this.findCurrentOrderIdIfExisted(saveCurrentOrder);
+            this.findCurrentOrderIdIfExisted(entreeOrderMappingList);
         }
 
     }
 
-    findCurrentOrderIdIfExisted(saveCurrentOrder) {
+    findCurrentOrderIdIfExisted(entreeOrderMappingList) {
+
         let currentDate = new Date();
         //console.log(currentDate);
         let currentDateStr = currentDate.toUTCDateTimeDigits();
@@ -198,20 +192,55 @@ export class EntreeListCommonComponent implements OnInit {
         this._currentOrderService.getOrderIdByCurrentDate(currentDateStr)
             .subscribe(
             (data) => {
-                console.log('existedOrderId: ', data);
                 if (data == null) {
-                    console.log('Ready to add', saveCurrentOrder);
-                    // this._currentOrderService.createEntree(saveCurrentOrder)
-                    //     .subscribe(
-                    //     (data) => {
-                    //         this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
-                    //     });
+                    let startDateOfCurrentWeek = new Date().getWeekStartDate();
+                    let endDateOfCurrentWeek = new Date().getWeekEndDate();
+                    //let startDateOfCurrentWeek = moment().startOf('isoWeek').toDate();
+                    //let endDateOfCurrentWeek = moment().endOf('isoWeek').toDate();
+
+                    let SaveInitialOrder: SaveInitialOrder = {
+                        id: 0,
+                        startDate: startDateOfCurrentWeek,
+                        endDate: endDateOfCurrentWeek,
+                        addedOn: new Date(),
+                        addedById: 2,
+                        lastUpdatedByOn: null,
+                        lastUpdatedById: 0,
+                        note: '',
+                        entreeOrderMappingsWithCurrentOrder: entreeOrderMappingList
+                    }
+                    console.log('Ready to add', SaveInitialOrder);
+                    this._currentOrderService.createOrder(SaveInitialOrder)
+                        .subscribe(
+                        (data) => {
+                            this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
+                        },
+                        (err) => {
+                            HelperMethod.subscribeErrorHandler(err, this.toastr);
+                        });
                 } else {
-                    // remove existed entree automatically
-                    // Update existed Order
-                    
+                    var existedOrderId = data.id;
+                    console.log('existedOrderId: ', existedOrderId);
+                    this._currentOrderService.getOrderByOrderId(existedOrderId, true, false)
+                        .subscribe(
+                        (data) => {
+                            entreeOrderMappingList.forEach(newMapping => {
+                                data.entreeOrderMappingsWithCurrentOrder.forEach(existedMapping => {
+                                    if (existedMapping.entreeId == newMapping.entreeId)
+                                        existedMapping.count += 1;
+                                })
+                            });
+                            this._currentOrderService.updateOrder(data)
+                                .subscribe(
+                                (data) => {
+                                    this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
+                                },
+                                (err) => {
+                                    HelperMethod.subscribeErrorHandler(err, this.toastr);
+                                });
+                            console.log('existed Order: ', data);
+                        });
                 }
-            }
-            );
+            });
     }
 }

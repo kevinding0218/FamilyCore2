@@ -31,7 +31,7 @@ namespace WebApi
             services.AddScoped<IStapleFoodRepository, StapleFoodRepository>();
             services.AddScoped<IEntreeRepository, EntreeRepository>();
             services.AddScoped<IEntreeHelperRepository, EntreeHelperRepository>();
-            services.AddScoped<ICurrentOrder, CurrentOrder>();
+            services.AddScoped<ICurrentOrderRepository, CurrentOrderRepository>();
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -24,7 +24,7 @@
           <ngx-datatable #mainTable class="bootstrap expandable fullscreen" style="border: lightblue 3px double;" [rows]="ngx_rows"
             [loadingIndicator]="ngx_loadingIndicator" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="40" [limit]="5"
             [rowHeight]="'auto'" [reorderable]="ngx_reorderable" (page)="onPageMainTable($event)" [selected]="selected" [selectionType]="'checkbox'"
-            (activate)="onActivate($event)" (select)='onSelect($event)'>
+            (select)='onSelect($event)'>
             <!-- Row Detail Template -->
             <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
               <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
