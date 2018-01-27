@@ -7,6 +7,8 @@ import { OrderProcessingSingleEntree, OrderProcessInfo, OrderEntreeDetailInfo } 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { Router } from '@angular/router';
+import { CalendarEvent } from 'calendar-utils';
+import { CalendarEventTimesChangedEvent } from 'angular-calendar';
 
 @Component({
   templateUrl: 'current-weekly-order.component.html'
@@ -122,6 +124,4 @@ export class CurrentWeeklyOrderComponent implements OnInit {
         ' To ' + this.currentWeekOrderInitialInfo.endDate.toStringFormat());
     }
   }
-
-
 }

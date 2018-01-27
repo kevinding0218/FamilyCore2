@@ -1,3 +1,4 @@
+import { SetupEntreeCalendarComponent } from './setupentreecalendar/setup-entree-calendar.component';
 import { ExcelService } from './../../utility/export/exportExcelService';
 import { EntreeDetailSummaryByTypeComponent } from './common/entreeDetailSummaryByType/entree-detail-summary-by-type.component';
 import { CurrentOrderService } from './../../services/order/current-order.service';
@@ -14,7 +15,8 @@ import { SingleEntreeComponent } from './common/single-entree/single-entree.comp
   declarations: [
     CurrentWeeklyOrderComponent,
     EntreeDetailSummaryByTypeComponent,
-    SingleEntreeComponent
+    SingleEntreeComponent,
+    SetupEntreeCalendarComponent
   ],
   providers: [ CurrentOrderService, ExcelService ]
 })

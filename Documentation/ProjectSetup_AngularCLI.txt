@@ -474,6 +474,8 @@ npm install moment --save	(Not working for typescript)
 --EXPORT
 npm install file-saver --save
 npm install xlsx --save
+--Calendar
+npm install --save angular-calendar
 
 
 
