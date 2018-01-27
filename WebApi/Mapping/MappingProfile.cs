@@ -109,6 +109,9 @@ namespace WebApi.Mapping
             this.CreateMap<Order, SaveInitialOrder>()
                 .ForMember(sc => sc.EntreeOrderMappingsWithCurrentOrder,
                 opt => opt.MapFrom(o => o.MappingEntreesWithCurrentOrder.Select(esos => new EntreeOrderMapping { EntreeId = esos.EntreeId, Count = esos.Count }).ToArray()));
+
+            this.CreateMap<Order, OrderProcessInfo>()
+                .ForMember(opi => opi.EntreeInfoList, opt => opt.Ignore());
         }
         #endregion
 
@@ -195,6 +198,8 @@ namespace WebApi.Mapping
                         {
                             if (esos.EntreeId == mapping.EntreeId && esos.Count != mapping.Count)
                                 esos.Count = mapping.Count;
+                            if (esos.EntreeId == mapping.EntreeId && esos.Note != mapping.Note && esos.Note.Equals(string.Empty))
+                                esos.Note = mapping.Note;
                         }
                     }
 
@@ -212,11 +217,39 @@ namespace WebApi.Mapping
                     //// e.g: save contains 1,2, 3 origianl contains 1,2 need to add 3
                     var addedEntrees = so.EntreeOrderMappingsWithCurrentOrder
                                             .Where(eom => !o.MappingEntreesWithCurrentOrder.Any(esos => esos.EntreeId == eom.EntreeId))
-                                            .Select(eom => new Entrees_Orders { EntreeId = eom.EntreeId, OrderId = so.Id, Count = eom.Count }).ToList();
+                                            .Select(eom => new Entrees_Orders { EntreeId = eom.EntreeId, OrderId = so.Id, Count = eom.Count, Note = eom.Note }).ToList();
 
                     foreach (var e in addedEntrees)
                         o.MappingEntreesWithCurrentOrder.Add(e);
                 });
+
+            this.CreateMap<OrderProcessInfo, Order>()
+                    .ForMember(o => o.MappingEntreesWithCurrentOrder, opt => opt.Ignore())
+                    .AfterMap((opi, o) =>
+                    {
+                        //// Remove unselected entree order mapping
+                        var removedEntrees = new List<Entrees_Orders>();
+                        foreach (var mapping in o.MappingEntreesWithCurrentOrder)
+                        {
+                            if (!opi.EntreeInfoList.Any(opse => opse.EntreeId == mapping.EntreeId))
+                                removedEntrees.Add(mapping);
+                        }
+                        foreach (var e in removedEntrees)
+                            o.MappingEntreesWithCurrentOrder.Remove(e);
+
+                        //// Update existed entree if count changes
+                        var updateExistedEntreeCountList = new List<Entrees_Orders>();
+                        foreach (var mapping in opi.EntreeInfoList)
+                        {
+                            foreach (var esos in o.MappingEntreesWithCurrentOrder)
+                            {
+                                if (esos.EntreeId == mapping.EntreeId && esos.Count != mapping.EntreeCount)
+                                    esos.Count = mapping.EntreeCount;
+                                if (esos.EntreeId == mapping.EntreeId && esos.Note != mapping.Note)
+                                    esos.Note = mapping.Note;
+                            }
+                        }
+                    });
         }
         #endregion
     }

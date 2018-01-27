@@ -10,6 +10,9 @@ namespace WebApi.Resource.Meal.EntreeResource
         public string EntreeName { get; set; }
         public int VegetableCount { get; set; }
         public int MeatCount { get; set; }
+        public int SeafoodCount { get; set; }
+        public int IngredientCount { get; set; }
+        public int SauceCount { get; set; }
         public string StapleFood { get; set; }
         public string Style { get; set; }
         public string Catagory { get; set; }

@@ -17,7 +17,7 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12"></div>
             <div class="col-lg-2 col-ms-2 col-sm-12">
-              <a [routerLink]="['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]" class="btn btn-warning">
+              <a [routerLink]="['/meal/entreeForm/new/' + this.splitBy + '/' + this.splitById]" class="btn btn-outline-warning btn-md">
                 <i class="icon-plus"></i> {{ newEntreeButtonText }}</a>
             </div>
           </div>
@@ -76,22 +76,22 @@
             <div class="col-lg-10 col-md-10 col-sm-12">
             </div>
             <div class="col-lg-2 col-ms-2 col-sm-12">
-              <button type="button" class="btn btn-lg btn-success" (click)="addToOrder()">
+              <button type="button" class="btn btn-lg btn-outline-success" (click)="addToOrder()">
                 <i class="fa fa-cart-plus"></i> Add to Order</button>
             </div>
           </div>
 
-          <div class='selected-column'>
+          <!-- <div class='selected-column'>
             <h4>Selections
               <small>({{selected?.length}})</small>
             </h4>
             <ul>
               <li *ngFor='let sel of selected'>
-                {{sel.entreeId}} - {{sel.entreeName}}
+                {{sel.entreeId}} - {{sel.entreeName}} - {{sel.note}}
               </li>
               <li *ngIf="!selected?.length">No Selections</li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

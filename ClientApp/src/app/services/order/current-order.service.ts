@@ -1,4 +1,4 @@
-import { SaveInitialOrder } from './../../viewModels/order/saveOrder';
+import { SaveInitialOrder, OrderProcessInfo } from './../../viewModels/order/saveOrder';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -32,13 +32,28 @@ export class CurrentOrderService {
             .map(res => res.json());
     }
 
+    getCurrentWeekOrderPrepare() {
+        return this._http.get(this.apiEndPoint + '/currentWeekOrderPrepare')
+            .map(res => res.json());
+    }
+
+    getCurrentWeekOrderEntreeDetails() {
+        return this._http.get(this.apiEndPoint + '/currentWeekOrderEntreeDetails')
+            .map(res => res.json());
+    }
+
     createOrder(order: SaveInitialOrder) {
         return this._http.post(this.apiEndPoint, order)
             .map(res => res.json());
     }
 
-    updateOrder(order: SaveInitialOrder) {
-        return this._http.put(this.apiEndPoint + '/' + order.id, order)
+    updateInitialOrder(order: SaveInitialOrder) {
+        return this._http.put(this.apiEndPoint + '/updateInitialOrder/' + order.id, order)
+            .map(res => res.json());
+    }
+
+    updateProcessingOrder(order: OrderProcessInfo) {
+        return this._http.put(this.apiEndPoint + '/updateProcessingOrder/' + order.id, order)
             .map(res => res.json());
     }
 

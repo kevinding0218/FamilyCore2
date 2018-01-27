@@ -2,6 +2,7 @@ interface Date {
     toUTCDateTimeDigits: () => string;
     getWeekStartDate: () => Date;
     getWeekEndDate: () => Date;
+    toStringFormat: () => string;
 }
 
 Date.prototype.toUTCDateTimeDigits = function (): string {
@@ -45,4 +46,9 @@ Date.prototype.getWeekEndDate = function()
     // Grabbing Start/End Dates
     var EndDate = new Date(currentDate.setDate(date + 6));
     return EndDate;
+}
+
+Date.prototype.toStringFormat = function()
+{
+    return (this.getFullYear() + '_' + (this.getMonth() + 1) + '_' + this.getDate());
 }

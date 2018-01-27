@@ -1,13 +1,16 @@
-.input-sm-space {
-  padding-left: 10px;
-}
-
-.input-md-space {
-  padding-left: 15px;
+.thumbnail img {
+    float: left;
+    width: 15%;
+    height: 80px;
 }
 
 /*  always show up/down arrows for input "number" field */
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button {  
    opacity: 1;
+}
+
+.input-span-right {
+    width: 40%;
+    float: right;
 }

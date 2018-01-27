@@ -173,7 +173,8 @@ export class EntreeListCommonComponent implements OnInit {
             this.selected.forEach(function (element) {
                 let newEntreeOrderMapping: EntreeOrderMapping = {
                     entreeId: element.entreeId,
-                    count: 1
+                    count: 1,
+                    note: element.note
                 }
                 entreeOrderMappingList.push(newEntreeOrderMapping);
             });
@@ -226,11 +227,18 @@ export class EntreeListCommonComponent implements OnInit {
                         (data) => {
                             entreeOrderMappingList.forEach(newMapping => {
                                 data.entreeOrderMappingsWithCurrentOrder.forEach(existedMapping => {
-                                    if (existedMapping.entreeId == newMapping.entreeId)
+                                    if (existedMapping.entreeId == newMapping.entreeId){
                                         existedMapping.count += 1;
+                                    }
+                                    else
+                                    {
+                                        let item = data.entreeOrderMappingsWithCurrentOrder.find(e => e.entreeId === newMapping.entreeId);
+                                        if (typeof(item) == 'undefined')
+                                            data.entreeOrderMappingsWithCurrentOrder.push({ entreeId: newMapping.entreeId, count: 1, note: newMapping.note })
+                                    }
                                 })
                             });
-                            this._currentOrderService.updateOrder(data)
+                            this._currentOrderService.updateInitialOrder(data)
                                 .subscribe(
                                 (data) => {
                                     this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');

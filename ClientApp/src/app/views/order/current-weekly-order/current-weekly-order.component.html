@@ -1,1 +1,80 @@
-<span>Current Weekly Order</span>
+<div *ngIf="!isProcessed">
+    <div class="row" *ngIf="currentWeekOrderInitialInfo != null">
+        <div class="col-sm-6 col-md-4" *ngFor="let entree of currentWeekOrderInitialInfo.entreeInfoList">
+            <app-single-entree [entree]="entree" (removeEntree)="this.OnRemoveEntreeClick($event)"></app-single-entree>
+        </div>
+    </div>
+    <span class="ml-auto" style="display: table;">
+        <a class="btn btn-outline-success btn-lg" (click)="processInitialOrder()">
+            <i class="icon-arrow-right-circle"></i> Proceed Order </a>
+    </span>
+</div>
+
+<div class="row" *ngIf="isProcessed">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Entree List Between {{ currentWeekOrderInitialInfo.startDate | date:'shortDate' }} and {{ currentWeekOrderInitialInfo.endDate
+                | date:'shortDate' }}
+                <a class="btn btn-outline-primary btn-md" style="float: right;" (click)="exportCurrentWeekEntreeDetailList('entree')">
+                    <i class="icon-cloud-download" style="float: right;"> Download</i>
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let c of entree_list_columns">
+                                {{ c.title }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entree of currentWeekOrderInitialInfo.entreeInfoList">
+                            <td>{{ entree.entreeName }}</td>
+                            <td>{{ entree.style }}</td>
+                            <td>{{ entree.catagory }}</td>
+                            <td>{{ entree.entreeCount }}</td>
+                            <td>{{ entree.note }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Entree Detail List Between {{ currentWeekOrderInitialInfo.startDate | date:'shortDate' }} and {{ currentWeekOrderInitialInfo.endDate
+                | date:'shortDate' }}
+                <a class="btn btn-outline-primary btn-md" style="float: right;" (click)="exportCurrentWeekEntreeDetailList('entreeDetail')">
+                    <i class="icon-cloud-download" style="float: right;"> Download</i>
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let c of entree_detail_list_columns">
+                                {{ c.title }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entreeDetail of currentWeekEntreeDetails">
+                            <td>{{ entreeDetail.entreeDetailName }}</td>
+                            <td>{{ entreeDetail.entreeDetailQty }}</td>
+                            <td>{{ entreeDetail.entreeDetailTypeName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isProcessed">
+    <span class="mr-auto" style="display: table;">
+        <a class="btn btn-outline-success btn-lg" (click)="goBackToInitialOrder()">
+            <i class="icon-arrow-left-circle"></i> Go Back </a>
+    </span>
+</div>

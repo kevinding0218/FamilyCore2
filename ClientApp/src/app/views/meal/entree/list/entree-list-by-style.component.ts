@@ -2,10 +2,12 @@ import { Observable } from 'rxjs/Rx';
 import { EntreeHelperService } from './../../../../services/meal/entree-helper.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { routerTransition } from '../../../../router.animations';
 
 @Component({
     selector: 'app-entree-by-stle-list',
-    templateUrl: './entree-list-by-style.component.html'
+    templateUrl: './entree-list-by-style.component.html',
+    animations: [routerTransition()]
 })
 
 export class EntreeListByStyleComponent implements OnInit {

@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Extensions;
+using WebApi.Resource.Order;
 
 namespace WebApi.Persistent.Order.CurrentOrder
 {
@@ -34,6 +38,36 @@ namespace WebApi.Persistent.Order.CurrentOrder
             return await this._context.Orders
                                         .Include(o => o.MappingEntreesWithCurrentOrder)
                                         .FirstOrDefaultAsync(o => o.StartDate <= currentDate && o.EndDate >= currentDate);
+        }
+        #endregion
+
+        #region Read List
+        public async Task<List<OrderProcessingSingleEntree>> GetCurrentWeekOrderPrepare(DateTime? StartDate, DateTime? EndDate)
+        {
+            var currentWeekEntreeInfoList = new List<OrderProcessingSingleEntree>();
+            await _context.LoadStoredProc("dbo.GetWeekOrderPrepare")
+                .WithSqlParam("StartDate", StartDate)
+                .WithSqlParam("EndDate", EndDate)
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    currentWeekEntreeInfoList = handler.ReadToList<OrderProcessingSingleEntree>().ToList();
+                    // do something with your results.
+                });
+            return currentWeekEntreeInfoList;
+        }
+
+        public async Task<List<OrderEntreeDetailInfo>> GetCurrentWeekOrderEntreeDetails(DateTime? StartDate, DateTime? EndDate)
+        {
+            var currentWeekEntreeInfoList = new List<OrderEntreeDetailInfo>();
+            await _context.LoadStoredProc("dbo.GetWeekOrderEntreeDetails")
+                .WithSqlParam("StartDate", StartDate)
+                .WithSqlParam("EndDate", EndDate)
+                .ExecuteStoredProcAsync((handler) =>
+                {
+                    currentWeekEntreeInfoList = handler.ReadToList<OrderEntreeDetailInfo>().ToList();
+                    // do something with your results.
+                });
+            return currentWeekEntreeInfoList;
         }
         #endregion
 

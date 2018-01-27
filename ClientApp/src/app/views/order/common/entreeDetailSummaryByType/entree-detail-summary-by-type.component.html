@@ -1,0 +1,8 @@
+<ul style="margin-left: -10px;">
+    <li class="edit_ul_li" *ngFor="let entreeDetail of entreeDetailList">
+        <div style="border: 1px #1b8eb7 solid; padding: .25rem;border-radius: 15px;">
+            <label class="col-form-label">{{ entreeDetail.entreeDetailName }}</label> x 
+            <label class="col-form-label">{{ entreeDetail.entreeDetailQty }}</label>
+        </div>
+    </li>
+</ul>

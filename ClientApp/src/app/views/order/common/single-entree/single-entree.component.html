@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-header px-3 py-2">
+    <div style="float: right;">
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeCurrentEntree()">
+        <i class="fa fa-remove"></i> Remove
+      </button>
+    </div>
+    <div class="text-muted text-uppercase font-weight-bold font-xs">{{ entree.catagory }}</div>
+  </div>
+  <div class="card-body p-3 clearfix">
+    <div class="thumbnail">
+      <img src="{{ entree.entreeImgUrl }}" alt="Responsive image">
+    </div>
+    <div style="float: right;">
+      <input type="number" id="entreeQty" class="form-control-sm input-span-right" min="1" value="1" [(ngModel)]="entree.entreeCount">
+    </div>
+    <div class="h5 text-primary mb-0 mt-2">
+      <strong>{{ entree.entreeName }}</strong>
+    </div>
+    <div class="text-muted text-uppercase font-weight-bold font-xs">{{ entree.style }}</div>
+    <textarea id="entreeNote" class="form-control" placeholder="Enter Note.." rows='2' [(ngModel)]="entree.note"
+      name="entreeNote"></textarea>
+  </div>
+  <div class="card-footer px-3 py-2">
+    <a class="font-weight-bold font-xs btn-block text-muted" href="#">View Detail
+      <i class="fa fa-angle-right float-right font-lg"></i>
+    </a>
+  </div>
+</div>

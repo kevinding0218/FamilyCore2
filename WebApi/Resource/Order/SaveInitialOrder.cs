@@ -24,5 +24,6 @@ namespace WebApi.Resource.Order
     {
         public int EntreeId { get; set; }
         public int? Count { get; set; }
+        public string Note { get; set; }
     }
 }

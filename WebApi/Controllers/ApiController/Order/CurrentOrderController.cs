@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Extensions;
 using WebApi.Persistent.Order.CurrentOrder;
@@ -53,6 +54,24 @@ namespace WebApi.Controllers.ApiController.Order
             // Return view Model
             return Ok(saveCurrentOrder);
         }
+
+        //api/currentOrder/currentWeekOrderPrepare
+        [HttpGet("currentWeekOrderPrepare")]
+        public async Task<OrderProcessInfo> GetCurrentWeekOrderPrepare()
+        {
+            var currentOrder = await this._currentOrderRepository.GetOrderByCurrentDate(DateTime.Now);
+            var orderProcessInfo = _mapper.Map<DomainLibrary.Order.Order, OrderProcessInfo>(currentOrder);
+            orderProcessInfo.EntreeInfoList = await _currentOrderRepository.GetCurrentWeekOrderPrepare(DateTime.Now, DateTime.Now);
+
+            return orderProcessInfo;
+        }
+
+        //api/currentOrder/currentWeekOrderEntreeDetails
+        [HttpGet("currentWeekOrderEntreeDetails")]
+        public async Task<List<OrderEntreeDetailInfo>> GetCurrentWeekOrderEntreeDetails()
+        {
+            return await this._currentOrderRepository.GetCurrentWeekOrderEntreeDetails(DateTime.Now, DateTime.Now);
+        }
         #endregion
 
         #region CREATE
@@ -77,8 +96,8 @@ namespace WebApi.Controllers.ApiController.Order
         #endregion
 
         #region  UPDATE
-        [HttpPut("{id}")] //api/currentOrder/id
-        public async Task<IActionResult> UpdateEntree(int id, [FromBody] SaveInitialOrder saveCurrentOrder)
+        [HttpPut("updateInitialOrder/{id}")] //api/currentOrder/updateInitialOrder/id
+        public async Task<IActionResult> UpdateInitialOrder(int id, [FromBody] SaveInitialOrder saveCurrentOrder)
         {
             var existedOrderFromDB = await _currentOrderRepository.GetOrder(saveCurrentOrder.Id);
             if (existedOrderFromDB == null)
@@ -86,6 +105,37 @@ namespace WebApi.Controllers.ApiController.Order
 
             // Convert from View Model to Domain Model
             _mapper.Map<SaveInitialOrder, DomainLibrary.Order.Order>(saveCurrentOrder, existedOrderFromDB);
+            existedOrderFromDB.LastUpdatedByOn = DateTime.Now;
+
+            // Insert into database by using Domain Model
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(ex.Message, ex.StackTrace);
+                return BadRequest(ModelState);
+            }
+
+            // Fetch complete object from database
+            existedOrderFromDB = await _currentOrderRepository.GetOrder(existedOrderFromDB.Id);
+            // Convert from Domain Model to View Model
+            var result = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(existedOrderFromDB);
+
+            // Return view Model
+            return Ok(result);
+        }
+
+        [HttpPut("updateProcessingOrder/{id}")] //api/currentOrder/updateProcessingOrder/id
+        public async Task<IActionResult> UpdateProcessingOrder(int id, [FromBody] OrderProcessInfo processOrder)
+        {
+            var existedOrderFromDB = await _currentOrderRepository.GetOrder(processOrder.Id);
+            if (existedOrderFromDB == null)
+                return NotFound();
+
+            // Convert from View Model to Domain Model
+            _mapper.Map<OrderProcessInfo, DomainLibrary.Order.Order>(processOrder, existedOrderFromDB);
             existedOrderFromDB.LastUpdatedByOn = DateTime.Now;
 
             // Insert into database by using Domain Model

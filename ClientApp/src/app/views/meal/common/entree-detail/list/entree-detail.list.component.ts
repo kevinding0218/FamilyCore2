@@ -40,9 +40,12 @@ export class EntreeDetailListComponent implements OnInit {
 
     ngx_detail_columns = [
         { prop: 'entreeName', name: 'Entree' },
+        { prop: 'stapleFood', name: 'Staple Food' },
         { prop: 'vegetableCount', name: 'Vegetable Count' },
         { prop: 'meatCount', name: 'Meat Count' },
-        { prop: 'stapleFood', name: 'Staple Food' },
+        { prop: 'seafoodCount', name: 'Seafood Count' },
+        { prop: 'ingredientCount', name: 'Ingredient Count' },
+        { prop: 'sauceCount', name: 'Sauce Count' },
         { prop: 'style', name: 'Style' },
         { prop: 'catagory', name: 'Catagory' },
         { prop: 'note', name: 'Entree Note' }
