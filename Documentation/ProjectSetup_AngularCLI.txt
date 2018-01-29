@@ -476,6 +476,8 @@ npm install file-saver --save
 npm install xlsx --save
 --Calendar
 npm install --save angular-calendar
+--Date range picker
+npm install ng2-daterangepicker --save
 
 
 
