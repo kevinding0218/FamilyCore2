@@ -40,7 +40,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-sidebar-nav-item',
   template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
+    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'" appNavDropdownItemClickToggle>
       <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
     </li>
     <ng-template #dropdown>
