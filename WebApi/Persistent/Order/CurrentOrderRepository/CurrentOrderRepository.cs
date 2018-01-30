@@ -35,9 +35,16 @@ namespace WebApi.Persistent.Order.CurrentOrder
 
         public async Task<DomainLibrary.Order.Order> GetOrderByCurrentDate(DateTime currentDate)
         {
-            return await this._context.Orders
+            if (this._context.Orders.Any(o => o.StartDate <= currentDate && o.EndDate >= currentDate))
+            {
+                return await this._context.Orders
                                         .Include(o => o.MappingEntreesWithCurrentOrder)
-                                        .FirstOrDefaultAsync(o => o.StartDate <= currentDate && o.EndDate >= currentDate);
+                                        .SingleOrDefaultAsync(o => o.StartDate <= currentDate && o.EndDate >= currentDate);
+            }
+            else
+            {
+                return null;
+            }
         }
         #endregion
 
@@ -75,6 +82,20 @@ namespace WebApi.Persistent.Order.CurrentOrder
         public void AddOrder(DomainLibrary.Order.Order newOrder)
         {
             _context.Add(newOrder);
+        }
+        #endregion
+
+        #region Update Entree Order Mapping
+        public void UpdateEntreeOrderMappingScheduleDate(int OrderId, int EntreeId, DateTime ScheduledDate)
+        {
+            _context.LoadStoredProc("dbo.UpdateEntreeOrderMappingScheduleDate")
+                .WithSqlParam("OrderId", OrderId)
+                .WithSqlParam("EntreeId", EntreeId)
+                .WithSqlParam("ScheduleDate", ScheduledDate)
+                .ExecuteStoredProc((handler) =>
+                {
+                    // do nothing.
+                });
         }
         #endregion
     }

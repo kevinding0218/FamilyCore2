@@ -188,12 +188,12 @@ export class EntreeListCommonComponent implements OnInit {
 
         let currentDate = new Date();
         //console.log(currentDate);
-        let currentDateStr = currentDate.toUTCDateTimeDigits();
+        let currentDateStr = currentDate.toLocaleDateString();//toUTCDateTimeDigits();
         //console.log('currentDate is ' + currentDateStr);
         this._currentOrderService.getOrderIdByCurrentDate(currentDateStr)
             .subscribe(
             (data) => {
-                if (data == null) {
+                if (data.id == 0) {
                     let startDateOfCurrentWeek = new Date().getWeekStartDate();
                     let endDateOfCurrentWeek = new Date().getWeekEndDate();
                     //let startDateOfCurrentWeek = moment().startOf('isoWeek').toDate();

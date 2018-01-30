@@ -35,6 +35,7 @@ export interface OrderProcessingSingleEntree {
     catagory: string;
     entreeName: string;
     entreeCount: number;
+    scheduledDate: Date;
     note: string;
     entreeImgUrl: string;
 }
@@ -44,4 +45,10 @@ export interface OrderEntreeDetailInfo {
     entreeDetailQty: number;
     entreeDetailTypeName: string;
     stapleFood: string;
+}
+
+export interface EntreeOrderMappingSchedule {
+    orderId: number;
+    entreeId: number;
+    scheduleDate: Date;
 }

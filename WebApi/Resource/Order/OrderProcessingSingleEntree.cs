@@ -28,6 +28,7 @@ namespace WebApi.Resource.Order
         public string Style { get; set; }
         public string Catagory { get; set; }
         public int? EntreeCount { get; set; }
+        public DateTime ScheduledDate { get; set; }
         public string Note { get; set; }
         public string EntreeImgUrl { get; set; }
     }
@@ -38,5 +39,12 @@ namespace WebApi.Resource.Order
         public int EntreeDetailQty { get; set; }
         public string EntreeDetailTypeName { get; set; }
         public string StapleFood { get; set; }
+    }
+
+    public class EntreeOrderMappingSchedule
+    {
+        public int EntreeId { get; set; }
+        public int OrderId { get; set; }
+        public DateTime ScheduleDate { get; set; }
     }
 }

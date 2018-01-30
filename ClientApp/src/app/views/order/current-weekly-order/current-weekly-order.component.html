@@ -1,16 +1,89 @@
-<div *ngIf="!isProcessed">
-    <div class="row" *ngIf="currentWeekOrderInitialInfo != null">
-        <div class="col-sm-6 col-md-4" *ngFor="let entree of currentWeekOrderInitialInfo.entreeInfoList">
-            <app-single-entree [entree]="entree" (removeEntree)="this.OnRemoveEntreeClick($event)"></app-single-entree>
-        </div>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" [class.bg-info]="processStep == 1"
+        [class.bg-warning]="processStep == 2" [class.bg-success]="processStep == 3" [style.width]="processPercent" [attr.aria-valuenow]="processValue"
+        aria-valuemin="0" aria-valuemax="100">
+        {{ processPercent }} Complete
     </div>
-    <span class="ml-auto" style="display: table;">
-        <a class="btn btn-outline-success btn-lg" (click)="processInitialOrder()">
-            <i class="icon-arrow-right-circle"></i> Proceed Order </a>
-    </span>
 </div>
 
-<div class="row" *ngIf="isProcessed">
+<div class="row" style="padding-bottom: 50px;"></div>
+
+<div class="row" *ngIf="processStep == 1">
+    <div class="col-lg-12" *ngIf="currentWeekOrderInitialInfo != null">
+        <div class="row">
+            <div class="col-4" *ngFor="let entree of currentWeekOrderInitialInfo.entreeInfoList">
+                <app-single-entree [entree]="entree" (removeEntree)="this.OnRemoveEntreeClick($event)"></app-single-entree>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10 offset-1">
+        <span class="ml-auto" style="display: table;">
+            <a class="btn btn-outline-success btn-lg" (click)="processInitialOrder()">
+                <i class="icon-arrow-right-circle"></i> Proceed Order </a>
+        </span>
+    </div>
+</div>
+
+<div class="row" *ngIf="processStep == 2">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                Draggable Events
+            </div>
+            <div class="card-body">
+                <label class="col-form-label" *ngIf="externalEvents?.length == 0">Entree distributed completed</label>
+                <ul class="form-control" *ngIf="externalEvents?.length > 0">
+                    <li class="form-control" *ngFor="let event of externalEvents" mwlDraggable [dropData]="{event: event}" style="position:relative; z-index: 10; border-radius: 5px;margin-top: 5px; margin-bottom: 5px;"
+                        [style.background-color]="event.color.secondary" [style.border-color]="event.color.primary">
+                        <a href="javascript:;">
+                            {{ event.title }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="card text-white" class="bg-success">
+            <div class="card-body">
+                <ul class="form-control">
+                    <li class="form-control" *ngFor="let log of changeEventLog">
+                        <label class="col-form-label">
+                            {{ log }}
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong>Current Week Arrangement</strong>
+            </div>
+            <div class="card-body">
+                <div [ngSwitch]="view">
+                    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="initialEvents" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                        (eventTimesChanged)="eventDropped($event)">
+                    </mwl-calendar-week-view>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10 offset-1">
+        <span class="mr-auto">
+            <a class="btn btn-outline-success btn-lg" (click)="goBackToInitialOrder()">
+                <i class="icon-arrow-left-circle"></i> Go Back </a>
+        </span>
+        <span class="ml-auto">
+            <a class="btn btn-outline-success btn-lg" (click)="processOrderSummary()">
+                <i class="icon-arrow-right-circle"></i> Order Summary </a>
+        </span>
+    </div>
+</div>
+{{ initialEvents | json}}
+
+<div class="row" *ngIf="processStep == 3">
     <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -71,10 +144,4 @@
             </div>
         </div>
     </div>
-</div>
-<div *ngIf="isProcessed">
-    <span class="mr-auto" style="display: table;">
-        <a class="btn btn-outline-success btn-lg" (click)="goBackToInitialOrder()">
-            <i class="icon-arrow-left-circle"></i> Go Back </a>
-    </span>
 </div>

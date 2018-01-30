@@ -49,6 +49,8 @@ namespace WebApi.Controllers.ApiController.Order
 
             var currentDate = currentDateStr.ToDateTimeFromFormat();
             var currentOrder = await this._currentOrderRepository.GetOrderByCurrentDate(currentDate);
+            if (currentOrder == null)
+                return Ok(new SaveInitialOrder());
 
             var saveCurrentOrder = _mapper.Map<DomainLibrary.Order.Order, SaveInitialOrder>(currentOrder);
             // Return view Model
@@ -57,13 +59,16 @@ namespace WebApi.Controllers.ApiController.Order
 
         //api/currentOrder/currentWeekOrderPrepare
         [HttpGet("currentWeekOrderPrepare")]
-        public async Task<OrderProcessInfo> GetCurrentWeekOrderPrepare()
+        public async Task<IActionResult> GetCurrentWeekOrderPrepare()
         {
             var currentOrder = await this._currentOrderRepository.GetOrderByCurrentDate(DateTime.Now);
+            if (currentOrder == null)
+                return Ok(new OrderProcessInfo());
+
             var orderProcessInfo = _mapper.Map<DomainLibrary.Order.Order, OrderProcessInfo>(currentOrder);
             orderProcessInfo.EntreeInfoList = await _currentOrderRepository.GetCurrentWeekOrderPrepare(DateTime.Now, DateTime.Now);
 
-            return orderProcessInfo;
+            return Ok(orderProcessInfo);
         }
 
         //api/currentOrder/currentWeekOrderEntreeDetails
@@ -84,7 +89,16 @@ namespace WebApi.Controllers.ApiController.Order
 
             // Insert into database by using Domain Model
             _currentOrderRepository.AddOrder(newOrder);
-            await _uow.CompleteAsync();
+
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
 
             newOrder = await _currentOrderRepository.GetOrder(newOrder.Id);
             // Convert from Domain Model to View Model
@@ -156,6 +170,14 @@ namespace WebApi.Controllers.ApiController.Order
 
             // Return view Model
             return Ok(result);
+        }
+
+        [HttpPut("updateEntreeOrderSchedule")]
+        public string UpdateEntreeOrderSchedule([FromBody] EntreeOrderMappingSchedule entreeOrderMappingSchedule)
+        {
+            _currentOrderRepository.UpdateEntreeOrderMappingScheduleDate(entreeOrderMappingSchedule.OrderId, entreeOrderMappingSchedule.EntreeId, entreeOrderMappingSchedule.ScheduleDate);
+
+            return "Update Successfully";
         }
         #endregion
     }

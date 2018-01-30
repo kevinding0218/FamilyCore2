@@ -60,6 +60,15 @@ export const navigation = [
     }
   },
   {
+    name: 'Calendar',
+    url: '/order/setupCalendar',
+    icon: 'icon-calculator',
+    badge: {
+      variant: 'success',
+      text: '12'
+    }
+  },
+  {
     name: 'Pages',
     url: '/pages',
     icon: 'icon-star',

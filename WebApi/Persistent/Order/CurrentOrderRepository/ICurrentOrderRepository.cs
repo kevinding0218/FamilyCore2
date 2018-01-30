@@ -12,5 +12,6 @@ namespace WebApi.Persistent.Order.CurrentOrder
         Task<List<OrderProcessingSingleEntree>> GetCurrentWeekOrderPrepare(DateTime? StartDate, DateTime? EndDate);
         Task<List<OrderEntreeDetailInfo>> GetCurrentWeekOrderEntreeDetails(DateTime? StartDate, DateTime? EndDate);
         void AddOrder(DomainLibrary.Order.Order newOrder);
+        void UpdateEntreeOrderMappingScheduleDate(int OrderId, int EntreeId, DateTime ScheduledDate);
     }
 }

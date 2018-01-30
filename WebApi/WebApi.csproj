@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180130035310_removePrimaryKeyInOrderEntree.cs" />
+    <Compile Remove="Migrations\20180130035310_removePrimaryKeyInOrderEntree.Designer.cs" />
+    <Compile Remove="Migrations\20180130035451_removekeydroptable.cs" />
+    <Compile Remove="Migrations\20180130035451_removekeydroptable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

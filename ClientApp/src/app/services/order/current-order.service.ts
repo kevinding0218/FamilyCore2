@@ -1,4 +1,4 @@
-import { SaveInitialOrder, OrderProcessInfo } from './../../viewModels/order/saveOrder';
+import { SaveInitialOrder, OrderProcessInfo, EntreeOrderMappingSchedule } from './../../viewModels/order/saveOrder';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -57,6 +57,9 @@ export class CurrentOrderService {
             .map(res => res.json());
     }
 
+    updateEntreeOrderSchedule(mapping: EntreeOrderMappingSchedule) {
+        return this._http.put(this.apiEndPoint + '/updateEntreeOrderSchedule', mapping);
+    }
     //   deleteEntree(id) {
     //     return this._http.delete(this.apiEndPoint + '/' + id)
     //       .map(res => res.json());

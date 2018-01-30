@@ -11,9 +11,10 @@ using WebApi.Persistent;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(FcDbContext))]
-    partial class FcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180130034810_addPrimaryKeySechueldDate")]
+    partial class addPrimaryKeySechueldDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,6 +192,8 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("DomainLibrary.Meal.Entrees_Orders", b =>
                 {
+                    b.Property<int>("Id");
+
                     b.Property<int>("OrderId");
 
                     b.Property<int>("EntreeId");
@@ -201,9 +204,11 @@ namespace WebApi.Migrations
 
                     b.Property<DateTime?>("ScheduledDate");
 
-                    b.HasKey("OrderId", "EntreeId");
+                    b.HasKey("Id", "OrderId", "EntreeId");
 
                     b.HasIndex("EntreeId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Entrees_Orders");
                 });

@@ -1,5 +1,6 @@
 import {
   Component,
+  OnInit,
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef
@@ -33,6 +34,10 @@ const colors: any = {
   yellow: {
     primary: '#e3bc08',
     secondary: '#FDF1BA'
+  },
+  orange: {
+    primary: '#ea6804',
+    secondary: '#e5ac80'
   }
 };
 
@@ -40,15 +45,10 @@ const colors: any = {
   templateUrl: 'setup-entree-calendar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SetupEntreeCalendarComponent {
-  view: string = 'month';
+export class SetupEntreeCalendarComponent implements OnInit {
+  view: string = 'week';
 
   viewDate: Date = new Date();
-
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
 
   actions: CalendarEventAction[] = [
     {
@@ -60,7 +60,7 @@ export class SetupEntreeCalendarComponent {
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.initialEvents = this.initialEvents.filter(iEvent => iEvent !== event);
         this.handleEvent('Deleted', event);
       }
     }
@@ -68,45 +68,104 @@ export class SetupEntreeCalendarComponent {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
+  initialEvents: CalendarEvent[] = [
+    // {
+    //   start: subDays(new Date(), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'A 3 day event',
+    //   color: colors.red,
+    //   actions: this.actions,
+    //   draggable: true
+    // },
+    // {
+    //   start: startOfDay(new Date()),
+    //   title: 'An event with no end date',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   draggable: true
+    // },
+    // {
+    //   start: new Date(),
+    //   end: addDays(new Date(), 1),
+    //   title: 'A 2 day event',
+    //   color: colors.blue,
+    //   draggable: true
+    // }
+  ];
+
+  externalEvents: CalendarEvent[] = [
     {
-      start: subDays(startOfDay(new Date()), 1),
+      title: 'Entree 1',
+      color: colors.yellow,
+      start: new Date(),
       end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions
+      allDay: true,
+      draggable: true
     },
     {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
+      title: 'Entree 2',
+      color: colors.blue,
+      start: new Date(),
+      end: addDays(new Date(), 1),
+      allDay: true,
       draggable: true
     }
   ];
 
   activeDayIsOpen: boolean = true;
 
-  constructor() {}
+  constructor() { }
+
+  ngOnInit() {
+    this.initialEvents = [
+      {
+        start: subDays(startOfDay(new Date()), 1),
+        //end: new Date(),
+        title: 'Entree yesterday',
+        color: colors.red,
+        actions: this.actions,
+        allDay: true,
+        draggable: true
+      },
+      {
+        start: startOfDay(new Date()),
+        //end: new Date(),
+        title: 'Entree today',
+        color: colors.yellow,
+        actions: this.actions,
+        allDay: true,
+        draggable: true
+      },
+      {
+        start: addDays(startOfDay(new Date()), 1),
+        //end: addDays(startOfDay(new Date()), 2),
+        title: 'Entree tomorrow',
+        color: colors.orange,
+        actions: this.actions,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        },
+        draggable: true
+      }, {
+        start: addDays(startOfDay(new Date()), 2),
+        //end: addDays(startOfDay(new Date()), 3),
+        title: 'Entree tomorrow after tomorrow',
+        color: colors.blue,
+        actions: this.actions,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        },
+        draggable: true
+      }
+    ];
+    console.log('ngOnInit initialEvents', this.initialEvents);
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    console.log('dayClicked date', date);
+    console.log('dayClicked events', events);
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -125,19 +184,49 @@ export class SetupEntreeCalendarComponent {
     newStart,
     newEnd
   }: CalendarEventTimesChangedEvent): void {
+    console.log('eventTimesChanged newStart', newStart);
+    console.log('eventTimesChanged newEnd', newEnd);
+    console.log('eventTimesChanged event', event);
     event.start = newStart;
     event.end = newEnd;
     this.handleEvent('Dropped or resized', event);
     this.refresh.next();
+    console.log('eventTimesChanged refresh', this.refresh);
+    console.log('eventTimesChanged initialEvents', this.initialEvents);
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
     console.log('action is ' + action + '\nCalendarEvent is: ', event);
   }
 
+  changeEventLog: string[] = [];
+
+  eventDropped({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    console.log('eventDropped newStart', newStart);
+    console.log('eventDropped newEnd', newEnd);
+    console.log('eventDropped event', event);
+    this.changeEventLog.push('Old Event - ' + event.title + ' between ' +
+    event.start.toLocaleDateString() + ' changed to ' + newStart.toLocaleDateString());
+    const externalIndex: number = this.externalEvents.indexOf(event);
+    if (externalIndex > -1) {
+      this.externalEvents.splice(externalIndex, 1);
+      this.initialEvents.push(event);
+    }
+    event.start = newStart;
+    if (newEnd) {
+      event.end = newEnd;
+    }
+    this.viewDate = newStart;
+    this.activeDayIsOpen = true;
+    console.log('eventDropped initialEvents', this.initialEvents);
+  }
+
   addEvent(): void {
-    this.events.push({
+    this.initialEvents.push({
       title: 'New event',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
@@ -149,6 +238,7 @@ export class SetupEntreeCalendarComponent {
       }
     });
     this.refresh.next();
+    console.log('eventTimesChanged refresh', this.refresh);
   }
 
   //Date Range Picker
