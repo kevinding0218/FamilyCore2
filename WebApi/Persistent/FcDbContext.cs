@@ -22,6 +22,7 @@ namespace WebApi.Persistent
         public DbSet<Supermarket> Supermarkets { get; set; }
         public DbSet<ContactAddress> ContactAddresses { get; set; }
         public DbSet<DomainLibrary.Order.Order> Orders { get; set; }
+        public DbSet<EntreePhoto> EntreePhotos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

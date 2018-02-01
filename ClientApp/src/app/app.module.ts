@@ -1,5 +1,6 @@
+import { ProgressService, BrowserXhrWithProgress } from './services/progress/progress.service';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpModule } from '@angular/http';
+import { HttpModule, BrowserXhr } from '@angular/http';
 import { ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -95,7 +96,12 @@ const APP_DIRECTIVES = [
       provide: ErrorHandler, 
       useClass: AppErrorHandler
     },
-    ErrorLogService
+    { 
+      provide: BrowserXhr, 
+      useClass: BrowserXhrWithProgress 
+    }, 
+    ErrorLogService,
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })

@@ -31,11 +31,14 @@ namespace DomainLibrary.Meal
         public ICollection<Entrees_Details> MappingDetailsWithCurrentEntree { get; set; }
         // one Entree could have many Entrees_Orders
         public ICollection<Entrees_Orders> MappingOrdersWithCurrentEntree { get; set; }
+        // one Entree could have many EntreePhotos
+        public ICollection<EntreePhoto> EntreePhotos { get; set; }
 
         public Entree()
         {
             MappingDetailsWithCurrentEntree = new Collection<Entrees_Details>();
             MappingOrdersWithCurrentEntree = new Collection<Entrees_Orders>();
+            EntreePhotos = new Collection<EntreePhoto>();
         }
     }
 }

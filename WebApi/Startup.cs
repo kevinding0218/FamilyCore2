@@ -7,9 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApi.Persistent;
 using WebApi.Persistent.Meal;
 using WebApi.Persistent.Meal.EntreeHelperRepo;
+using WebApi.Persistent.Meal.EntreePhotoRepo;
 using WebApi.Persistent.Order.CurrentOrder;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
+using WebApi.Resource.Meal.PhotoResource;
 
 namespace WebApi
 {
@@ -32,6 +34,8 @@ namespace WebApi
             services.AddScoped<IEntreeRepository, EntreeRepository>();
             services.AddScoped<IEntreeHelperRepository, EntreeHelperRepository>();
             services.AddScoped<ICurrentOrderRepository, CurrentOrderRepository>();
+            services.AddScoped<IEntreePhotoRepository, EntreePhotoRepository>();
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -66,6 +70,7 @@ namespace WebApi
             }
 
             app.UseMvc();
+            app.UseStaticFiles();
 
             // ********************
             // USE CORS - might not be required.

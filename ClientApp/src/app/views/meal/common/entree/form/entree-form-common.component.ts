@@ -1,10 +1,13 @@
+import { ProgressService } from './../../../../../services/progress/progress.service';
+import { HelperMethod } from './../../../../../utility/helper/helperMethod';
+import { EntreePhotoUploadService } from './../../../../../services/upload/entree-photo-upload.service';
 import { element } from 'protractor';
 import { KeyValuePairInfo } from './../../../../../viewModels/meal/entreeDetail';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { EntreeService } from './../../../../../services/meal/entree.service';
 import { EntreeHelperService } from './../../../../../services/meal/entree-helper.service';
 import { SaveEntree, EntreeDetailMappingResource, SimilarEntreeInputObj } from './../../../../../viewModels/meal/entree';
-import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
@@ -63,7 +66,10 @@ export class EntreeFormCommonComponent implements OnInit {
         private _entreeService: EntreeService,
         private _entreeHelperService: EntreeHelperService,
         private toastr: ToastrService,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private _entreePhotoUploadService: EntreePhotoUploadService,
+        private _progressService: ProgressService,
+        private zone: NgZone,
     ) {
         _route.params.subscribe(p => {
             this.splitBy = (typeof p['splitBy'] == 'undefined') ? '' : p['splitBy'];
@@ -95,7 +101,11 @@ export class EntreeFormCommonComponent implements OnInit {
             this.stapleFoods = data[2];
             this.entreeDetailTypes = data[3];
             if (this.updatedId != 0)
+            {
                 this.setEntree(data[4]);
+                this._entreePhotoUploadService.getPhotos(this.updatedId)
+                        .subscribe(photos => { this.photos = photos; console.log('ngOnInit getPhotos: ', photos); });
+            }
         }, err => {
             if (err.status == 404)
                 this._router.navigate(['/pages/404']);
@@ -299,5 +309,42 @@ export class EntreeFormCommonComponent implements OnInit {
 
     decline(): void {
         this.infoModal.hide();
+    }
+
+    // Upload Photo
+    photos: any[] = [];
+    progress: any = null;
+    apiFtp: string = localStorage.getItem('WebApiFtp').toString();
+    @ViewChild('fileInput') fileInput: ElementRef;
+    uploadPhoto() {
+        //uploadPhoto($event) then use $event.target
+        this._progressService.startTracking()
+            .subscribe(progress => {
+                console.log('startTracking: ', progress);
+                this.zone.run(() => {
+                    console.log('zone run: ', progress);
+                    this.progress = progress;
+                })
+                //this.progress = progress;
+            },
+            err => {
+                HelperMethod.subscribeErrorHandler(err, this.toastr);
+            },
+            () => { this.progress = null; }
+        );
+  
+        var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
+        var file = nativeElement.files[0];
+        nativeElement.value = '';
+  
+        this._entreePhotoUploadService.upload(this.entree.id, file)
+            .subscribe(photo => {
+                console.log('uploadPhoto: ', photo);
+                this.photos.push(photo);
+            },
+            err => {
+                HelperMethod.subscribeErrorHandler(err, this.toastr);
+            }
+        );
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
+using WebApi.Resource.Meal.PhotoResource;
 using WebApi.Resource.Order;
 using WebApi.Resource.QueryResource;
 using WebApi.Resource.Shared;
@@ -92,6 +93,7 @@ namespace WebApi.Mapping
                 .ForMember(eir => eir.EntreeDetailList, opt => opt.Ignore());
             this.CreateMap<Entree, SaveEntreeResource>()
                 .ForMember(svr => svr.EntreeDetails, opt => opt.Ignore());
+            this.CreateMap<EntreePhoto, EntreePhotoResource>();
         }
 
         private void DomainToApiEntreeHelper()

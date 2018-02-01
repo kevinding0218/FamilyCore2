@@ -36,6 +36,8 @@ export class HelperMethod {
                     toastr.warning(validationErrorDictionary[fieldName], 'Invalid Operation');
                 }
             }
+        } else {
+            toastr.warning(err.text(), 'Exception Occurred!');
         }
     }
 }
