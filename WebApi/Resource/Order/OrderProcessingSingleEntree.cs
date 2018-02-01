@@ -28,7 +28,7 @@ namespace WebApi.Resource.Order
         public string Style { get; set; }
         public string Catagory { get; set; }
         public int? EntreeCount { get; set; }
-        public DateTime ScheduledDate { get; set; }
+        public DateTime? ScheduledDate { get; set; }
         public string Note { get; set; }
         public string EntreeImgUrl { get; set; }
     }

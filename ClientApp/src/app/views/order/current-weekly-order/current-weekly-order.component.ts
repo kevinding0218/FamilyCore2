@@ -53,6 +53,7 @@ export class CurrentWeeklyOrderComponent implements OnInit {
     { title: 'Entree Style', },
     { title: 'Entree Catagory' },
     { title: 'Count' },
+    { title: 'Scheduled On' },
     { title: 'Note' }
   ];
 
@@ -181,14 +182,7 @@ export class CurrentWeeklyOrderComponent implements OnInit {
   refresh: Subject<any> = new Subject();
 
   externalEvents: CalendarEvent[] = [];
-  initialEvents: CalendarEvent[] = [
-    { title: '西红柿炒鸡蛋', 
-    color: colors.orange, 
-    start: new Date("2018-01-28T05:00:00"), 
-    allDay: true, 
-    draggable: true, 
-    meta: { "orderId": 14, "entreeId": 13 } 
-  }];
+  initialEvents: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
 
@@ -209,7 +203,7 @@ export class CurrentWeeklyOrderComponent implements OnInit {
         let existedCalendarEvent: CalendarEvent = {
           title: element.entreeName,
           color: this.assignColor(element),
-          start: element.scheduledDate,
+          start: new Date(element.scheduledDate),
           allDay: true,
           draggable: true,
           meta: { orderId: this.currentWeekOrderInitialInfo.id, entreeId: element.entreeId }
@@ -266,31 +260,38 @@ export class CurrentWeeklyOrderComponent implements OnInit {
     // console.log('eventDropped event', event);
     this.changeEventLog.push(event.title + ' has been placed on ' + newStart.toLocaleDateString());
     event.draggable = false;
-    var currentMapping: EntreeOrderMappingSchedule = {
-      orderId: event.meta.orderId,
-      entreeId: event.meta.entreeId,
-      scheduleDate: newStart
-    }
-    this._currentOrderService.updateEntreeOrderSchedule(currentMapping)
-      .subscribe(
-      (data) => {
-        event.draggable = true;
-      },
-      (err) => {
-        HelperMethod.subscribeErrorHandler(err, this.toastr);
+    let existedMapping = this.initialEvents.find(e => e.title === event.title);
+    if (existedMapping != null || typeof(existedMapping) != 'undefined') {
+      if (existedMapping.start.toLocaleDateString() != newStart.toLocaleDateString()) {
+        var updateMapping: EntreeOrderMappingSchedule = {
+          orderId: event.meta.orderId,
+          entreeId: event.meta.entreeId,
+          scheduleDate: newStart
+        }
+        this._currentOrderService.updateEntreeOrderSchedule(updateMapping)
+          .subscribe(
+          (data) => {
+            event.draggable = true;
+          },
+          (err) => {
+            HelperMethod.subscribeErrorHandler(err, this.toastr);
+          }
+          );
+        const externalIndex: number = this.externalEvents.indexOf(event);
+        if (externalIndex > -1) {
+          this.externalEvents.splice(externalIndex, 1);
+          this.initialEvents.push(event);
+        }
+        event.start = newStart;
+        if (newEnd) {
+          event.end = newEnd;
+        }
+        this.viewDate = newStart;
+        this.activeDayIsOpen = true;
+      } else {
+        console.log('Event is not changed!');
       }
-      );
-    const externalIndex: number = this.externalEvents.indexOf(event);
-    if (externalIndex > -1) {
-      this.externalEvents.splice(externalIndex, 1);
-      this.initialEvents.push(event);
     }
-    event.start = newStart;
-    if (newEnd) {
-      event.end = newEnd;
-    }
-    this.viewDate = newStart;
-    this.activeDayIsOpen = true;
-    console.log('eventDropped initialEvents', this.initialEvents);
+    
   }
 }
