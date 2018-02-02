@@ -1,3 +1,4 @@
+import { AppNgxBootstrapModule } from './ngxModule/app-ngx-bootstrap.module';
 import { ProgressService, BrowserXhrWithProgress } from './services/progress/progress.service';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpModule, BrowserXhr } from '@angular/http';
@@ -80,6 +81,7 @@ const APP_DIRECTIVES = [
     FormsModule,
     HttpModule,
     AppRoutingModule,
+    AppNgxBootstrapModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
