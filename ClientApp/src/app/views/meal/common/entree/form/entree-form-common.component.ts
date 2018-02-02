@@ -318,20 +318,20 @@ export class EntreeFormCommonComponent implements OnInit {
     @ViewChild('fileInput') fileInput: ElementRef;
     uploadPhoto() {
         //uploadPhoto($event) then use $event.target
-        this._progressService.startTracking()
-            .subscribe(progress => {
-                console.log('startTracking: ', progress);
-                this.zone.run(() => {
-                    console.log('zone run: ', progress);
-                    this.progress = progress;
-                })
-                //this.progress = progress;
-            },
-            err => {
-                HelperMethod.subscribeErrorHandler(err, this.toastr);
-            },
-            () => { this.progress = null; }
-        );
+        // this._progressService.startTracking()
+        //     .subscribe(progress => {
+        //         console.log('startTracking: ', progress);
+        //         this.zone.run(() => {
+        //             console.log('zone run: ', progress);
+        //             this.progress = progress;
+        //         })
+        //         //this.progress = progress;
+        //     },
+        //     err => {
+        //         HelperMethod.subscribeErrorHandler(err, this.toastr);
+        //     },
+        //     () => { this.progress = null; }
+        // );
   
         var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
         var file = nativeElement.files[0];

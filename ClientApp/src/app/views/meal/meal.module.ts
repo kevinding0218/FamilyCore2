@@ -1,72 +1,144 @@
-import { EntreePhotoUploadService } from './../../services/upload/entree-photo-upload.service';
-import { CurrentOrderService } from './../../services/order/current-order.service';
-import { EntreeByStyleWidgetComponent } from './common/entree/widget/entree-by-style-widget.component';
-import { EntreeByCatagoryWidgetComponent } from './common/entree/widget/entree-by-catagory-widget.component';
-import { EntreeSummaryBoardComponent } from './entree/form/entree-summary-board.component';
-import { EntreeDetailCartTemplateComponent } from './common/entree/form/entreeDetailSection/entree-detail-cart-template/entree-detail-cart-template.component';
-import { EntreeDetailCommonSectionComponent } from './common/entree/form/entreeDetailSection/entree-detail-common-section.component';
-import { EntreeHelperService } from './../../services/meal/entree-helper.service';
-import { EntreeFormCommonComponent } from './common/entree/form/entree-form-common.component';
-import { EntreeListByStyleComponent } from './entree/list/entree-list-by-style.component';
-import { EntreeService } from './../../services/meal/entree.service';
-import { EntreeListCommonComponent } from './common/entree/list/entree-list-common.component';
-import { IngredientListComponent } from './ingredient/list/ingredient-list.component';
-import { IngredientFormComponent } from './ingredient/form/ingredient-form.component';
-import { SeafoodFormComponent } from './seafood/form/seafood-form.component';
-import { SeafoodListComponent } from './seafood/list/seafood-list.component';
-import { EntreeDetailListComponent } from './common/entree-detail/list/entree-detail.list.component';
-import { EntreeDetailService } from './../../services/meal/entree-detail.service';
-import { SauceFormComponent } from './sauce/form/sauce-form.component';
-import { SauceListComponent } from './sauce/list/sauce-list.component';
-import { EntreeDetailFormComponent } from './common/entree-detail/form/entree-detail-form.component';
-import { StaplefoodService } from './../../services/meal/staplefood.service';
-import { MeatFormComponent } from './meat/meat-form/meat-form.component';
 import { AppNgxBootstrapModule } from './../../ngxModule/app-ngx-bootstrap.module';
 import { PaginationComponent } from './../../components/table-pagination/pagination.component';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MealRoutingModule } from './meal-routing.module';
-import { VegetableListComponent } from './vegetable/vegetable-list/vegetable-list.component';
-import { VegetableFormComponent } from './vegetable/vegetable-form/vegetable-form.component';
-import { MeatListComponent } from './meat/meat-list/meat-list.component';
-import { StaplefoodFormComponent } from './staplefood/staplefood-form/staplefood-form.component';
-import { StaplefoodListComponent } from './staplefood/staplefood-list/staplefood-list.component';
+
+// import entree common
+import {
+  EntreeDetailCartTemplateComponent,
+  EntreeDetailCommonSectionComponent,
+  EntreeFormCommonComponent,
+  EntreeListCommonComponent,
+  EntreeByStyleWidgetComponent,
+  EntreeByCatagoryWidgetComponent,
+  EntreeDetailFormComponent,
+  EntreeDetailListComponent
+} from './common';
+
+const ENTREE_COMMON_COMPONENTS = [
+  EntreeDetailCartTemplateComponent,
+  EntreeDetailCommonSectionComponent,
+  EntreeFormCommonComponent,
+  EntreeListCommonComponent,
+  EntreeByStyleWidgetComponent,
+  EntreeByCatagoryWidgetComponent,
+  EntreeDetailFormComponent,
+  EntreeDetailListComponent
+]
+
+// import entree
+import {
+  EntreeSummaryBoardComponent,
+  EntreeListByStyleComponent
+} from './entree';
+
+const ENTREE_UI_COMPONENTS = [
+  EntreeSummaryBoardComponent,
+  EntreeListByStyleComponent
+]
+
+// import staplefood
+import {
+  StaplefoodFormComponent,
+  StaplefoodListComponent
+} from './staplefood';
+
+const STAPLEFOOD_COMPONENTS = [
+  StaplefoodFormComponent,
+  StaplefoodListComponent
+]
+
+// import vegetable
+import {
+  VegetableListComponent,
+  VegetableFormComponent
+} from './vegetable';
+
+const VEGETABLE_COMPONENTS = [
+  VegetableListComponent,
+  VegetableFormComponent
+]
+
+// import meat
+import {
+  MeatFormComponent,
+  MeatListComponent
+} from './meat';
+
+const MEAT_COMPONENTS = [
+  MeatFormComponent,
+  MeatListComponent
+]
+
+// import sauce
+import {
+  SauceFormComponent,
+  SauceListComponent
+} from './sauce';
+
+const SAUCE_COMPONENTS = [
+  SauceFormComponent,
+  SauceListComponent
+]
+
+// import ingredient
+import {
+  IngredientListComponent,
+  IngredientFormComponent
+} from './ingredient';
+
+const INGREDIENT_COMPONENTS = [
+  IngredientListComponent,
+  IngredientFormComponent
+]
+
+// import seafood
+import {
+  SeafoodListComponent,
+  SeafoodFormComponent
+} from './seafood';
+
+const SEAFOOD_COMPONENTS = [
+  SeafoodListComponent,
+  SeafoodFormComponent
+]
+
+// import service
+import {
+  EntreeDetailService,
+  StaplefoodService,
+  EntreeService,
+  EntreeHelperService,
+  CurrentOrderService,
+  EntreePhotoUploadService
+} from './../../services';
+
+const SERVICE_COMPONENTS = [
+  EntreeDetailService,
+  StaplefoodService,
+  EntreeService,
+  EntreeHelperService,
+  CurrentOrderService,
+  EntreePhotoUploadService
+]
+
 
 @NgModule({
   imports: [ FormsModule, CommonModule, MealRoutingModule, AppNgxBootstrapModule ],
   declarations: [
-    EntreeDetailFormComponent,
-    EntreeDetailListComponent,
-    VegetableListComponent,
-    VegetableFormComponent,
-    PaginationComponent,
-    MeatListComponent,
-    MeatFormComponent,
-    StaplefoodFormComponent,
-    StaplefoodListComponent,
-    SauceFormComponent,
-    SauceListComponent,
-    SeafoodFormComponent,
-    SeafoodListComponent,
-    IngredientFormComponent,
-    IngredientListComponent,
-    EntreeByCatagoryWidgetComponent,
-    EntreeByStyleWidgetComponent,
-    EntreeSummaryBoardComponent,
-    EntreeListCommonComponent,
-    EntreeListByStyleComponent,
-    EntreeDetailCartTemplateComponent,
-    EntreeDetailCommonSectionComponent,
-    EntreeFormCommonComponent
+    ...ENTREE_COMMON_COMPONENTS,
+    ...ENTREE_UI_COMPONENTS,
+    ...VEGETABLE_COMPONENTS,
+    ...MEAT_COMPONENTS,
+    ...STAPLEFOOD_COMPONENTS,
+    ...SAUCE_COMPONENTS,
+    ...SEAFOOD_COMPONENTS,
+    ...INGREDIENT_COMPONENTS,
   ],
   providers: [ 
-    StaplefoodService, 
-    EntreeDetailService, 
-    EntreeService, 
-    EntreeHelperService, 
-    CurrentOrderService, 
-    EntreePhotoUploadService    
+    ...SERVICE_COMPONENTS   
   ]
 })
 export class MealModule { }

@@ -96,12 +96,12 @@ const APP_DIRECTIVES = [
       provide: ErrorHandler, 
       useClass: AppErrorHandler
     },
-    { 
-      provide: BrowserXhr, 
-      useClass: BrowserXhrWithProgress 
-    }, 
-    ErrorLogService,
-    ProgressService
+    // { 
+    //   provide: BrowserXhr, 
+    //   useClass: BrowserXhrWithProgress 
+    // }, 
+    // ProgressService,
+    ErrorLogService
   ],
   bootstrap: [AppComponent]
 })

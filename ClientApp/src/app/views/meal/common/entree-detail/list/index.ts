@@ -1,0 +1,1 @@
+export * from './entree-detail.list.component';
