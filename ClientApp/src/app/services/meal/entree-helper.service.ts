@@ -19,7 +19,11 @@ export class EntreeHelperService {
       .set('attribute', attribute)
       .set('currentEntreeId', currentEntreeId);
 
-    // Make the API call using the new parameters.
+    // Make the API call using the new parameters, here instead of using _http from Http, we should use HttpClient
+    // constructor(private _http: HttpClient) { }
+    // also in app.module, need to import HttpClientModule 
+    // import { HttpClientModule } from '@angular/common/http';
+
     return this._http.get(this.apiEndPoint + '/attribute', { params: httpParams })
       .map(res => res.json()); */
   }

@@ -1,4 +1,4 @@
-import { ProgressService } from './../../../../../services/progress/progress.service';
+//import { ProgressService } from './../../../../../services/progress/progress.service';
 import { HelperMethod } from './../../../../../utility/helper/helperMethod';
 import { EntreePhotoUploadService } from './../../../../../services/upload/entree-photo-upload.service';
 import { element } from 'protractor';
@@ -68,7 +68,7 @@ export class EntreeFormCommonComponent implements OnInit {
         private toastr: ToastrService,
         private modalService: BsModalService,
         private _entreePhotoUploadService: EntreePhotoUploadService,
-        private _progressService: ProgressService,
+        // private _progressService: ProgressService,
         private zone: NgZone,
     ) {
         _route.params.subscribe(p => {
