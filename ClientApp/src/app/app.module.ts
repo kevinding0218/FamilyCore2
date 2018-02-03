@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { AppNgxBootstrapModule } from './ngxModule/app-ngx-bootstrap.module';
 import { ProgressService, BrowserXhrWithProgress } from './services/progress/progress.service';
 import { ToastrModule } from 'ngx-toastr';
@@ -80,6 +81,7 @@ const APP_DIRECTIVES = [
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     AppNgxBootstrapModule,
     ToastrModule.forRoot({
