@@ -15,6 +15,14 @@
                 <app-single-entree [entree]="entree" (removeEntree)="this.OnRemoveEntreeClick($event)"></app-single-entree>
             </div>
         </div>
+        <!-- <div class="row">
+            <ul>
+                <li *ngFor="let entree of currentWeekOrderInitialInfo.entreeInfoList">
+                    <img class="entreeImg" src="{{ entree.entreeImgUrl }}" alt="Responsive image">
+                    <div class="con"><strong>{{ entree.entreeName }}</strong></div>
+                </li>
+            </ul>
+        </div> -->
     </div>
     <div class="col-lg-10 offset-1">
         <span class="ml-auto" style="display: table;">

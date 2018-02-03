@@ -27,7 +27,8 @@ import {
 
 
 @Component({
-  templateUrl: 'current-weekly-order.component.html'
+  templateUrl: 'current-weekly-order.component.html',
+  styleUrls: ['./current-weekly-order.component.css']
 })
 export class CurrentWeeklyOrderComponent implements OnInit {
   processStep: number = 1;
