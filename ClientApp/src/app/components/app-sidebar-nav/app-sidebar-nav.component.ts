@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Rx';
 import { MenuService } from './../../services/menu/menu.service';
 import { Component, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@angular/core';
 
@@ -10,7 +9,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@ang
   template: `
     <nav class="sidebar-nav">
       <ul class="nav">
-      <div *ngFor="let navitem of db_navigation | async">
+      <div *ngFor="let navitem of db_navigation">
           <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
           <div *ngIf="isTitle(navitem)">
             <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
@@ -34,7 +33,7 @@ export class AppSidebarNavComponent implements OnInit, OnDestroy {
   // Load from DB
   message: any;
   subscription: Subscription;
-  db_navigation: Observable<any>;
+  db_navigation: any;
 
   constructor(
     private _menuService: MenuService
@@ -63,7 +62,9 @@ export class AppSidebarNavComponent implements OnInit, OnDestroy {
   }
 
   loadMenuFromDb() {
-    this.db_navigation = this._menuService.getNavigations(2);
+    this._menuService.getNavigations(2).subscribe((result) => {
+      this.db_navigation = result;
+    });
   }
 
   ngOnDestroy() {
