@@ -25,6 +25,7 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
+import { NgProgress } from 'ngx-progressbar';
 
 
 @Component({
@@ -72,13 +73,18 @@ export class CurrentWeeklyOrderComponent implements OnInit {
     private _currentOrderService: CurrentOrderService,
     private _excelService: ExcelService,
     private toastr: ToastrService,
-    private _menuService: MenuService
+    private _menuService: MenuService,
+    public _ngProgress: NgProgress
   ) { }
 
   ngOnInit() {
+    /** request started */
+    this._ngProgress.start();
     this._currentOrderService.getCurrentWeekOrderPrepare()
       .subscribe(result => {
         this.currentWeekOrderInitialInfo = result;
+        /** request completed */
+        this._ngProgress.done();
       });
     this.processStep = 1;
     this.processPercent = '35%';

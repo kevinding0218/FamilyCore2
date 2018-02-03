@@ -10,6 +10,7 @@ import { StarRatingModule } from 'angular-star-rating';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CalendarModule } from 'angular-calendar';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { NgProgressModule } from 'ngx-progressbar';
 
 @NgModule({
   imports: [
@@ -21,9 +22,20 @@ import { Daterangepicker } from 'ng2-daterangepicker';
     NgxDatatableModule,
     TabsModule.forRoot(),
     CalendarModule.forRoot(),
-    Daterangepicker
+    Daterangepicker,
+    NgProgressModule
   ],
   declarations: [CalendarHeaderComponent],
-  exports: [BsDropdownModule, TooltipModule, ModalModule, NgxDatatableModule, StarRatingModule, TabsModule, CalendarModule, Daterangepicker, CalendarHeaderComponent]
+  exports: [
+    BsDropdownModule, 
+    TooltipModule, 
+    ModalModule, 
+    NgxDatatableModule, 
+    StarRatingModule, 
+    TabsModule, CalendarModule, 
+    Daterangepicker, 
+    CalendarHeaderComponent,
+    NgProgressModule
+  ]
 })
 export class AppNgxBootstrapModule { }
