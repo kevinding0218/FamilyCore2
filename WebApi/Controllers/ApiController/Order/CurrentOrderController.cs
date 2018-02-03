@@ -90,15 +90,7 @@ namespace WebApi.Controllers.ApiController.Order
             // Insert into database by using Domain Model
             _currentOrderRepository.AddOrder(newOrder);
 
-            try
-            {
-                await _uow.CompleteAsync();
-            }
-            catch (Exception ex)
-            {
-
-            }
-
+            await _uow.CompleteAsync();
 
             newOrder = await _currentOrderRepository.GetOrder(newOrder.Id);
             // Convert from Domain Model to View Model

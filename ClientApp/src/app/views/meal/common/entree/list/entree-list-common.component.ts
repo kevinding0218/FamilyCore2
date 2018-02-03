@@ -203,7 +203,7 @@ export class EntreeListCommonComponent implements OnInit {
                     //let endDateOfCurrentWeek = moment().endOf('isoWeek').toDate();
                     let _startWeek = moment().startOf('week').toDate();
                     let _endWeek = moment().endOf('week').toDate();
-                    //console.log('_startWeek is ' + _startWeek + '\n_endWeek is ' + _endWeek);
+                    console.log('_startWeek is ' + _startWeek + '\n_endWeek is ' + _endWeek);
 
                     let SaveInitialOrder: SaveInitialOrder = {
                         id: 0,

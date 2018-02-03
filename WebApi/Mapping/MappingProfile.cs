@@ -207,6 +207,8 @@ namespace WebApi.Mapping
         {
             this.CreateMap<SaveInitialOrder, Order>()
                 .ForMember(o => o.Id, opt => opt.Ignore())
+                .ForMember(o => o.StartDate, opt => opt.MapFrom(so => so.StartDate.Date.AddHours(0).AddMinutes(0).AddSeconds(0)))
+                .ForMember(o => o.EndDate, opt => opt.MapFrom(so => so.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59)))
                 .ForMember(o => o.MappingEntreesWithCurrentOrder, opt => opt.Ignore())
                 .AfterMap((so, o) =>
                 {
