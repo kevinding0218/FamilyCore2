@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentOrderService } from '../../../../../services/order/current-order.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'entree-common-list',
@@ -200,11 +201,14 @@ export class EntreeListCommonComponent implements OnInit {
                     let endDateOfCurrentWeek = new Date().getWeekEndDate();
                     //let startDateOfCurrentWeek = moment().startOf('isoWeek').toDate();
                     //let endDateOfCurrentWeek = moment().endOf('isoWeek').toDate();
+                    let _startWeek = moment().startOf('week').toDate();
+                    let _endWeek = moment().endOf('week').toDate();
+                    //console.log('_startWeek is ' + _startWeek + '\n_endWeek is ' + _endWeek);
 
                     let SaveInitialOrder: SaveInitialOrder = {
                         id: 0,
-                        startDate: startDateOfCurrentWeek,
-                        endDate: endDateOfCurrentWeek,
+                        startDate: _startWeek,
+                        endDate: _endWeek,
                         addedOn: new Date(),
                         addedById: 2,
                         lastUpdatedByOn: null,

@@ -35,7 +35,7 @@ namespace WebApi.Persistent.Order.CurrentOrder
 
         public async Task<DomainLibrary.Order.Order> GetOrderByCurrentDate(DateTime currentDate)
         {
-            if (this._context.Orders.Any(o => o.StartDate <= currentDate && o.EndDate >= currentDate))
+            if (this._context.Orders.Any(o => o.StartDate.Date <= currentDate.Date && o.EndDate.Date >= currentDate.Date))
             {
                 return await this._context.Orders
                                         .Include(o => o.MappingEntreesWithCurrentOrder)
