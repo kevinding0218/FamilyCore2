@@ -69,6 +69,15 @@ const APP_DIRECTIVES = [
   SIDEBAR_TOGGLE_DIRECTIVES
 ]
 
+// Import services
+import {
+  MenuService
+} from './services';
+
+const APP_SERVICES = [
+  MenuService
+]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -92,6 +101,7 @@ const APP_DIRECTIVES = [
     })
   ],
   providers: [
+    ...APP_SERVICES,
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

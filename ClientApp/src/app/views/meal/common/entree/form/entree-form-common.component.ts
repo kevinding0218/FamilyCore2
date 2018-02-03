@@ -1,3 +1,4 @@
+import { MenuService } from './../../../../../services/menu/menu.service';
 //import { ProgressService } from './../../../../../services/progress/progress.service';
 import { HelperMethod } from './../../../../../utility/helper/helperMethod';
 import { EntreePhotoUploadService } from './../../../../../services/upload/entree-photo-upload.service';
@@ -70,6 +71,7 @@ export class EntreeFormCommonComponent implements OnInit {
         private _entreePhotoUploadService: EntreePhotoUploadService,
         // private _progressService: ProgressService,
         private zone: NgZone,
+        private _menuService: MenuService
     ) {
         _route.params.subscribe(p => {
             this.splitBy = (typeof p['splitBy'] == 'undefined') ? '' : p['splitBy'];
@@ -218,6 +220,7 @@ export class EntreeFormCommonComponent implements OnInit {
             (data) => {
                 this.toastr.success(this.entree.name + ' has been successfully inserted!', 'INSERT SUCCESS');
                 this.returnToList();
+                this._menuService.sendBadgeUpdateMessage('reloadMenu');
             },
             (err) => {
                 if (err.status === 400) {

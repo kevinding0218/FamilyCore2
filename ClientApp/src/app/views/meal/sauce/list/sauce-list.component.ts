@@ -17,7 +17,7 @@ export class SauceListComponent implements OnInit {
     { 
         _route.params.subscribe(p => {
             let entree_type : string = (typeof p['type'] == 'undefined') ? 'entreeDetail' : p['type'];
-            console.log('In SauceListComponent entree_type is ' + entree_type);
+            //console.log('In SauceListComponent entree_type is ' + entree_type);
 
             this.entreeDetailType = entree_type;
             this.entreeListFormHeader = 'List of ' + entree_type.capitalizeFirstLetter();

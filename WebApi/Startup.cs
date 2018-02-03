@@ -8,6 +8,7 @@ using WebApi.Persistent;
 using WebApi.Persistent.Meal;
 using WebApi.Persistent.Meal.EntreeHelperRepo;
 using WebApi.Persistent.Meal.EntreePhotoRepo;
+using WebApi.Persistent.Menu;
 using WebApi.Persistent.Order.CurrentOrder;
 using WebApi.Persistent.User;
 using WebApi.Persistent.Utility;
@@ -36,6 +37,7 @@ namespace WebApi
             services.AddScoped<ICurrentOrderRepository, CurrentOrderRepository>();
             services.AddScoped<IEntreePhotoRepository, EntreePhotoRepository>();
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+            services.AddScoped<IMenuRepository, MenuRepository>();
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

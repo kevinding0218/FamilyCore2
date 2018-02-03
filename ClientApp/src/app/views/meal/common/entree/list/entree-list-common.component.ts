@@ -1,3 +1,4 @@
+import { MenuService } from './../../../../../services/menu/menu.service';
 import { HelperMethod } from './../../../../../utility/helper/helperMethod';
 import { SaveInitialOrder, EntreeOrderMapping } from './../../../../../viewModels/order/saveOrder';
 import { EntreeService } from './../../../../../services/meal/entree.service';
@@ -63,7 +64,8 @@ export class EntreeListCommonComponent implements OnInit {
         private _router: Router,
         private _entreeService: EntreeService,
         private toastr: ToastrService,
-        private _currentOrderService: CurrentOrderService
+        private _currentOrderService: CurrentOrderService,
+        private _menuService: MenuService
     ) {
 
     }
@@ -133,7 +135,7 @@ export class EntreeListCommonComponent implements OnInit {
 
     // Select row
     onSelect({ selected }) {
-        console.log('Select Event', selected, this.selected);
+        //console.log('Select Event', selected, this.selected);
 
         this.selected.splice(0, this.selected.length);
         this.selected.push(...selected);
@@ -215,6 +217,7 @@ export class EntreeListCommonComponent implements OnInit {
                         .subscribe(
                         (data) => {
                             this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
+                            this._menuService.sendBadgeUpdateMessage('reloadMenu');
                         },
                         (err) => {
                             HelperMethod.subscribeErrorHandler(err, this.toastr);
@@ -242,6 +245,7 @@ export class EntreeListCommonComponent implements OnInit {
                                 .subscribe(
                                 (data) => {
                                     this.toastr.success('Entree has been added to current weekly order!', 'Add To Order Successfully');
+                                    this._menuService.sendBadgeUpdateMessage('reloadMenu');
                                 },
                                 (err) => {
                                     HelperMethod.subscribeErrorHandler(err, this.toastr);

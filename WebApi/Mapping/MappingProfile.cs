@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using DomainLibrary.Menu;
 using DomainLibrary.Order;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.Meal.PhotoResource;
+using WebApi.Resource.Menu;
 using WebApi.Resource.Order;
 using WebApi.Resource.QueryResource;
 using WebApi.Resource.Shared;
@@ -28,13 +30,17 @@ namespace WebApi.Mapping
             DomainToApiEntree();
             // Entree Helper
             DomainToApiEntreeHelper();
+
             // Order
             DomainToApiInitialOrder();
+
+            // Menu
+            DomainToApiApplicationMenu();
             #endregion
 
             #region API Resource/View Model to Domain
             // Vegetable
-            this.CreateMap<VegetableQueryResource, VegetableQuery>();
+            CreateMap<VegetableQueryResource, VegetableQuery>();
             // EntreeDetail
             ApiToDomainEntreeDetail();
             // StapleFood
@@ -114,6 +120,19 @@ namespace WebApi.Mapping
 
             this.CreateMap<Order, OrderProcessInfo>()
                 .ForMember(opi => opi.EntreeInfoList, opt => opt.Ignore());
+        }
+
+        private void DomainToApiApplicationMenu()
+        {
+            this.CreateMap<ApplicationMenu, Navigation>()
+                .ForMember(nav => nav.children, opt => opt.MapFrom(am => am.Children.Select(nav => new Navigation
+                {
+                    Icon = nav.Icon,
+                    Url = nav.Url,
+                    Name = nav.Name,
+                    ShowBadge = nav.ShowBadge
+                })))
+                .ForMember(nav => nav.Badge, opt => opt.Ignore());
         }
         #endregion
 

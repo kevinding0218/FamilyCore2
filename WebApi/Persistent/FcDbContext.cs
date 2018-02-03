@@ -1,5 +1,6 @@
 ﻿using DomainLibrary.Location;
 using DomainLibrary.Meal;
+using DomainLibrary.Menu;
 using DomainLibrary.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ namespace WebApi.Persistent
         public DbSet<ContactAddress> ContactAddresses { get; set; }
         public DbSet<DomainLibrary.Order.Order> Orders { get; set; }
         public DbSet<EntreePhoto> EntreePhotos { get; set; }
+        public DbSet<ApplicationMenu> Menus { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

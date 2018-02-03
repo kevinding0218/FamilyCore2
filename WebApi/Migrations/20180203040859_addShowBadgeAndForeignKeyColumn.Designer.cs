@@ -11,9 +11,10 @@ using WebApi.Persistent;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(FcDbContext))]
-    partial class FcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180203040859_addShowBadgeAndForeignKeyColumn")]
+    partial class addShowBadgeAndForeignKeyColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,8 +366,6 @@ namespace WebApi.Migrations
                     b.Property<int?>("ApplicationMenuId");
 
                     b.Property<string>("Icon");
-
-                    b.Property<int>("MenuPosition");
 
                     b.Property<string>("Name");
 

@@ -1,29 +1,28 @@
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
+import { MenuService } from './../../services/menu/menu.service';
+import { Component, ElementRef, Input, OnInit, Renderer2, OnDestroy } from '@angular/core';
 
 // Import navigation elements
-import { navigation } from './../../_nav';
+// import { navigation } from './../../_nav';
 
 @Component({
   selector: 'app-sidebar-nav',
   template: `
     <nav class="sidebar-nav">
       <ul class="nav">
-        <ng-template ngFor let-navitem [ngForOf]="navigation">
+      <div *ngFor="let navitem of db_navigation | async">
           <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
-          <ng-template [ngIf]="isTitle(navitem)">
+          <div *ngIf="isTitle(navitem)">
             <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
-          </ng-template>
-          <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
+          </div>
+          <div *ngIf="!isDivider(navitem)&&!isTitle(navitem)">
             <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
-          </ng-template>
-        </ng-template>
+          </div>
+        </div>
       </ul>
     </nav>`
 })
-export class AppSidebarNavComponent {
-
-  public navigation = navigation;
-
+export class AppSidebarNavComponent implements OnInit, OnDestroy {
   public isDivider(item) {
     return item.divider ? true : false
   }
@@ -32,10 +31,50 @@ export class AppSidebarNavComponent {
     return item.title ? true : false
   }
 
-  constructor() { }
+  // Load from DB
+  message: any;
+  subscription: Subscription;
+  db_navigation: Observable<any>;
+
+  constructor(
+    private _menuService: MenuService
+  ) {
+    // subscribe to home component messages
+    this.subscription = this._menuService.getBadgeUpdateMessage().subscribe(message => {
+      if (message != null && message.info == 'reloadMenu') {
+        this.loadMenuFromDb();
+      }
+      this.message = message;
+    });
+  }
+
+  // ngOnChanges(changes: SimpleChanges) {
+  //   for (let propName in changes) {
+  //     let chng = changes[propName];
+  //     let cur  = JSON.stringify(chng.currentValue);
+  //     let prev = JSON.stringify(chng.previousValue);
+  //     console.log(propName + ' changed to ' + cur + ' from previous ' + prev);
+  //     // this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
+  //   }
+  // }
+
+  ngOnInit() {
+    this.loadMenuFromDb();
+  }
+
+  loadMenuFromDb() {
+    this.db_navigation = this._menuService.getNavigations(2);
+  }
+
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
+  }
 }
 
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-sidebar-nav-item',
@@ -72,7 +111,7 @@ export class AppSidebarNavItemComponent {
     return this.router.isActive(this.thisUrl(), false)
   }
 
-  constructor( private router: Router )  { }
+  constructor(private router: Router) { }
 
 }
 
@@ -163,12 +202,12 @@ export class AppSidebarNavTitleComponent implements OnInit {
 
     this.renderer.addClass(li, 'nav-title');
 
-    if ( this.title.class ) {
+    if (this.title.class) {
       const classes = this.title.class;
       this.renderer.addClass(li, classes);
     }
 
-    if ( this.title.wrapper ) {
+    if (this.title.wrapper) {
       const wrapper = this.renderer.createElement(this.title.wrapper.element);
 
       this.renderer.appendChild(wrapper, name);

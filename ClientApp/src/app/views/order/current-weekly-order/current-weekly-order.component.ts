@@ -1,3 +1,4 @@
+import { MenuService } from './../../../services/menu/menu.service';
 import { colors } from './../../../ngxModule/ng2-calendar/ng2-calendar-color';
 import { element } from 'protractor';
 import { ExcelService } from './../../../utility/export/exportExcelService';
@@ -70,7 +71,8 @@ export class CurrentWeeklyOrderComponent implements OnInit {
   constructor(
     private _currentOrderService: CurrentOrderService,
     private _excelService: ExcelService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private _menuService: MenuService
   ) { }
 
   ngOnInit() {
@@ -100,6 +102,7 @@ export class CurrentWeeklyOrderComponent implements OnInit {
         this.processPercent = '70%';
         this.processValue = 70;
         this.initialCurrentEvents();
+        this._menuService.sendBadgeUpdateMessage('reloadMenu');
       },
       (err) => {
         HelperMethod.subscribeErrorHandler(err, this.toastr);

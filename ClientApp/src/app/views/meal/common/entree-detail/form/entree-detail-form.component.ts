@@ -5,6 +5,7 @@ import { SaveEntreeDetail } from '../../../../../viewModels/meal/entreeDetail';
 import { Observable } from 'rxjs/Rx';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuService } from '../../../../../services/index';
 
 @Component({
     selector: 'entree-detail-form',
@@ -40,7 +41,8 @@ export class EntreeDetailFormComponent implements OnInit {
         private _router: Router,
         private _entreeDetailService: EntreeDetailService,
         private _staplefoodService: StaplefoodService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private _menuService: MenuService
     ) {
         _route.params.subscribe(p => {
             this.entreeDetail.keyValuePairInfo.id = (typeof p['id'] == 'undefined') ? 0 : +p['id'];
@@ -128,6 +130,7 @@ export class EntreeDetailFormComponent implements OnInit {
             (data) => {
                 this.toastr.success(this.entreeDetailType + ' has been successfully inserted!', 'INSERT SUCCESS');
                 this.returnToList();
+                this._menuService.sendBadgeUpdateMessage('reloadMenu');
             },
             (err) => {
                 if (err.status === 400) {

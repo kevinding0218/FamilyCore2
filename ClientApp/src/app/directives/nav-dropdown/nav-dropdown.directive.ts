@@ -25,7 +25,13 @@ export class NavDropdownDirective {
 export class NavDropdownToggleDirective {
   constructor(private dropdown: NavDropdownDirective) { }
 
-  @HostListener('mouseover', ['$event'])
+  // @HostListener('mouseover', ['$event'])
+  // toggleOpen($event: any) {
+  //   $event.preventDefault();
+  //   this.dropdown.toggle();
+  // }
+
+  @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
     this.dropdown.toggle();
