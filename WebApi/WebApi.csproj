@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20180130035310_removePrimaryKeyInOrderEntree.Designer.cs" />
     <Compile Remove="Migrations\20180130035451_removekeydroptable.cs" />
     <Compile Remove="Migrations\20180130035451_removekeydroptable.Designer.cs" />
+    <Compile Remove="Migrations\20180205230431_CreateUserPasswordTable.cs" />
+    <Compile Remove="Migrations\20180205230431_CreateUserPasswordTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

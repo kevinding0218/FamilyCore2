@@ -16,6 +16,13 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'entree-form-common',
     templateUrl: './entree-form-common.component.html',
+    // providers: [
+    //     { 
+    //         provide: BrowserXhr, 
+    //         useClass: BrowserXhrWithProgress 
+    //     }, 
+    //     ProgressService
+    // ]
 })
 
 export class EntreeFormCommonComponent implements OnInit {

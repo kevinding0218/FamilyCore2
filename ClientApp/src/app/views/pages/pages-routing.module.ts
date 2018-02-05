@@ -1,3 +1,4 @@
+import { ProfileComponent } from './profile/profile.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -5,6 +6,7 @@ import { P404Component } from './404.component';
 import { P500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
+import { CallbackComponent } from './callback/callback.component';
 
 const routes: Routes = [
   {
@@ -39,6 +41,20 @@ const routes: Routes = [
         component: RegisterComponent,
         data: {
           title: 'Register Page'
+        }
+      },
+      {
+        path: 'callback',
+        component: CallbackComponent,
+        data: {
+          title: 'Logging Callback Page'
+        }
+      },
+      {
+        path: 'user_profile',
+        component: ProfileComponent,
+        data: {
+          title: 'User Profile'
         }
       }
     ]

@@ -1,7 +1,10 @@
 ﻿using DomainLibrary.Shared;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace DomainLibrary.Member
 {
@@ -30,8 +33,18 @@ namespace DomainLibrary.Member
         public DateTime LastLogIn { get; set; }
         [StringLength(255)]
         public string Note { get; set; }
+        public bool Active { get; set; }
 
         [NotMapped]
         public string FullName { get { return String.Format("{0} {1}", FirstName, LastName); } }
+
+        public ICollection<UserPassword> UserPasswords { get; set; }
+        [NotMapped]
+        public UserPassword LatestUserPassword { get { return (UserPasswords != null && UserPasswords.Count > 0) ? UserPasswords.Where(up => up.Active).FirstOrDefault() : null; } }
+
+        public User()
+        {
+            UserPasswords = new Collection<UserPassword>();
+        }
     }
 }

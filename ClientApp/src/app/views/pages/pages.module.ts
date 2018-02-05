@@ -1,3 +1,7 @@
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ProfileComponent } from './profile/profile.component';
+import { CallbackComponent } from './callback/callback.component';
 import { NgModule } from '@angular/core';
 
 import { P404Component } from './404.component';
@@ -8,12 +12,14 @@ import { RegisterComponent } from './register.component';
 import { PagesRoutingModule } from './pages-routing.module';
 
 @NgModule({
-  imports: [ PagesRoutingModule ],
+  imports: [ FormsModule, CommonModule, PagesRoutingModule ],
   declarations: [
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    CallbackComponent,
+    ProfileComponent
   ]
 })
 export class PagesModule { }

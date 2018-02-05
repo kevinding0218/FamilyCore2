@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,18 @@ namespace WebApi
 
             services.AddMvc();
 
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://familycore.auth0.com/";
+                options.Audience = "https://api.family-core.com";
+            });
+
             // ********************
             // Setup CORS
             // ********************
@@ -70,6 +83,9 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
 
             app.UseMvc();
             app.UseStaticFiles();

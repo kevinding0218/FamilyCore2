@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AppNgxBootstrapModule } from './ngxModule/app-ngx-bootstrap.module';
 import { ProgressService, BrowserXhrWithProgress } from './services/progress/progress.service';
@@ -110,11 +111,7 @@ const APP_SERVICES = [
       provide: ErrorHandler, 
       useClass: AppErrorHandler
     },
-    // { 
-    //   provide: BrowserXhr, 
-    //   useClass: BrowserXhrWithProgress 
-    // }, 
-    // ProgressService,
+    AuthService,
     ErrorLogService
   ],
   bootstrap: [AppComponent]

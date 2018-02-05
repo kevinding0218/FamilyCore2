@@ -1,3 +1,4 @@
+import { AuthService } from '../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -112,7 +113,7 @@ export class DashboardComponent implements OnInit{
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  constructor( ) { }
+  constructor(public auth: AuthService) { }
 
   ngOnInit(): void {
     // generate random values for mainChart

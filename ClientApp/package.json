@@ -30,6 +30,8 @@
     "@swimlane/ngx-datatable": "^11.1.7",
     "angular-calendar": "^0.23.2",
     "angular-star-rating": "^3.0.8",
+    "auth0-js": "^9.2.0",
+    "auth0-lock": "^11.0.1",
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-daterangepicker": "^2.1.25",
     "chart.js": "2.7.1",

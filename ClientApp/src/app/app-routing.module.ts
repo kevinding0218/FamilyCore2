@@ -48,8 +48,8 @@ const routes: Routes = [
         loadChildren: './views/pages/pages.module#PagesModule',
       }
     ]
-  },
-  {path: '**', redirectTo: '/pages/404'}
+  }
+  // ,{path: '**', redirectTo: '/pages/404'}
 ];
 
 @NgModule({
