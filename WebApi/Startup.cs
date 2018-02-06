@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.EmailSettings;
 using WebApi.Persistent;
 using WebApi.Persistent.Meal;
 using WebApi.Persistent.Meal.EntreeHelperRepo;
@@ -29,6 +30,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<WebApi.EmailSettings.EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddScoped<IEmailSender, AuthMessageSender>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVegetableRepository, VegetableRepository>();
             services.AddScoped<IEntreeDetailRepository, EntreeDetailRepository>();
