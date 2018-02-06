@@ -1,5 +1,4 @@
-﻿using DomainLibrary.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ using System.Linq;
 namespace DomainLibrary.Member
 {
     [Table("Users")]
-    public class User : TransLog
+    public class User
     {
         public int UserID { get; set; }
 
@@ -34,6 +33,10 @@ namespace DomainLibrary.Member
         [StringLength(255)]
         public string Note { get; set; }
         public bool Active { get; set; }
+        public DateTime PasswordExpired { get; set; }
+        public DateTime AddedOn { get; set; }
+        public int? LastUpdatedById { get; set; }
+        public DateTime? LastUpdatedByOn { get; set; }
 
         [NotMapped]
         public string FullName { get { return String.Format("{0} {1}", FirstName, LastName); } }

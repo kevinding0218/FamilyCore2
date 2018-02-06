@@ -39,6 +39,7 @@ namespace WebApi
             services.AddScoped<IEntreePhotoRepository, EntreePhotoRepository>();
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IPasswordRepository, PasswordRepository>();
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

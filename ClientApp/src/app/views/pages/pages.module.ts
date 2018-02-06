@@ -1,3 +1,4 @@
+import { UserPasswordService } from './../../services/user/userpassword/userpassword.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
@@ -20,6 +21,9 @@ import { PagesRoutingModule } from './pages-routing.module';
     RegisterComponent,
     CallbackComponent,
     ProfileComponent
+  ],
+  providers: [
+    UserPasswordService
   ]
 })
 export class PagesModule { }

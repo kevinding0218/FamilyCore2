@@ -11,9 +11,10 @@ using WebApi.Persistent;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(FcDbContext))]
-    partial class FcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180205235607_removeAddedByInUserTable")]
+    partial class removeAddedByInUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,8 +352,6 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Note")
                         .HasMaxLength(255);
-
-                    b.Property<DateTime>("PasswordExpired");
 
                     b.HasKey("UserID");
 

@@ -11,9 +11,10 @@ using WebApi.Persistent;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(FcDbContext))]
-    partial class FcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180206000301_addPasswordExpireOnUser")]
+    partial class addPasswordExpireOnUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

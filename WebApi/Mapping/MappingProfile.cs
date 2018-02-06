@@ -12,6 +12,7 @@ using WebApi.Resource.Menu;
 using WebApi.Resource.Order;
 using WebApi.Resource.QueryResource;
 using WebApi.Resource.Shared;
+using WebApi.Resource.User;
 
 namespace WebApi.Mapping
 {
@@ -30,12 +31,12 @@ namespace WebApi.Mapping
             DomainToApiEntree();
             // Entree Helper
             DomainToApiEntreeHelper();
-
             // Order
             DomainToApiInitialOrder();
-
             // Menu
             DomainToApiApplicationMenu();
+            // User
+            DomainToApiUser();
             #endregion
 
             #region API Resource/View Model to Domain
@@ -49,6 +50,8 @@ namespace WebApi.Mapping
             ApiToDomainEntree();
             // Order
             ApiToDomainInitialOrder();
+            // User
+            ApiToDomainUser();
             #endregion
         }
 
@@ -133,6 +136,12 @@ namespace WebApi.Mapping
                     ShowBadge = nav.ShowBadge
                 })))
                 .ForMember(nav => nav.Badge, opt => opt.Ignore());
+        }
+
+        private void DomainToApiUser()
+        {
+            this.CreateMap<DomainLibrary.Member.UserPassword, UserPasswordResource>();
+            this.CreateMap<DomainLibrary.Member.User, ViewUserResource>();
         }
         #endregion
 
@@ -273,6 +282,36 @@ namespace WebApi.Mapping
                             }
                         }
                     });
+        }
+
+        private void ApiToDomainUser()
+        {
+            this.CreateMap<UserPasswordResource, DomainLibrary.Member.UserPassword>();
+
+            this.CreateMap<RegisterNewUserResource, DomainLibrary.Member.User>()
+                                .ForMember(u => u.UserID, opt => opt.Ignore())
+                                .ForMember(u => u.FirstName, opt => opt.Ignore())
+                                .ForMember(u => u.LastName, opt => opt.Ignore())
+                                .ForMember(u => u.IsFCUser, opt => opt.Ignore())
+                                .ForMember(u => u.LastLogIn, opt => opt.Ignore())
+                                .ForMember(u => u.Note, opt => opt.Ignore())
+                                .ForMember(u => u.Active, opt => opt.Ignore())
+                                .ForMember(u => u.FullName, opt => opt.Ignore())
+                                .ForMember(u => u.PasswordExpired, opt => opt.Ignore())
+                                .ForMember(u => u.AddedOn, opt => opt.Ignore())
+                                .ForMember(u => u.LastUpdatedById, opt => opt.Ignore())
+                                .ForMember(u => u.LastUpdatedByOn, opt => opt.Ignore())
+                                .ForMember(u => u.LatestUserPassword, opt => opt.Ignore())
+                                .ForMember(u => u.UserPasswords, opt => opt.Ignore())
+                                .AfterMap((rnur, u) =>
+                                {
+                                    u.UserPasswords.Add(new DomainLibrary.Member.UserPassword
+                                    {
+                                        Password = rnur.Password,
+                                        Active = true,
+                                        PasswordCreated = DateTime.Now
+                                    });
+                                });
         }
         #endregion
     }
