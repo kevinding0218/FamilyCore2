@@ -1,0 +1,5 @@
+H:\FamilyCore\WebApi
+--output-path=obj\Any CPU\Release\netcoreapp2.0\
+--application-name=WebApi
+--content-root=H:\FamilyCore\WebApi
+--file=

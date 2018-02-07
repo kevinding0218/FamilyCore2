@@ -42,7 +42,7 @@ namespace WebApi.EmailSettings
                 mail.Priority = MailPriority.High;
                 //mail.Attachments.Add(new Attachment(Server.MapPath("~/myimage.jpg")));
 
-                using (SmtpClient smtp = new SmtpClient(_emailSettings.PrimaryDomain, _emailSettings.SecondaryPort))
+                using (SmtpClient smtp = new SmtpClient(_emailSettings.PrimaryDomain, _emailSettings.PrimaryPort))
                 {
                     smtp.Credentials = new NetworkCredential(_emailSettings.UsernameEmail, _emailSettings.UsernamePassword);
                     smtp.EnableSsl = true;

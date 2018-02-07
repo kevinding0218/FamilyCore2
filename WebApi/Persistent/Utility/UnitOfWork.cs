@@ -8,6 +8,7 @@ namespace WebApi.Persistent.Utility
         public UnitOfWork(FcDbContext context)
         {
             this._context = context;
+            //this._context.Database.EnsureCreated();
         }
 
         public async Task CompleteAsync()

@@ -6,7 +6,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EntreeService {
-  private readonly apiEndPoint: string = 'http://localhost:49934/api/entree';
+  private readonly apiPort: string = localStorage.getItem('WebApiPath').toString();
+  private readonly apiEndPoint: string = this.apiPort + '/entree';
   constructor(private _http: Http) { }
 
   getEntree(id) {

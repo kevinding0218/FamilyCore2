@@ -7,10 +7,12 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class VegetableService {
-  private readonly serviceApiEndPoint: string = 'http://localhost:49934/api/vegetable';
-  private readonly debugApiEndPoint: string = 'http://localhost:5000/api/vegetable';
-  private isDebug: boolean = false;
-  private readonly apiEndPoint: string = this.isDebug ? this.debugApiEndPoint : this.serviceApiEndPoint;
+  // private readonly serviceApiEndPoint: string = 'http://localhost:49934/api/vegetable';
+  // private readonly debugApiEndPoint: string = 'http://localhost:5000/api/vegetable';
+  // private isDebug: boolean = false;
+  // private readonly apiEndPoint: string = this.isDebug ? this.debugApiEndPoint : this.serviceApiEndPoint;
+  private readonly apiPort: string = localStorage.getItem('WebApiPath').toString();
+  private readonly apiEndPoint: string = this.apiPort + '/vegetable';
   constructor(private _http: Http) { }
 
   getVegetable(id) {

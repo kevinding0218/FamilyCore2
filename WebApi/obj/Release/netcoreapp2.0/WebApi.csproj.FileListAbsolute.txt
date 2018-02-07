@@ -1,0 +1,13 @@
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\WebApi.deps.json
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\WebApi.runtimeconfig.json
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\WebApi.runtimeconfig.dev.json
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\WebApi.dll
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\WebApi.pdb
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\DomainLibrary.dll
+H:\FamilyCore\WebApi\bin\Release\netcoreapp2.0\DomainLibrary.pdb
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.csprojResolveAssemblyReference.cache
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.csproj.CoreCompileInputs.cache
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.AssemblyInfoInputs.cache
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.AssemblyInfo.cs
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.dll
+H:\FamilyCore\WebApi\obj\Release\netcoreapp2.0\WebApi.pdb

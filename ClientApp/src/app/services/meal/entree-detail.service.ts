@@ -7,10 +7,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EntreeDetailService {
-  private readonly serviceApiEndPoint: string = 'http://localhost:49934/api/entreeDetail';
-  private readonly debugApiEndPoint: string = 'http://localhost:5000/api/entreeDetail';
-  private isDebug: boolean = false;
-  private readonly apiEndPoint: string = this.isDebug ? this.debugApiEndPoint : this.serviceApiEndPoint;
+  private readonly apiPort: string = localStorage.getItem('WebApiPath').toString();
+  private readonly apiEndPoint: string = this.apiPort + '/entreeDetail';
   constructor(private _http: Http) { }
 
   getEntreeDetail(id) {

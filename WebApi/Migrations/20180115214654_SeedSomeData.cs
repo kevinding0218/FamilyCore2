@@ -6,30 +6,30 @@ namespace WebApi.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("INSERT INTO Users(Email, FirstName, LastName, IsFCUser, LastLogIn, AddedById, AddedOn) VALUES ('kevinding0218@gmail.com', 'Ran', 'Ding', 1, GETDATE(), 1, GETDATE())");
+            //migrationBuilder.Sql("INSERT INTO Users(Email, FirstName, LastName, IsFCUser, LastLogIn, AddedById, AddedOn) VALUES ('kevinding0218@gmail.com', 'Ran', 'Ding', 1, GETDATE(), 1, GETDATE())");
 
-            //Seed into EntreeDetailType
-            SeedEntreeDetailType(migrationBuilder);
+            ////Seed into EntreeDetailType
+            //SeedEntreeDetailType(migrationBuilder);
 
-            //Seed Vegetable into EntreeDetail
-            SeedEntreeDetailVegetable(migrationBuilder);
+            ////Seed Vegetable into EntreeDetail
+            //SeedEntreeDetailVegetable(migrationBuilder);
 
-            //Seed Meat into EntreeDetail
-            SeedEntreeDetailMeat(migrationBuilder);
+            ////Seed Meat into EntreeDetail
+            //SeedEntreeDetailMeat(migrationBuilder);
 
-            //Seed into StapleFood
-            SeedStapleFood(migrationBuilder);
+            ////Seed into StapleFood
+            //SeedStapleFood(migrationBuilder);
 
-            //Seed into Entree Category
-            SeedEntreeCategory(migrationBuilder);
+            ////Seed into Entree Category
+            //SeedEntreeCategory(migrationBuilder);
 
-            //Seed into Entree Style
-            SeedEntreeStyle(migrationBuilder);
+            ////Seed into Entree Style
+            //SeedEntreeStyle(migrationBuilder);
 
-            //Seed into Entree
-            SeedEntree(migrationBuilder);
+            ////Seed into Entree
+            //SeedEntree(migrationBuilder);
 
-            SeedEntree_Details(migrationBuilder);
+            //SeedEntree_Details(migrationBuilder);
         }
 
         private static void SeedEntree_Details(MigrationBuilder migrationBuilder)

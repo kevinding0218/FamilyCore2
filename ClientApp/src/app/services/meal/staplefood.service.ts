@@ -7,7 +7,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class StaplefoodService {
-  private readonly apiEndPoint: string = 'http://localhost:49934/api/stapleFood';
+  private readonly apiPort: string = localStorage.getItem('WebApiPath').toString();
+  private readonly apiEndPoint: string = this.apiPort + '/stapleFood';
   constructor(private _http: Http) { }
 
   getStaplefood(id) {

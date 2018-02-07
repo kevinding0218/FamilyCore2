@@ -7,7 +7,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class EntreeHelperService {
-  private readonly apiEndPoint: string = 'http://localhost:49934/api/entreeHelper';
+  private readonly apiPort: string = localStorage.getItem('WebApiPath').toString();
+  private readonly apiEndPoint: string = this.apiPort + '/entreeHelper';
   constructor(private _http: Http, private _httpClient: HttpClient) { }
 
   getEntreeHelperDropdownItems(attribute, currentEntreeId) {
