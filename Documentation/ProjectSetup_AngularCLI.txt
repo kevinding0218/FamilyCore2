@@ -481,6 +481,8 @@ npm install ng2-daterangepicker --save
 --------------------
 Auto0
 ran.ding@familycore.com Leave2012
+Azure location:
+http://familycoredev.azurewebsites.net
 
 
 
