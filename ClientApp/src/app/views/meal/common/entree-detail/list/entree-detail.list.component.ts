@@ -167,7 +167,7 @@ export class EntreeDetailListComponent implements OnInit {
         this.toggleExpandRowClick.emit(id);
     }
 
-    onDetailToggle() {
+    onDetailToggle(event) {
         console.log('Detail Toggled', event);
     }
 }

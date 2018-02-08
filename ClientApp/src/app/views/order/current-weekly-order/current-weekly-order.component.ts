@@ -199,6 +199,7 @@ export class CurrentWeeklyOrderComponent implements OnInit {
   initialCurrentEvents() {
     var currentWeeklyEntreeList = this.currentWeekOrderInitialInfo.entreeInfoList;
     currentWeeklyEntreeList.forEach((element) => {
+      console.log('element in initialCurrentEvents', element);
       if (element.scheduledDate == null) {
         let newCalendarEvent: CalendarEvent = {
           title: element.entreeName,
@@ -265,43 +266,50 @@ export class CurrentWeeklyOrderComponent implements OnInit {
     newStart,
     newEnd
   }: CalendarEventTimesChangedEvent): void {
-    // console.log('eventDropped newStart', newStart);
-    // console.log('eventDropped newEnd', newEnd);
-    // console.log('eventDropped event', event);
+    console.log('eventDropped newStart', newStart);
+    console.log('eventDropped newEnd', newEnd);
+    console.log('eventDropped event', event);
     this.changeEventLog.push(event.title + ' has been placed on ' + newStart.toLocaleDateString());
     event.draggable = false;
     let existedMapping = this.initialEvents.find(e => e.title === event.title);
     if (existedMapping != null || typeof(existedMapping) != 'undefined') {
       if (existedMapping.start.toLocaleDateString() != newStart.toLocaleDateString()) {
-        var updateMapping: EntreeOrderMappingSchedule = {
-          orderId: event.meta.orderId,
-          entreeId: event.meta.entreeId,
-          scheduleDate: newStart
-        }
-        this._currentOrderService.updateEntreeOrderSchedule(updateMapping)
-          .subscribe(
-          (data) => {
-            event.draggable = true;
-          },
-          (err) => {
-            HelperMethod.subscribeErrorHandler(err, this.toastr);
-          }
-          );
-        const externalIndex: number = this.externalEvents.indexOf(event);
-        if (externalIndex > -1) {
-          this.externalEvents.splice(externalIndex, 1);
-          this.initialEvents.push(event);
-        }
-        event.start = newStart;
-        if (newEnd) {
-          event.end = newEnd;
-        }
-        this.viewDate = newStart;
-        this.activeDayIsOpen = true;
+        this.updateScheduledDateInDb(event, newStart, newEnd);
       } else {
         console.log('Event is not changed!');
       }
+    } else {
+      this.updateScheduledDateInDb(event, newStart, newEnd);
     }
     
+  }
+  
+  updateScheduledDateInDb(event, newStart, newEnd) {
+    var updateMapping: EntreeOrderMappingSchedule = {
+      orderId: event.meta.orderId,
+      entreeId: event.meta.entreeId,
+      scheduleDate: newStart
+    }
+    console.log('updateMapping is ', updateMapping);
+    this._currentOrderService.updateEntreeOrderSchedule(updateMapping)
+      .subscribe(
+      (data) => {
+        event.draggable = true;
+      },
+      (err) => {
+        HelperMethod.subscribeErrorHandler(err, this.toastr);
+      }
+      );
+    const externalIndex: number = this.externalEvents.indexOf(event);
+    if (externalIndex > -1) {
+      this.externalEvents.splice(externalIndex, 1);
+      this.initialEvents.push(event);
+    }
+    event.start = newStart;
+    if (newEnd) {
+      event.end = newEnd;
+    }
+    this.viewDate = newStart;
+    this.activeDayIsOpen = true;
   }
 }

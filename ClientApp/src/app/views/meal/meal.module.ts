@@ -1,5 +1,4 @@
 import { AppNgxBootstrapModule } from './../../ngxModule/app-ngx-bootstrap.module';
-import { PaginationComponent } from './../../components/table-pagination/pagination.component';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

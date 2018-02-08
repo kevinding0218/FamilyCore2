@@ -8,6 +8,8 @@
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "./app/views/meal/vegetable/vegetable-form/vegetable-form-query.component.ts",
+    "./app/views/meal/vegetable/vegetable-list/vegetable-list-query.component.ts"
   ]
 }

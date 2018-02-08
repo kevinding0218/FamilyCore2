@@ -72,7 +72,7 @@ namespace WebApi
             corsBuilder.AllowAnyHeader();
             corsBuilder.AllowAnyMethod();
             corsBuilder.AllowAnyOrigin(); // For anyone access.
-            corsBuilder.WithOrigins("http://localhost:4200"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.WithOrigins("http://localhost:4200", "https://familycoredevsite.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.AllowCredentials();
 
             services.AddCors(options =>

@@ -98,6 +98,15 @@ export class DashboardComponent implements OnInit{
   public mainChartLegend = false;
   public mainChartType = 'line';
 
+  // events
+  public chartClicked(e: any): void {
+    console.log(e);
+  }
+
+  public chartHovered(e: any): void {
+    console.log(e);
+  }
+
   // convert Hex to RGBA
   public convertHex(hex: string, opacity: number) {
     hex = hex.replace('#', '');

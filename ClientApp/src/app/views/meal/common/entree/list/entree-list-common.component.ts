@@ -130,7 +130,7 @@ export class EntreeListCommonComponent implements OnInit {
         this.toggleExpandRowClick.emit(id);
     }
 
-    onDetailToggle() {
+    onDetailToggle(event) {
         console.log('Detail Toggled', event);
     }
 

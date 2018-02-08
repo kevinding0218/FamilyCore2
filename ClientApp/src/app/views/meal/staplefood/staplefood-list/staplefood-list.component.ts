@@ -80,7 +80,7 @@ export class StaplefoodListComponent implements OnInit {
     this.mainTable.rowDetail.toggleExpandRow(row);
   }
 
-  onDetailToggle(){
+  onDetailToggle(event){
     console.log('Detail Toggled', event);
   }
 

@@ -483,6 +483,24 @@ Auto0
 ran.ding@familycore.com Leave2012
 Azure location:
 http://familycoredev.azurewebsites.net
+--------------------
+
+Deploy angular project to azure
+ng build --prod --bh
+--bh: basic href 
+cd..cd..cd..
+mkdir newAzureDeployFolder
+cd newAzureDeployFolder
+git init
+$copy all build file to this folder from dist
+git add *
+git commit --message "initial checkin"
+git remote add origin (paste the url)
+git remote -v
+git push origin master
+Authentication
+familycore
+TexasLuther01
 
 
 
