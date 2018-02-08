@@ -91,7 +91,7 @@ export class VegetableFormQueryComponent implements OnInit {
           }
         });
     } else {
-      this.vegetable.addedById = 2;
+      this.vegetable.addedById = +localStorage.getItem('userId');
       this.vegetable.addedOn = new Date();
       this._vegetableService.create(this.vegetable)
         .subscribe(x => {

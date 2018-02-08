@@ -219,7 +219,7 @@ export class EntreeFormCommonComponent implements OnInit {
     }
 
     addEntree() {
-        this.entree.addedById = 2;
+        this.entree.addedById = +localStorage.getItem('userId');
         this.entree.addedOn = new Date();
         this.entree.stapleFoodId = this.entree.stapleFoodId == 0 ? null: this.entree.stapleFoodId;
         this._entreeService.createEntree(this.entree)

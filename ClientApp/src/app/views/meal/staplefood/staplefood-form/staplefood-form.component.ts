@@ -92,7 +92,7 @@ export class StaplefoodFormComponent implements OnInit {
                     }
                 });
         } else {
-            this.staplefood.addedById = 2;
+            this.staplefood.addedById = +localStorage.getItem('userId');
             this.staplefood.addedOn = new Date();
             this._staplefoodService.create(this.staplefood)
                 .subscribe(x => {

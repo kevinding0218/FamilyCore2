@@ -101,7 +101,7 @@ export class EntreeDetailFormComponent implements OnInit {
     }
 
     updateEntreeDetail() {
-        this.entreeDetail.lastUpdatedById = 2;
+        this.entreeDetail.lastUpdatedById = +localStorage.getItem('userId');
 
         this._entreeDetailService.update(this.entreeDetail)
             .subscribe(
@@ -123,7 +123,7 @@ export class EntreeDetailFormComponent implements OnInit {
     }
 
     addEntreeDetail() {
-        this.entreeDetail.addedById = 2;
+        this.entreeDetail.addedById = +localStorage.getItem('userId');
         this.entreeDetail.addedOn = new Date();
         this._entreeDetailService.create(this.entreeDetail)
             .subscribe(

@@ -1,10 +1,3 @@
-USE [FamilyCore_Dev]
-GO
-/****** Object:  StoredProcedure [dbo].[GetEntreeInfoById]    Script Date: 1/15/2018 8:25:50 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
@@ -35,54 +28,54 @@ BEGIN
 		ISNULL(e.Note, '') AS Note,
 		e.AddedById, addedUser.FirstName + ' ' + addedUser.LastName AS AddedByUserName, 
 		CONVERT(varchar(25), e.AddedOn, 120)  as AddedOn
-		FROM FamilyCore_Dev.dbo.Entree e
-		LEFT JOIN FamilyCore_Dev.dbo.StapleFood sf ON sf.Id = e.StapleFoodId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
-		LEFT JOIN FamilyCore_Dev.dbo.Users addedUser ON addedUser.UserID = e.AddedById
+		FROM dbo.Entree e
+		LEFT JOIN dbo.StapleFood sf ON sf.Id = e.StapleFoodId
+		INNER JOIN dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
+		INNER JOIN dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
+		LEFT JOIN dbo.Users addedUser ON addedUser.UserID = e.AddedById
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE es.Id = @Id
@@ -103,54 +96,54 @@ BEGIN
 		ISNULL(e.Note, '') AS Note,
 		e.AddedById, addedUser.FirstName + ' ' + addedUser.LastName AS AddedByUserName, 
 		CONVERT(varchar(25), e.AddedOn, 120)  as AddedOn
-		FROM FamilyCore_Dev.dbo.Entree e
-		LEFT JOIN FamilyCore_Dev.dbo.StapleFood sf ON sf.Id = e.StapleFoodId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
-		LEFT JOIN FamilyCore_Dev.dbo.Users addedUser ON addedUser.UserID = e.AddedById
+		FROM dbo.Entree e
+		LEFT JOIN dbo.StapleFood sf ON sf.Id = e.StapleFoodId
+		INNER JOIN dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
+		INNER JOIN dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
+		LEFT JOIN dbo.Users addedUser ON addedUser.UserID = e.AddedById
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE ec.Id = @Id
@@ -171,54 +164,54 @@ BEGIN
 		ISNULL(e.Note, '') AS Note,
 		e.AddedById, addedUser.FirstName + ' ' + addedUser.LastName AS AddedByUserName, 
 		CONVERT(varchar(25), e.AddedOn, 120)  as AddedOn
-		FROM FamilyCore_Dev.dbo.Entree e
-		LEFT JOIN FamilyCore_Dev.dbo.StapleFood sf ON sf.Id = e.StapleFoodId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
-		INNER JOIN FamilyCore_Dev.dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
-		LEFT JOIN FamilyCore_Dev.dbo.Users addedUser ON addedUser.UserID = e.AddedById
+		FROM dbo.Entree e
+		LEFT JOIN dbo.StapleFood sf ON sf.Id = e.StapleFoodId
+		INNER JOIN dbo.EntreeStyle es ON es.Id = e.EntreeStyleId
+		INNER JOIN dbo.EntreeCatagory ec ON ec.Id = e.EntreeCatagoryId
+		LEFT JOIN dbo.Users addedUser ON addedUser.UserID = e.AddedById
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
 		(
 			SELECT COUNT(*) AS DetailCount, e.Id, edt.DetailType
-			FROM FamilyCore_Dev.dbo.Entree e
-			INNER JOIN FamilyCore_Dev.dbo.Entrees_Details eds ON eds.EntreeId = e.Id
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN FamilyCore_Dev.dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			FROM dbo.Entree e
+			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
+			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		ORDER BY e.LastUpdatedByOn DESC, e.CurrentRank DESC

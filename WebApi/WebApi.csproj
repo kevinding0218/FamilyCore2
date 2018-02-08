@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180115214654_SeedSomeData.cs" />
+    <Compile Remove="Migrations\20180115214654_SeedSomeData.Designer.cs" />
     <Compile Remove="Migrations\20180130035310_removePrimaryKeyInOrderEntree.cs" />
     <Compile Remove="Migrations\20180130035310_removePrimaryKeyInOrderEntree.Designer.cs" />
     <Compile Remove="Migrations\20180130035451_removekeydroptable.cs" />

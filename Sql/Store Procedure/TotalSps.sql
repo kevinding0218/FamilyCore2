@@ -48,12 +48,16 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT O.Id AS OrderId, E.Id AS EntreeId, 
 	ES.Style, EC.Catagory, E.Name AS EntreeName, 
-	EO.Count AS EntreeCount, EO.ScheduledDate, EO.Note AS Note, 'assets/images/logo.png' AS EntreeImgUrl
+	EO.Count AS EntreeCount, EO.ScheduledDate, EO.Note AS Note, PrimaryPhoto.FileName AS EntreeImgUrl
 	FROM dbo.[Order] O
 	INNER JOIN dbo.Entrees_Orders EO ON EO.OrderId = O.Id
 	INNER JOIN dbo.Entree E ON EO.EntreeId = E.Id
 	INNER JOIN dbo.EntreeStyle ES ON ES.Id = E.EntreeStyleId
 	INNER JOIN dbo.EntreeCatagory EC ON EC.Id = E.EntreeCatagoryId
+	LEFT JOIN (
+		SELECT TOP 1 ep.FileName, ep.EntreeId FROM dbo.Entree e
+		INNER JOIN dbo.EntreePhoto ep ON ep.EntreeId = e.Id
+	)PrimaryPhoto ON PrimaryPhoto.EntreeId = e.Id
 	WHERE O.StartDate <= ISNULL(@StartDate, GETDATE()) AND O.EndDate > ISNULL(@EndDate, GETDATE())
 END
 GO
@@ -251,7 +255,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
@@ -260,7 +264,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
@@ -269,7 +273,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -278,7 +282,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -287,7 +291,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE es.Id = @Id
@@ -319,7 +323,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
@@ -328,7 +332,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
@@ -337,7 +341,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -346,7 +350,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -355,7 +359,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE ec.Id = @Id
@@ -387,7 +391,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
@@ -396,7 +400,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
@@ -405,7 +409,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -414,7 +418,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -423,7 +427,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		ORDER BY e.LastUpdatedByOn DESC, e.CurrentRank DESC
@@ -466,7 +470,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
@@ -475,7 +479,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
@@ -484,7 +488,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -493,7 +497,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -502,7 +506,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE eds.EntreeDetailId = @Id
@@ -532,7 +536,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 			GROUP BY e.Id, edt.DetailType
 		) VegeCountTable ON VegeCountTable.Id = e.Id
 		LEFT JOIN
@@ -541,7 +545,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 			GROUP BY e.Id, edt.DetailType
 		) MeatCountTable ON MeatCountTable.Id = e.Id
 		LEFT JOIN
@@ -550,7 +554,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 			GROUP BY e.Id, edt.DetailType
 		) SeafoodCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -559,7 +563,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 			GROUP BY e.Id, edt.DetailType
 		) IngredientCountTable ON SeafoodCountTable.Id = e.Id
 		LEFT JOIN
@@ -568,7 +572,7 @@ BEGIN
 			FROM dbo.Entree e
 			INNER JOIN dbo.Entrees_Details eds ON eds.EntreeId = e.Id
 			INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+			INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 			GROUP BY e.Id, edt.DetailType
 		) SauceCountTable ON SeafoodCountTable.Id = e.Id
 		WHERE sf.Id = @Id
@@ -591,7 +595,7 @@ BEGIN
 					Select ISNULL(ed.Name, '') + ' x ' + LTRIM(STR(ISNULL(eds.Quantity, 0))) + ', ' AS [text()]
 					FROM dbo.Entrees_Details eds
 					INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = ' ﬂ≤À'
+					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N' ﬂ≤À'
 					Where eds.EntreeId = ST2.EntreeId
 					ORDER BY eds.EntreeId
 					For XML PATH ('')
@@ -605,7 +609,7 @@ BEGIN
 					Select ISNULL(ed.Name, '') + ' x ' + LTRIM(STR(ISNULL(eds.Quantity, 0))) + ', ' AS [text()]
 					FROM dbo.Entrees_Details eds
 					INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '»‚¿‡'
+					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'»‚¿‡'
 					Where eds.EntreeId = ST2.EntreeId
 					ORDER BY eds.EntreeId
 					For XML PATH ('')
@@ -619,7 +623,7 @@ BEGIN
 					Select ISNULL(ed.Name, '') + ' x ' + LTRIM(STR(ISNULL(eds.Quantity, 0))) + ', ' AS [text()]
 					FROM dbo.Entrees_Details eds
 					INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '∫£œ '
+					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'∫£œ '
 					Where eds.EntreeId = ST2.EntreeId
 					ORDER BY eds.EntreeId
 					For XML PATH ('')
@@ -633,7 +637,7 @@ BEGIN
 					Select ISNULL(ed.Name, '') + ' x ' + LTRIM(STR(ISNULL(eds.Quantity, 0))) + ', ' AS [text()]
 					FROM dbo.Entrees_Details eds
 					INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = 'Ω¥÷≠'
+					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'Ω¥÷≠'
 					Where eds.EntreeId = ST2.EntreeId
 					ORDER BY eds.EntreeId
 					For XML PATH ('')
@@ -647,7 +651,7 @@ BEGIN
 					Select ISNULL(ed.Name, '') + ' x ' + LTRIM(STR(ISNULL(eds.Quantity, 0))) + ', ' AS [text()]
 					FROM dbo.Entrees_Details eds
 					INNER JOIN dbo.EntreeDetail ed ON ed.Id = eds.EntreeDetailId
-					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = '≈‰¡œ'
+					INNER JOIN dbo.EntreeDetailType edt ON edt.Id = ed.EntreeDetailTypeId AND edt.DetailType = N'≈‰¡œ'
 					Where eds.EntreeId = ST2.EntreeId
 					ORDER BY eds.EntreeId
 					For XML PATH ('')
@@ -670,7 +674,7 @@ BEGIN
 	IF @splitBy = 'catagory'
 	BEGIN
 		SELECT COUNT(e.Id) AS SplitByCount, ec.Id AS SplitId, ec.Catagory AS SplitByName 
-		, CAST((COUNT(e.Id) * 100/(SELECT COUNT(*) FROM dbo.Entree)) AS VARCHAR) AS SplitByPercentage
+		, CAST((COUNT(e.Id) * 100/(SELECT CASE COUNT(*) WHEN 0 THEN 1 ELSE COUNT(*) END FROM dbo.Entree)) AS VARCHAR) AS SplitByPercentage
 		, ec.Id % 5 AS StyleBgId
 		FROM [dbo].EntreeCatagory ec 
 		LEFT JOIN dbo.Entree e ON e.EntreeCatagoryId = ec.Id
@@ -679,7 +683,7 @@ BEGIN
 	ELSE IF @splitBy = 'style'
 	BEGIN
 		SELECT COUNT(e.Id) AS SplitByCount, es.Id AS SplitId, es.Style AS SplitByName 
-		, CAST((COUNT(e.Id) * 100/(SELECT COUNT(*) FROM dbo.Entree)) AS VARCHAR) AS SplitByPercentage
+		, CAST((COUNT(e.Id) * 100/(SELECT CASE COUNT(*) WHEN 0 THEN 1 ELSE COUNT(*) END FROM dbo.Entree)) AS VARCHAR) AS SplitByPercentage
 		, es.Id % 5 AS StyleBgId
 		FROM [dbo].EntreeStyle es 
 		LEFT JOIN dbo.Entree e ON e.EntreeStyleId = es.Id

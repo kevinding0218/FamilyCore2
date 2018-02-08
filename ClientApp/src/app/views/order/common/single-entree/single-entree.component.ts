@@ -11,6 +11,7 @@ export class SingleEntreeComponent implements OnInit {
   @Input() entree: OrderProcessingSingleEntree;
   @Output('removeEntree') removeEntreeEmitter = new EventEmitter();
 
+  apiFtp: string = localStorage.getItem('WebApiFtp').toString();
   constructor() { }
 
   ngOnInit() {
