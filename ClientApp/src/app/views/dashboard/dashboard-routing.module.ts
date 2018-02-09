@@ -1,3 +1,4 @@
+import { MemberAuthGuard } from './../../services/member/member.auth.guard.service';
 import { NgModule } from '@angular/core';
 import { Routes,
      RouterModule } from '@angular/router';
@@ -10,7 +11,8 @@ const routes: Routes = [
     component: DashboardComponent,
     data: {
       title: 'Dashboard'
-    }
+    },
+    canActivate: [MemberAuthGuard]
   }
 ];
 

@@ -12,6 +12,15 @@ import { RegisterComponent } from './register.component';
 
 import { PagesRoutingModule } from './pages-routing.module';
 
+// import service
+import {
+  UserService
+} from './../../services';
+
+const MEMBER_SERVICE_COMPONENTS = [
+  UserService
+]
+
 @NgModule({
   imports: [ FormsModule, CommonModule, PagesRoutingModule ],
   declarations: [
@@ -23,6 +32,7 @@ import { PagesRoutingModule } from './pages-routing.module';
     ProfileComponent
   ],
   providers: [
+    ...MEMBER_SERVICE_COMPONENTS,
     UserPasswordService
   ]
 })

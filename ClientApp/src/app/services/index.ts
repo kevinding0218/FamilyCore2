@@ -4,3 +4,4 @@ export * from './order';
 export * from './progress';
 export * from './upload';
 export * from './menu';
+export * from './member';

@@ -1,3 +1,5 @@
+import { UserService } from './../../services/member/user.service';
+import { MemberAuthGuard } from './../../services/member/member.auth.guard.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +21,6 @@ import { CommonModule } from '@angular/common';
     ButtonsModule.forRoot()
   ],
   declarations: [ DashboardComponent ],
-  providers: [AuthService]
+  providers: [MemberAuthGuard, UserService, AuthService]
 })
 export class DashboardModule { }

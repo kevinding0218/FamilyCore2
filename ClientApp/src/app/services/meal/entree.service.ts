@@ -1,6 +1,6 @@
 import { SaveEntree } from './../../viewModels/meal/entree';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 
@@ -15,9 +15,16 @@ export class EntreeService {
       .map(res => res.json());
   }
 
+
   //api/entree/group?splitBy=a&id=b
   getEntrees(splitBy, id) {
-    return this._http.get(this.apiEndPoint + '/group?splitBy=' + splitBy + '&id=' + id)
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let authToken = localStorage.getItem('auth_token');
+    headers.append('Authorization', `Bearer ${authToken}`);
+    console.log('headers is ', headers);
+
+    return this._http.get(this.apiEndPoint + '/group?splitBy=' + splitBy + '&id=' + id, {headers})
       .map(res => res.json());
   }
 

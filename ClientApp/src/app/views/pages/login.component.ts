@@ -1,3 +1,5 @@
+import { UserService } from './../../services/member/user.service';
+import { Credentials } from './../../viewModels/member/credentials';
 import { RegisterInfo } from './../../viewModels/user/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserPasswordService } from './../../services/user/userpassword/userpassword.service';
@@ -9,30 +11,51 @@ import { HelperMethod } from './../../utility/helper/helperMethod';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent {
-  loginUser: RegisterInfo = {
-    email: '',
-    password: ''
-  };
-
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _upService: UserPasswordService,
+    private _userService: UserService,
     private toastr: ToastrService) { }
 
+  // Old Login
+  // loginUser: RegisterInfo = {
+  //   email: '',
+  //   password: ''
+  // };
+  // loginVerify() {
+  //   this._upService.verify(this.loginUser)
+  //     .subscribe(result => {
+  //       console.log('result is', result);
+  //       localStorage.setItem('userId', result.userID);
+  //       this.toastr.success('Welcome ' + this.loginUser.email + '!', 'Logged In');
+  //       this._router.navigate(['/dashboard']);
+  //     },
+  //     (err) => {
+  //       if (err.status === 404) {
+  //         this.toastr.error('Incorrect Access Info!', 'Logged Failed');
+  //       }
+  //     });
+  // }
+
+  // Jwt token login
+  errors: string;
+  isRequesting: boolean;
+  submitted: boolean = false;
+  loginUser: Credentials = { email: '', password: '' };
   loginVerify() {
-    this._upService.verify(this.loginUser)
-      .subscribe(result => {
-        console.log('result is', result);
-        localStorage.setItem('userId', result.userID);
-        this.toastr.success('Welcome ' + this.loginUser.email + '!', 'Logged In');
-        this._router.navigate(['/dashboard']);
-      },
-      (err) => {
-        if (err.status === 404) {
-          this.toastr.error('Incorrect Access Info!', 'Logged Failed');
+    this.submitted = true;
+    this.isRequesting = true;
+    this.errors = '';
+    this._userService.login(this.loginUser.email, this.loginUser.password)
+      .finally(() => this.isRequesting = false)
+      .subscribe(
+      result => {
+        if (result) {
+          this._router.navigate(['/dashboard']);
         }
-      });
+      },
+      error => this.errors = error);
   }
 
   forgetPassword() {

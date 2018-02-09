@@ -480,10 +480,13 @@ npm install --save angular-calendar
 npm install ng2-daterangepicker --save
 --------------------
 Auto0
-ran.ding@familycore.com Leave2012
+ran.ding@familycore.com Leave2012/Macro123
+demo@familycore.com demo123
 Azure location:
 http://familycoredev.azurewebsites.net
 --------------------
+Common Issue:
+FromBody object is null, check sending json object format especially if it's missing ","
 
 Deploy angular project to azure
 ng build --prod --bh

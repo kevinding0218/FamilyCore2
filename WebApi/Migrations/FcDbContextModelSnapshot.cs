@@ -322,6 +322,74 @@ namespace WebApi.Migrations
                     b.ToTable("Supermarket_StapleFood");
                 });
 
+            modelBuilder.Entity("DomainLibrary.Member.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<long?>("FacebookId");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<long?>("GoogleId");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PictureUrl");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUser");
+                });
+
+            modelBuilder.Entity("DomainLibrary.Member.Member", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Gender");
+
+                    b.Property<string>("IdentityId");
+
+                    b.Property<string>("Locale");
+
+                    b.Property<string>("Location");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("Members");
+                });
+
             modelBuilder.Entity("DomainLibrary.Member.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -548,6 +616,13 @@ namespace WebApi.Migrations
                         .WithMany()
                         .HasForeignKey("SuperMarketId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DomainLibrary.Member.Member", b =>
+                {
+                    b.HasOne("DomainLibrary.Member.AppUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId");
                 });
 
             modelBuilder.Entity("DomainLibrary.Member.UserPassword", b =>

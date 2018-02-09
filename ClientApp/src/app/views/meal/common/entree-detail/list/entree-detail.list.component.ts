@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -6,7 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'entree-detail-list',
-    templateUrl: './entree-detail-list.component.html'
+    templateUrl: './entree-detail-list.component.html',
+    styleUrls: [ './entree-detail-list.component.css']
 })
 
 export class EntreeDetailListComponent implements OnInit {
@@ -169,5 +171,27 @@ export class EntreeDetailListComponent implements OnInit {
 
     onDetailToggle(event) {
         console.log('Detail Toggled', event);
+    }
+
+    filterData(event) {
+        console.log(event);
+        let columnName = event.target.id;
+        const filterValue = event.target.value.toLowerCase();
+        console.log('columnName is ' + columnName + '; filterValue is ' + filterValue);
+        console.log('this.temp_grid is ', this.temp_grid);
+        let filteredData = this.temp_grid.filter(function (d) {
+            console.log('d is ', d);
+            console.log('d.note is ' + d.note);
+            console.log('d[note] is ' + d['note']);
+            if (columnName == 'keyValuePairInfo.id') {
+                return d.keyValuePairInfo.id.indexOf(filterValue) !== -1 || !filterValue;
+            } else if (columnName == 'keyValuePairInfo.name') {
+                return d.keyValuePairInfo.name.indexOf(filterValue) !== -1 || !filterValue;
+            } else {
+                return d[columnName].indexOf(filterValue) !== -1 || !filterValue;
+            }
+        });
+        this.ngx_rows = filteredData;
+        this.mainTable.offset = 0;
     }
 }

@@ -45,7 +45,18 @@
                 </ng-template>
               </ngx-datatable-column>
               <div *ngFor="let c of ngx_columns">
-                <ngx-datatable-column [name]="c.name" sortable="false" [prop]="c.prop"></ngx-datatable-column>
+                <ngx-datatable-column [name]="c.name" sortable="false" [prop]="c.prop" headerClass="textright" cellClass="textright">
+                  <ng-template let-column="column" height="200" ngx-datatable-header-template >
+                    <label style="height:10px;cursor:pointer">{{ c.name }}</label><br/>
+                    <input
+                          type='text'
+                          [id]="c.prop"
+                          style='width:50%;height:25px;border:1px solid #c2cfd6;padding: 0.375rem 0.375rem;'
+                          placeholder='Filter..'
+                          (keyup)='filterData($event)'
+                        />
+                      </ng-template>
+                </ngx-datatable-column>
               </div>
               <ngx-datatable-column name="Actions" sortable="false" prop="keyValuePairInfo.id">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

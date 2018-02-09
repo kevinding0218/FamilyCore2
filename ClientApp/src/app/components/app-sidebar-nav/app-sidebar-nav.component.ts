@@ -85,7 +85,7 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
     </li>
     <ng-template #dropdown>
       <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
-          [class.open]="isActive()"
+          [class.open]="true"
           routerLinkActive="open"
           appNavDropdown>
         <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>

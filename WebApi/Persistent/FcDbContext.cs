@@ -25,6 +25,7 @@ namespace WebApi.Persistent
         public DbSet<DomainLibrary.Order.Order> Orders { get; set; }
         public DbSet<EntreePhoto> EntreePhotos { get; set; }
         public DbSet<ApplicationMenu> Menus { get; set; }
+        public DbSet<DomainLibrary.Member.Member> Members { get; set; }
 
 
 

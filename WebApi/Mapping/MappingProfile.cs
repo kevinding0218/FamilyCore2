@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using DomainLibrary.Member;
 using DomainLibrary.Menu;
 using DomainLibrary.Order;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using WebApi.Persistent.Query;
 using WebApi.Resource.Meal.EntreeResource;
 using WebApi.Resource.Meal.PhotoResource;
+using WebApi.Resource.Member;
 using WebApi.Resource.Menu;
 using WebApi.Resource.Order;
 using WebApi.Resource.QueryResource;
@@ -52,6 +54,8 @@ namespace WebApi.Mapping
             ApiToDomainInitialOrder();
             // User
             ApiToDomainUser();
+            // Member 
+            ApiToDomainMember();
             #endregion
         }
 
@@ -312,6 +316,12 @@ namespace WebApi.Mapping
                                         PasswordCreated = DateTime.Now
                                     });
                                 });
+        }
+
+        private void ApiToDomainMember()
+        {
+            this.CreateMap<RegistrationViewModel, AppUser>()
+                .ForMember(app => app.UserName, map => map.MapFrom(vm => vm.Email)); ;
         }
         #endregion
     }

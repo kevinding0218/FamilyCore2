@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -37,6 +38,7 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region READ LIST OF OBJECTS
         //api/entree/group?splitBy=a&id=b
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("group")]
         //[Authorize]
         public async Task<IEnumerable<EntreeInfoResource>> GetEntrees(string splitBy, int id)
