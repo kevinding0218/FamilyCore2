@@ -1,16 +1,17 @@
+import { Subscription } from 'rxjs';
 import { UserService } from './../../services/member/user.service';
 import { Credentials } from './../../viewModels/member/credentials';
 import { RegisterInfo } from './../../viewModels/user/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserPasswordService } from './../../services/user/userpassword/userpassword.service';
 import { ToastrService } from 'ngx-toastr';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HelperMethod } from './../../utility/helper/helperMethod';
 
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -18,6 +19,18 @@ export class LoginComponent {
     private _userService: UserService,
     private toastr: ToastrService) { 
       localStorage.removeItem('auth_token');
+    }
+
+    brandNew: boolean;
+    private subscription: Subscription;
+    ngOnInit() {
+
+      // subscribe to router event
+      this.subscription = this._route.queryParams.subscribe(
+        (param: any) => {
+           this.brandNew = param['brandNew'];   
+           this.loginUser.userName = param['email'];         
+        });      
     }
 
   // Old Login

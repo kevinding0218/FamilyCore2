@@ -20,7 +20,7 @@ namespace WebApi.Persistent.Member.JWTAuth
             _jwtHeader = new JwtHeader(_jwtOptions.SigningCredentials);
         }
 
-        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
+        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, bool InternalUser = false)
         {
             // Creates a JwtSecurityToken with a combination of registered claims (from the jwt spec) Sub, Jti, Iat and two specific to our app: Rol and Id.
             var claims = new[]
@@ -28,9 +28,8 @@ namespace WebApi.Persistent.Member.JWTAuth
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.Now).ToString(), ClaimValueTypes.Integer64),
-                 //new Claim(JwtRegisteredClaimNames.Iat, _jwtOptions.IssuedAt.ToLocalTime().ToLongTimeString()),
                  new Claim(JwtRegisteredClaimNames.Exp, ToUnixEpochDate(DateTime.Now.AddMinutes(3)).ToString(), ClaimValueTypes.Integer64),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
+                 //identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.MHUser),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id),
              };
 
@@ -61,6 +60,10 @@ namespace WebApi.Persistent.Member.JWTAuth
             jwt.Payload["expiredOn"] = _jwtOptions.Expiration.ToString();
             jwt.Payload["customIssueAt"] = DateTime.Now.ToString();
             jwt.Payload["customExpiredOn"] = DateTime.Now.AddMinutes(3).ToString();
+            if (InternalUser)
+                jwt.Payload[Helpers.Constants.Strings.JwtClaimIdentifiers.InternalUser] = Helpers.Constants.Strings.JwtClaims.ApiInternalAccess;
+            else
+                jwt.Payload[Helpers.Constants.Strings.JwtClaimIdentifiers.Rol] = Helpers.Constants.Strings.JwtClaims.ApiAccess;
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
@@ -73,6 +76,15 @@ namespace WebApi.Persistent.Member.JWTAuth
             {
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, Helpers.Constants.Strings.JwtClaims.ApiAccess)
+            });
+        }
+
+        public ClaimsIdentity GenerateClaimsIdentityAdmin(string userName, string id)
+        {
+            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
+            {
+                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
+                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.InternalUser, Helpers.Constants.Strings.JwtClaims.ApiInternalAccess)
             });
         }
 

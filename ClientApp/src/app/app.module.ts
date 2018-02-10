@@ -1,3 +1,4 @@
+import { SpinnerComponent } from './views/pages/spinner/spinner.component';
 import { AuthenticateXHRBackend } from './services/member/authenticate-xhr.backend';
 import { AuthService } from './services/auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';

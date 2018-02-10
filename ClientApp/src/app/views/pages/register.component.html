@@ -54,6 +54,7 @@
             </div> -->
 
               <button type="button" class="btn btn-block btn-success" (click)="this.submit()" [disabled]="!f.valid">Create Account</button>
+              <app-spinner [isRunning]="isRequesting"></app-spinner> 
             </form>
           </div>
           <div class="card-footer p-4">

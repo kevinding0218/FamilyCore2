@@ -130,6 +130,7 @@ namespace WebApi
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim(WebApi.Persistent.Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, WebApi.Persistent.Helpers.Constants.Strings.JwtClaims.ApiAccess));
+                options.AddPolicy("InternalOnly", policy => policy.RequireClaim(WebApi.Persistent.Helpers.Constants.Strings.JwtClaimIdentifiers.InternalUser, WebApi.Persistent.Helpers.Constants.Strings.JwtClaims.ApiInternalAccess));
             });
         }
 

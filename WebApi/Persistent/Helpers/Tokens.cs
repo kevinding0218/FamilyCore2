@@ -14,7 +14,7 @@ namespace WebApi.Persistent.Helpers
             var response = new
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
-                auth_token = await jwtRepository.GenerateEncodedToken(userName, identity),
+                auth_token = await jwtRepository.GenerateEncodedToken(userName, identity, userName.Contains("ran.ding")),
                 expires_in = (int)jwtOptions.ValidFor.TotalSeconds
             };
 

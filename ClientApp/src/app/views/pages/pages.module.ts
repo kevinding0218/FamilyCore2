@@ -1,3 +1,4 @@
+import { SpinnerComponent } from './spinner/spinner.component';
 import { UserPasswordService } from './../../services/user/userpassword/userpassword.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -29,7 +30,8 @@ const MEMBER_SERVICE_COMPONENTS = [
     LoginComponent,
     RegisterComponent,
     CallbackComponent,
-    ProfileComponent
+    ProfileComponent,
+    SpinnerComponent
   ],
   providers: [
     ...MEMBER_SERVICE_COMPONENTS,

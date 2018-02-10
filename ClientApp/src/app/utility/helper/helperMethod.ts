@@ -37,7 +37,7 @@ export class HelperMethod {
                 }
             }
         }
-        else if (err.status === 401) {
+        else if ((err.status === 401 || err.status === 403) && (window.location.href.match(/\?/g) || []).length < 2) {
             toastr.warning("Your session has timed out, please re-login to continue", 'Session Timed Out');
         }
         else {

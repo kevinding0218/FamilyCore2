@@ -36,6 +36,8 @@ export class RegisterComponent {
   // }
 
   // New
+  isRequesting: boolean;
+  submitted: boolean = false;
   newUser: UserRegistration = {
     email: '',
     password: '',
@@ -44,11 +46,14 @@ export class RegisterComponent {
     location: ''
   };
   submit() {
+    this.submitted = true;
+    this.isRequesting = true;
     this._userService.register(this.newUser.email, this.newUser.password, this.newUser.firstName, this.newUser.lastName, this.newUser.location)
+      .finally(() => this.isRequesting = false)
       .subscribe(
       result => {
         if (result) {
-          this._router.navigate(['/pages/login']);
+          this._router.navigate(['/pages/login'], { queryParams: { email: this.newUser.email } });
         }
       },
       (err) => {

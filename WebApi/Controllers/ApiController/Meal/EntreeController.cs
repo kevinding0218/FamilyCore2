@@ -13,7 +13,8 @@ using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Controllers.ApiController.Meal
 {
-    [Authorize(Policy = "ApiUser")]
+    //[Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "InternalOnly")]
     [EnableCors("SiteCorsPolicy")]
     [Route("/api/entree")]
     public class EntreeController : Controller
@@ -56,6 +57,7 @@ namespace WebApi.Controllers.ApiController.Meal
         #endregion
 
         #region  READ SINGLE OBJECT
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEntree(int id)
         {
