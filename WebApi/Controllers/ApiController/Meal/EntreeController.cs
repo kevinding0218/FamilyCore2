@@ -13,6 +13,7 @@ using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Controllers.ApiController.Meal
 {
+    [Authorize(Policy = "ApiUser")]
     [EnableCors("SiteCorsPolicy")]
     [Route("/api/entree")]
     public class EntreeController : Controller
@@ -38,7 +39,6 @@ namespace WebApi.Controllers.ApiController.Meal
 
         #region READ LIST OF OBJECTS
         //api/entree/group?splitBy=a&id=b
-        [Authorize(Policy = "ApiUser")]
         [HttpGet("group")]
         //[Authorize]
         public async Task<IEnumerable<EntreeInfoResource>> GetEntrees(string splitBy, int id)

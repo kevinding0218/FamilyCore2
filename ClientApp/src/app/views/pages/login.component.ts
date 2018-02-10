@@ -16,7 +16,9 @@ export class LoginComponent {
     private _router: Router,
     private _upService: UserPasswordService,
     private _userService: UserService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService) { 
+      localStorage.removeItem('auth_token');
+    }
 
   // Old Login
   // loginUser: RegisterInfo = {
@@ -42,20 +44,23 @@ export class LoginComponent {
   errors: string;
   isRequesting: boolean;
   submitted: boolean = false;
-  loginUser: Credentials = { email: '', password: '' };
-  loginVerify() {
+  loginUser: Credentials = { userName: '', password: '' };
+
+  login({ value, valid }: { value: Credentials, valid: boolean }) {
     this.submitted = true;
     this.isRequesting = true;
-    this.errors = '';
-    this._userService.login(this.loginUser.email, this.loginUser.password)
-      .finally(() => this.isRequesting = false)
-      .subscribe(
-      result => {
-        if (result) {
-          this._router.navigate(['/dashboard']);
-        }
-      },
-      error => this.errors = error);
+    this.errors='';
+    if (valid) {
+      this._userService.login(value.userName, value.password)
+        .finally(() => this.isRequesting = false)
+        .subscribe(
+        result => {         
+          if (result) {
+            this._router.navigate(['/dashboard']);   
+          }
+        },
+        error => this.errors = error);
+    }
   }
 
   forgetPassword() {

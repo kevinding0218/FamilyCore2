@@ -19,7 +19,7 @@ export class UserService extends BaseService {
 
     // Observable navItem source
     private _authNavStatusSource = new BehaviorSubject<boolean>(false);
-    // Observable navItem stream
+    // Observable navItem stream and broadcast this _authNavStatusSource so we can monitor from anywhere
     authNavStatus$ = this._authNavStatusSource.asObservable();
 
     private loggedIn = false;
@@ -29,6 +29,7 @@ export class UserService extends BaseService {
         this.loggedIn = !!localStorage.getItem('auth_token');
         // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
         // header component resulting in authed user nav links disappearing despite the fact user is still logged in
+        // next: assign this.loggedIn to _authNavStatusSource
         this._authNavStatusSource.next(this.loggedIn);
     }
 
@@ -68,7 +69,7 @@ export class UserService extends BaseService {
     }
 
     isLoggedIn() {
-        return this.loggedIn;
+        return !!localStorage.getItem('auth_token');;
     }
 
     //   facebookLogin(accessToken:string) {

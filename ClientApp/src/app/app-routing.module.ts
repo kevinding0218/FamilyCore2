@@ -1,3 +1,4 @@
+import { MemberAuthGuard } from './services/member/member.auth.guard.service';
 import { P404Component } from './views/pages/404.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';

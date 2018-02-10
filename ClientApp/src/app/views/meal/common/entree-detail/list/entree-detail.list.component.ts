@@ -1,3 +1,4 @@
+import { HelperMethod } from './../../../../../utility/helper/helperMethod';
 import { style } from '@angular/animations';
 import { EntreeDetailService } from '../../../../../services/meal/entree-detail.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
@@ -73,7 +74,11 @@ export class EntreeDetailListComponent implements OnInit {
             .subscribe(result => {
                 this.ngx_rows = this.temp_grid = result;
                 setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
-            });
+            },
+            (err) => {
+                HelperMethod.subscribeErrorHandler(err, this.toastr);
+            }
+        );
     }
 
     editMainTableItem(value) {

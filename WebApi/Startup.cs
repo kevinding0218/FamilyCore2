@@ -39,12 +39,8 @@ namespace WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureRepositoryService(IServiceCollection services)
         {
-            services.Configure<WebApi.EmailSettings.EmailSettings>(Configuration.GetSection("EmailSettings"));
-            services.AddScoped<IEmailSender, AuthMessageSender>();
-
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVegetableRepository, VegetableRepository>();
             services.AddScoped<IEntreeDetailRepository, EntreeDetailRepository>();
@@ -61,27 +57,10 @@ namespace WebApi
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddAutoMapper();
+        }
 
-            services.AddDbContext<FcDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-
-            services.AddMvc();
-
-            // ********************
-            // Setup CORS
-            // ********************
-            var corsBuilder = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicyBuilder();
-            corsBuilder.AllowAnyHeader();
-            corsBuilder.AllowAnyMethod();
-            corsBuilder.AllowAnyOrigin(); // For anyone access.
-            corsBuilder.WithOrigins("http://localhost:4200", "https://familycoredevsite.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.AllowCredentials();
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            });
-
+        public void ConfigureJwtAuthService(IServiceCollection services)
+        {
             // jwt wire up
             // Get options from app settings
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
@@ -96,16 +75,20 @@ namespace WebApi
 
             var tokenValidationParameters = new TokenValidationParameters
             {
+                // Validate the JWT Issuer (iss) claim  
                 ValidateIssuer = true,
                 ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
 
+                // Validate the JWT Audience (aud) claim  
                 ValidateAudience = true,
                 ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
 
+                // The signing key must match! 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _signingKey,
 
                 RequireExpirationTime = false,
+                // Validate the token expiry  
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
@@ -147,6 +130,38 @@ namespace WebApi
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim(WebApi.Persistent.Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, WebApi.Persistent.Helpers.Constants.Strings.JwtClaims.ApiAccess));
             });
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<WebApi.EmailSettings.EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddScoped<IEmailSender, AuthMessageSender>();
+            ConfigureRepositoryService(services);
+
+            services.AddAutoMapper();
+
+            services.AddDbContext<FcDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddMvc();
+
+            // ********************
+            // Setup CORS
+            // ********************
+            var corsBuilder = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicyBuilder();
+            corsBuilder.AllowAnyHeader();
+            corsBuilder.AllowAnyMethod();
+            corsBuilder.AllowAnyOrigin(); // For anyone access.
+            corsBuilder.WithOrigins("http://localhost:4200", "https://familycoredevsite.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.AllowCredentials();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            });
+
+
+            ConfigureJwtAuthService(services);
 
             // add identity
             var builder = services.AddIdentityCore<AppUser>(o =>

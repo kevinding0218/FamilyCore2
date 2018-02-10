@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentOrderService } from '../../../../../services/order/current-order.service';
 import * as moment from 'moment';
+import { error } from 'selenium-webdriver';
 
 @Component({
     selector: 'entree-common-list',
@@ -80,7 +81,11 @@ export class EntreeListCommonComponent implements OnInit {
             .subscribe(result => {
                 this.ngx_rows = this.temp_grid = result;
                 setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
-            });
+            },
+            (err) => {
+                HelperMethod.subscribeErrorHandler(err, this.toastr);
+            }
+        );
     }
 
     editMainTableItem(value) {

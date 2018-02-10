@@ -36,8 +36,21 @@ export class HelperMethod {
                     toastr.warning(validationErrorDictionary[fieldName], 'Invalid Operation');
                 }
             }
-        } else {
+        }
+        else if (err.status === 401) {
+            toastr.warning("Your session has timed out, please re-login to continue", 'Session Timed Out');
+        }
+        else {
             toastr.warning(err.text(), 'Exception Occurred!');
         }
+    }
+
+    static generateHttpHeaderWithJwtToken(headers) {
+        headers.append('Content-Type', 'application/json');
+        let authToken = localStorage.getItem('auth_token');
+        headers.append('Authorization', `Bearer ${authToken}`);
+        console.log('generateHttpHeaderWithJwtToken headers is ', headers);
+
+        return headers;
     }
 }

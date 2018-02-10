@@ -11,11 +11,13 @@ namespace WebApi.Persistent.Member.JWTAuth
     public class JwtRepository : IJwtRepository
     {
         private readonly JwtIssuerOptions _jwtOptions;
+        private readonly JwtHeader _jwtHeader;
 
         public JwtRepository(IOptions<JwtIssuerOptions> jwtOptions)
         {
             _jwtOptions = jwtOptions.Value;
             ThrowIfInvalidOptions(_jwtOptions);
+            _jwtHeader = new JwtHeader(_jwtOptions.SigningCredentials);
         }
 
         public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
@@ -25,10 +27,26 @@ namespace WebApi.Persistent.Member.JWTAuth
             {
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
+                 //new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
+                 new Claim(JwtRegisteredClaimNames.Iat, _jwtOptions.IssuedAt.ToShortTimeString()),
+                 new Claim(JwtRegisteredClaimNames.Exp, _jwtOptions.Expiration.ToShortTimeString()),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
+                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id),
              };
+
+            //var payload = new JwtPayload
+            //{
+            //    {"iss", _jwtOptions.Issuer},
+            //    {"sub", _jwtOptions.Subject},
+            //    {"aud", _jwtOptions.Audience},
+            //    {"exp", _jwtOptions.Expiration},
+            //    {"nbf", _jwtOptions.NotBefore},
+            //    {"iat", _jwtOptions.IssuedAt},
+            //    {"valid_for", _jwtOptions.ValidFor},
+            //    {"unique_name", userName}
+            //};
+            //var jwt = new JwtSecurityToken(_jwtHeader, payload);
+            //var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
@@ -36,7 +54,7 @@ namespace WebApi.Persistent.Member.JWTAuth
                 audience: _jwtOptions.Audience,
                 claims: claims,
                 notBefore: _jwtOptions.NotBefore,
-                expires: _jwtOptions.Expiration,
+                //expires: _jwtOptions.Expiration,
                 signingCredentials: _jwtOptions.SigningCredentials);
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);

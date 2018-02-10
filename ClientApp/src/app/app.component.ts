@@ -9,8 +9,6 @@ import 'app/utility/extensions/dateExtension';
 })
 export class AppComponent { 
   constructor() {
-    localStorage.setItem('currentUser', 'false');
-    
     localStorage.setItem('WebApiFtp', 'http://localhost:49934');
     localStorage.setItem('WebApiPath', 'http://localhost:49934/api');
 

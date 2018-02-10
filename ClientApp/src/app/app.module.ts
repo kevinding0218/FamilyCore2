@@ -1,9 +1,10 @@
+import { AuthenticateXHRBackend } from './services/member/authenticate-xhr.backend';
 import { AuthService } from './services/auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AppNgxBootstrapModule } from './ngxModule/app-ngx-bootstrap.module';
 import { ProgressService, BrowserXhrWithProgress } from './services/progress/progress.service';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpModule, BrowserXhr } from '@angular/http';
+import { HttpModule, BrowserXhr, XHRBackend } from '@angular/http';
 import { ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -72,7 +73,7 @@ const APP_DIRECTIVES = [
 
 // Import services
 import {
-  MenuService
+  MenuService, UserService
 } from './services';
 
 const APP_SERVICES = [
@@ -113,6 +114,10 @@ const APP_SERVICES = [
     },
     AuthService,
     ErrorLogService
+    // ,{ 
+    //   provide: XHRBackend, 
+    //   useClass: AuthenticateXHRBackend
+    // }
   ],
   bootstrap: [AppComponent]
 })
