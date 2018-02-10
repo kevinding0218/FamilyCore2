@@ -27,9 +27,9 @@ namespace WebApi.Persistent.Member.JWTAuth
             {
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 //new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-                 new Claim(JwtRegisteredClaimNames.Iat, _jwtOptions.IssuedAt.ToShortTimeString()),
-                 new Claim(JwtRegisteredClaimNames.Exp, _jwtOptions.Expiration.ToShortTimeString()),
+                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.Now).ToString(), ClaimValueTypes.Integer64),
+                 //new Claim(JwtRegisteredClaimNames.Iat, _jwtOptions.IssuedAt.ToLocalTime().ToLongTimeString()),
+                 new Claim(JwtRegisteredClaimNames.Exp, ToUnixEpochDate(DateTime.Now.AddMinutes(3)).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id),
              };
@@ -56,6 +56,11 @@ namespace WebApi.Persistent.Member.JWTAuth
                 notBefore: _jwtOptions.NotBefore,
                 //expires: _jwtOptions.Expiration,
                 signingCredentials: _jwtOptions.SigningCredentials);
+
+            jwt.Payload["issueAt"] = _jwtOptions.IssuedAt.ToString();
+            jwt.Payload["expiredOn"] = _jwtOptions.Expiration.ToString();
+            jwt.Payload["customIssueAt"] = DateTime.Now.ToString();
+            jwt.Payload["customExpiredOn"] = DateTime.Now.AddMinutes(3).ToString();
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 

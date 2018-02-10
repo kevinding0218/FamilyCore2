@@ -61,6 +61,21 @@ namespace WebApi
 
         public void ConfigureJwtAuthService(IServiceCollection services)
         {
+            // InvalidOperationException: Scheme already exists: Bearer 
+            // Fix: Only include one service.AddAuthentication
+            // 1. Add Auth0 Authentication Services
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            //}).AddJwtBearer(options =>
+            //{
+            //    options.Authority = "https://familycore.auth0.com/";
+            //    options.Audience = "https://api.family-core.com";
+            //});
+
+
             // jwt wire up
             // Get options from app settings
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
@@ -87,25 +102,11 @@ namespace WebApi
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _signingKey,
 
-                RequireExpirationTime = false,
+                RequireExpirationTime = true,
                 // Validate the token expiry  
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
-
-            // InvalidOperationException: Scheme already exists: Bearer 
-            // Fix: Only include one service.AddAuthentication
-            // 1. Add Auth0 Authentication Services
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //}).AddJwtBearer(options =>
-            //{
-            //    options.Authority = "https://familycore.auth0.com/";
-            //    options.Audience = "https://api.family-core.com";
-            //});
 
             // Add Custom Authentication Middleware Service
             // introduced JWT authentication to the request pipeline, 
