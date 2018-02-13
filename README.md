@@ -4,3 +4,5 @@ Angular 5.2.1 + Bootstrap 4 + Ngx-bootstrap + Chart.js + file-saver + ngx-toastr
 <br >
 Web Api:
 .Net core 2.0 + EF Core code first + Web Api core + AutoMapper + FluentValidation + Identity + JwtTokenSecurity
+<br>
+Hosted in Azure: https://familycoredevsite.azurewebsites.net(site is currently on-open only during development time due to budget limitation:))
