@@ -25,21 +25,11 @@ const CURRENT_WEEKLY_COMPONENTS = [
   CurrentWeeklyOrderComponent
 ]
 
-import {
-  SetupEntreeCalendarComponent
-} from './setupentreecalendar';
-
-const SETUP_CALENDAR_COMPONENTS = [
-  SetupEntreeCalendarComponent
-]
-
-
 @NgModule({
   imports: [ FormsModule, CommonModule, OrderRoutingModule, AppNgxBootstrapModule ],
   declarations: [
     ...ORDER_COMMON_COMPONENTS,
-    ...CURRENT_WEEKLY_COMPONENTS,
-    ...SETUP_CALENDAR_COMPONENTS
+    ...CURRENT_WEEKLY_COMPONENTS
   ],
   providers: [ CurrentOrderService, ExcelService ]
 })

@@ -7,3 +7,5 @@ H:\FamilyCore\DomainLibrary\obj\Release\netcoreapp2.0\DomainLibrary.AssemblyInfo
 H:\FamilyCore\DomainLibrary\obj\Release\netcoreapp2.0\DomainLibrary.dll
 H:\FamilyCore\DomainLibrary\obj\Release\netcoreapp2.0\DomainLibrary.pdb
 H:\FamilyCore\DomainLibrary\obj\Release\netcoreapp2.0\DomainLibrary.csprojResolveAssemblyReference.cache
+H:\FamilyCore\DomainLibrary\bin\Release\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.dll
+H:\FamilyCore\DomainLibrary\bin\Release\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.xml

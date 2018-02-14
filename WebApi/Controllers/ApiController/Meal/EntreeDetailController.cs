@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DomainLibrary.Meal;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,7 +13,7 @@ using WebApi.Resource.Meal.EntreeResource;
 
 namespace WebApi.Controllers.ApiController.Meal
 {
-    [Authorize(Policy = "ApiUser")]
+    //[Authorize(Policy = "ApiUser")]
     [EnableCors("SiteCorsPolicy")]
     [Route("/api/entreeDetail")]
     public class EntreeDetailController : Controller

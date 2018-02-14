@@ -56,11 +56,9 @@ export class LoginComponent implements OnInit{
   // Jwt token login
   errors: string;
   isRequesting: boolean;
-  submitted: boolean = false;
   loginUser: Credentials = { userName: '', password: '' };
 
   login({ value, valid }: { value: Credentials, valid: boolean }) {
-    this.submitted = true;
     this.isRequesting = true;
     this.errors='';
     if (valid) {

@@ -14,10 +14,10 @@
     <div style="float: right;">
       <input type="number" id="entreeQty" class="form-control-sm input-span-right" min="1" value="1" [(ngModel)]="entree.entreeCount">
     </div>
-    <div class="h5 text-primary mb-0 mt-2">
+    <div class="h5 text-primary mb-0 mt-2 col-left">
       <strong>{{ entree.entreeName }}</strong>
     </div>
-    <div class="text-muted text-uppercase font-weight-bold font-xs">{{ entree.style }}</div>
+    <div class="text-muted text-uppercase font-weight-bold font-xs col-left col-bottom">{{ entree.style }}</div>
     <textarea id="entreeNote" class="form-control" placeholder="Enter Note.." rows='2' [(ngModel)]="entree.note"
       name="entreeNote"></textarea>
   </div>

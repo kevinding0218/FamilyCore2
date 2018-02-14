@@ -2,6 +2,7 @@
 using DomainLibrary.Meal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using WebApi.Resource.Meal.EntreeResource;
 namespace WebApi.Controllers.ApiController.Meal
 {
     //[Authorize(Policy = "ApiUser")]
-    [Authorize(Policy = "InternalOnly")]
+    //[Authorize(Policy = "InternalOnly")]
     [EnableCors("SiteCorsPolicy")]
     [Route("/api/entree")]
     public class EntreeController : Controller
@@ -44,8 +45,16 @@ namespace WebApi.Controllers.ApiController.Meal
         //[Authorize]
         public async Task<IEnumerable<EntreeInfoResource>> GetEntrees(string splitBy, int id)
         {
-            var gridResult = await this._entreeRepository.GetSplitEntreesList(splitBy, id);
+            // Grab the current request headers
+            var headers = HttpContext.Request.Headers;
 
+            // Ensure that all of your properties are present in the current Request
+            if (!String.IsNullOrEmpty(headers["Authorization"]))
+            {
+                var jwtToken = headers["Authorization"].ToString();
+            }
+
+            var gridResult = await this._entreeRepository.GetSplitEntreesList(splitBy, id);
             foreach (var gridEntree in gridResult)
             {
                 var entreeDetailId = gridEntree.EntreeId;

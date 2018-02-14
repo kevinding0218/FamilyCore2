@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "5e5edfed573752b81cb096fcbff36a1d67063a40"
+    "signature": "c52c289cc17ad82dd899df8aa18276541e0c2269"
   },
   "compilationOptions": {
     "defines": [
@@ -30,7 +30,8 @@
           "Microsoft.EntityFrameworkCore.Design": "2.0.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.0.1",
           "Microsoft.NETCore.App": "2.0.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.2"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.2",
+          "FluentValidation.AspNetCore": "7.3.3"
         },
         "runtime": {
           "WebApi.dll": {}
@@ -72,6 +73,26 @@
         },
         "compile": {
           "lib/netstandard1.6/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
+        }
+      },
+      "FluentValidation/7.3.3": {
+        "runtime": {
+          "lib/netstandard2.0/FluentValidation.dll": {}
+        },
+        "compile": {
+          "lib/netstandard2.0/FluentValidation.dll": {}
+        }
+      },
+      "FluentValidation.AspNetCore/7.3.3": {
+        "dependencies": {
+          "FluentValidation": "7.3.3",
+          "Microsoft.AspNetCore.Mvc": "2.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FluentValidation.AspNetCore.dll": {}
+        },
+        "compile": {
+          "lib/netstandard2.0/FluentValidation.AspNetCore.dll": {}
         }
       },
       "Libuv/1.10.0": {
@@ -4298,6 +4319,20 @@
       "sha512": "sha512-pSWmuxqlE6aZNSljcEC0hXEGHrswi2ukYGDiypcBNYMLaOwPxpp4LmT9z9Eqb3EDweC1S9uRSLQPiuSRhwxVow==",
       "path": "automapper.extensions.microsoft.dependencyinjection/1.2.0",
       "hashPath": "automapper.extensions.microsoft.dependencyinjection.1.2.0.nupkg.sha512"
+    },
+    "FluentValidation/7.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-evpalruQAVErNrogGrSn7Rg96Cak/R0Bj1rU6LFjw4hfgOqskU86S7U4rDnZlkgqKQiO5uElbvHVKLw7wGMiew==",
+      "path": "fluentvalidation/7.3.3",
+      "hashPath": "fluentvalidation.7.3.3.nupkg.sha512"
+    },
+    "FluentValidation.AspNetCore/7.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5E+n467puTjpZwOp+NaXhVuKtwrJQW1M4kU8VACNvls2H9Yp2ydSohHfcZHDj1dH8fmpC+fHD0zu1o+0DYR7dg==",
+      "path": "fluentvalidation.aspnetcore/7.3.3",
+      "hashPath": "fluentvalidation.aspnetcore.7.3.3.nupkg.sha512"
     },
     "Libuv/1.10.0": {
       "type": "package",

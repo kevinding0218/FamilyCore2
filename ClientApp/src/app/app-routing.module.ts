@@ -34,6 +34,10 @@ const routes: Routes = [
       {
         path: 'order',
         loadChildren: './views/order/order.module#OrderModule'
+      },
+      {
+        path: 'testPage',
+        loadChildren: './views/testPage/test-page.module#TestPageModule'
       }
     ]
   },

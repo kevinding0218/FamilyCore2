@@ -1,0 +1,1 @@
+export * from './angular5-datatable.component';

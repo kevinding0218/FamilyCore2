@@ -30,6 +30,7 @@ export class EntreeDetailListComponent implements OnInit {
     ngx_reorderable: boolean = true;
     ngx_timeout: any;
     temp_grid = [];
+    selected = [];
 
     ngx_columns = [
         { prop: 'keyValuePairInfo.id', name: 'Id' },
