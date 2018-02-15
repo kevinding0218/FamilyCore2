@@ -505,6 +505,25 @@ Authentication
 familycore
 TexasLuther01
 
+--Deploy Angular to Azure
+#!/bin/sh
+xcopy "H:\FamilyCore\ClientApp\dist" "H:\FamilyCoreAzureAngularDeploy"
+cd H://FamilyCoreAzureAngularDeploy
+git add *
+git commit --message "deploy some changes"
+git push origin master
+echo Press Enter...
+read
+--Deploy Web Api to Azure
+#!/bin/sh
+xcopy "H:\FamilyCore\ClientApp\dist" "H:\FamilyCoreAzureAngularDeploy"
+cd H://FamilyCoreAzureWebApiDeploy
+git add *
+git commit --message "deploy some changes"
+git push origin master
+echo Press Enter...
+read
+
 
 
 

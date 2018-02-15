@@ -12,8 +12,8 @@ export class AppComponent {
     localStorage.setItem('WebApiFtp', 'http://localhost:49934');
     localStorage.setItem('WebApiPath', 'http://localhost:49934/api');
 
-    //localStorage.setItem('WebApiFtp', 'https://familycoredevapi.azurewebsites.net');
-    //localStorage.setItem('WebApiPath', 'https://familycoredevapi.azurewebsites.net/api');
+    // localStorage.setItem('WebApiFtp', 'https://familycoredevapi.azurewebsites.net');
+    // localStorage.setItem('WebApiPath', 'https://familycoredevapi.azurewebsites.net/api');
     
   }
 }

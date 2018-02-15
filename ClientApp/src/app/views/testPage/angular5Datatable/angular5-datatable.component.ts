@@ -1,39 +1,52 @@
-import { Component, ViewChild } from '@angular/core';
-import { DataTable, DataTableTranslations, DataTableResource } from './../../../components/data-table';
-import { films } from './data-table-demo3-data';
-
+import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'angular5-datatable',
-  templateUrl: './angular5-datatable.component.html'
+  selector: 'responsive-demo',
+  templateUrl: './angular5-datatable.component.html',
+  //encapsulation: ViewEncapsulation.None
+
 })
 export class Angular5DatatableComponent {
 
-    filmResource = new DataTableResource(films);
-    films = [];
-    filmCount = 0;
+  @ViewChild('myTable') table: any;
 
-    @ViewChild(DataTable) filmsTable;
+  rows: any[] = [];
+  expanded: any = {};
+  timeout: any;
+  ngx_loadingIndicator: boolean = true;
 
-    constructor() {
-        this.filmResource.count().then(count => this.filmCount = count);
-    }
+  constructor() {
+    this.fetch((data) => {
+      this.rows = data;
+    });
+  }
 
-    reloadFilms(params) {
-        this.filmResource.query(params).then(films => this.films = films);
-    }
+  onPage(event) {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      console.log('paged!', event);
+    }, 100);
+  }
 
-    cellColor(car) {
-        return 'rgb(255, 255,' + (155 + Math.floor(100 - ((car.rating - 8.7)/1.3)*100)) + ')';
+  fetch(cb) {
+    const req = new XMLHttpRequest();
+    req.open('GET', `assets/data/100k.json`);
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+      //setTimeout(() => { this.ngx_loadingIndicator = false; }, 1500);
     };
 
-    // special params:
+    req.send();
+  }
 
-    translations = <DataTableTranslations>{
-        indexColumn: 'Index column',
-        expandColumn: 'Expand column',
-        selectColumn: 'Select column',
-        paginationLimit: 'Max results',
-        paginationRange: 'Result range'
-    };
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  onDetailToggle(event) {
+    console.log('Detail Toggled', event);
+  }
+
 }

@@ -1,4 +1,3 @@
-import { DataTableModule } from './../../components/data-table/index';
 import { TestPageRoutingModule } from './test-page-routing.module';
 import { AppNgxBootstrapModule } from './../../ngxModule/app-ngx-bootstrap.module';
 import { NgModule } from '@angular/core';
@@ -20,7 +19,7 @@ const TEST_PAGE_COMPONENTS = [
 ]
 
 @NgModule({
-  imports: [ FormsModule, CommonModule, TestPageRoutingModule, AppNgxBootstrapModule, DataTableModule ],
+  imports: [ FormsModule, CommonModule, TestPageRoutingModule, AppNgxBootstrapModule ],
   declarations: [
     ...TEST_PAGE_COMPONENTS
   ],
