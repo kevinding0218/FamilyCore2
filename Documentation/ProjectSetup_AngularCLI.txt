@@ -506,6 +506,7 @@ familycore
 TexasLuther01
 
 --Deploy Angular to Azure
+ng build --prod --bh
 #!/bin/sh
 xcopy "H:\FamilyCore\ClientApp\dist" "H:\FamilyCoreAzureAngularDeploy"
 cd H://FamilyCoreAzureAngularDeploy
