@@ -1,3 +1,4 @@
+import { AngularMaterialComponent } from './angular-material-input/angular-material.component';
 import { Angular5DatatableComponent } from './angular5Datatable/angular5-datatable.component';
 import { NgModule } from '@angular/core';
 import {
@@ -26,6 +27,13 @@ const routes: Routes = [
         component: Angular5DatatableComponent,
         data: {
           title: 'Angular 5 DataTable'
+        }
+      },
+      {
+        path: 'angularMaterial',
+        component: AngularMaterialComponent,
+        data: {
+          title: 'Angular Material Input'
         }
       }
     ]

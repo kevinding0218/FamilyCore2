@@ -1,0 +1,74 @@
+<form class="example-form">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <b>Ngx Datatable</b>
+                </div>
+                <div class="card-body">
+                    <mat-form-field>
+                        <input matInput placeholder="Company (disabled)" disabled value="Google">
+                    </mat-form-field>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <mat-form-field>
+                                <input matInput type="text" class="form-control" placeholder="Form Group Row..." required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <table cellspacing="0">
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="First name">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="Long Last Name That Will Be Truncated">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput type="text" id="entreeDetailName" class="form-control" placeholder="Enter Name..." required>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p>
+                        <mat-form-field>
+                            <textarea matInput placeholder="Address">1600 Amphitheatre Pkwy</textarea>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <textarea matInput placeholder="Address 2"></textarea>
+                        </mat-form-field>
+                    </p>
+
+                    <table cellspacing="0">
+                        <tr>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="City">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput placeholder="State">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field>
+                                    <input matInput #postalCode maxlength="5" placeholder="Postal Code" value="94043">
+                                    <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
