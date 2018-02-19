@@ -4,30 +4,32 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
 
+/*
 import {
   ModalModule, ButtonsModule, TooltipModule, BsDropdownModule, ProgressbarModule, AlertModule, TabsModule,
   AccordionModule, CarouselModule
 } from 'ngx-bootstrap'
+*/
 
 import {PopoverModule} from "ngx-popover";
 
 import {SmartadminLayoutModule} from './layout'
 
-import {UserService} from './user'
+// import {UserService} from './user'
 
 
 import {I18nModule} from "./i18n/i18n.module";
-import {UserModule} from "./user/user.module";
-import {VoiceControlModule} from "./voice-control/voice-control.module";
+// import {VoiceControlModule} from "./voice-control/voice-control.module";
+// import {UserModule} from "./user/user.module";
 
 import {SmartadminWidgetsModule} from "./widgets/smartadmin-widgets.module";
 
 import {UtilsModule} from "./utils/utils.module";
-import {ChatModule} from "./chat/chat.module";
-import {StatsModule} from "./stats/stats.module";
-import {InlineGraphsModule} from "./graphs/inline/inline-graphs.module";
-import {SmartadminFormsLiteModule} from "./forms/smartadmin-forms-lite.module";
-import {SmartProgressbarModule} from "./ui/smart-progressbar/smart-progressbar.module";
+// import {ChatModule} from "./chat/chat.module";
+// import {StatsModule} from "./stats/stats.module";
+// import {InlineGraphsModule} from "./graphs/inline/inline-graphs.module";
+// import {SmartadminFormsLiteModule} from "./forms/smartadmin-forms-lite.module";
+// import {SmartProgressbarModule} from "./ui/smart-progressbar/smart-progressbar.module";
 
 
 @NgModule({
@@ -43,15 +45,15 @@ import {SmartProgressbarModule} from "./ui/smart-progressbar/smart-progressbar.m
   exports: [
     CommonModule, FormsModule, RouterModule,
 
-    ModalModule,
-    ButtonsModule,
-
-    AlertModule,
-    TabsModule,
-    TooltipModule,
-    BsDropdownModule,
-    ProgressbarModule,
-
+    // ModalModule,
+    // ButtonsModule,
+    // TooltipModule,
+    // DropdownModule,
+    // ProgressbarModule,
+    // AlertModule,
+    // TabsModule,
+    // AccordionModule,
+    // CarouselModule,
 
     PopoverModule,
 
@@ -62,19 +64,19 @@ import {SmartProgressbarModule} from "./ui/smart-progressbar/smart-progressbar.m
     UtilsModule,
 
 
-    SmartadminFormsLiteModule,
+    // SmartadminFormsLiteModule,
 
-    SmartProgressbarModule,
+    // SmartProgressbarModule,
 
-    InlineGraphsModule,
+    // InlineGraphsModule,
 
     SmartadminWidgetsModule,
 
-    ChatModule,
+    // ChatModule,
 
-    StatsModule,
+    // StatsModule,
 
-    VoiceControlModule,
+    // VoiceControlModule,
 
   ]
 })
